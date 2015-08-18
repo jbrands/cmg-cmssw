@@ -17,6 +17,7 @@ class TriggerInfo(object):
             name=self.name, fired=self.fired, n_o=len(self.objects))
 
 class TriggerAnalyzer(Analyzer):
+    "class TriggerAnalyzer"
     '''Access to trigger information, and trigger selection. The required
     trigger names need to be attached to the components.'''
 
@@ -27,7 +28,7 @@ class TriggerAnalyzer(Analyzer):
             ('TriggerResults', '', 'HLT'),
             'edm::TriggerResults'
             )
-
+        
         self.handles['triggerObjects'] =  AutoHandle(
             'selectedPatTrigger',
             'std::vector<pat::TriggerObjectStandAlone>'
@@ -41,18 +42,17 @@ class TriggerAnalyzer(Analyzer):
     def beginLoop(self, setup):
         super(TriggerAnalyzer,self).beginLoop(setup)
 
-        self.triggerList = self.cfg_comp.triggers
+        self.triggerList = self.cfg_ana.triggers #JB changed from cfg_comp.triggers
         self.vetoTriggerList = None
 
         if hasattr(self.cfg_comp, 'vetoTriggers'):
             self.vetoTriggerList = self.cfg_comp.vetoTriggers
            
-            
         self.counters.addCounter('Trigger')
         self.counters.counter('Trigger').register('All events')
         self.counters.counter('Trigger').register('HLT')
         
-
+        
     def process(self, event):
         self.readCollections(event.input)
         
@@ -62,7 +62,7 @@ class TriggerAnalyzer(Analyzer):
 
         triggerBits = self.handles['triggerResultsHLT'].product()
         names = event.input.object().triggerNames(triggerBits)
-
+        
         preScales = self.handles['triggerPrescales'].product()
 
         self.counters.counter('Trigger').inc('All events')
@@ -81,13 +81,20 @@ class TriggerAnalyzer(Analyzer):
 
             if fired and (prescale == 1 or self.cfg_ana.usePrescaled):
                 trigger_passed = True
-
+                
+        
+        event.triggerObjectEvents_IsoMu17 = []
+        event.triggerObjectEvents_IsoMu24 = []
         if self.cfg_ana.addTriggerObjects:
             triggerObjects = self.handles['triggerObjects'].product()
             for to in triggerObjects:
                 to.unpackPathNames(names)
                 for info in trigger_infos:
                     if to.hasPathName(info.name, True):
+                        if(info.name == 'HLT_IsoMu17_eta2p1_LooseIsoPFTau20_v1'):
+                            event.triggerObjectEvents_IsoMu17.append(to)
+                        if(info.name == 'HLT_IsoMu24_eta2p1_v1'):
+                            event.triggerObjectEvents_IsoMu24.append(to)
                         info.objects.append(to)
                         info.objIds.add(abs(to.pdgId()))
 
@@ -96,6 +103,7 @@ class TriggerAnalyzer(Analyzer):
         if self.cfg_ana.requireTrigger:
             if not trigger_passed:
                 return False
+
             
         self.counters.counter('Trigger').inc('HLT')
         return True
@@ -104,6 +112,7 @@ class TriggerAnalyzer(Analyzer):
         tmp = super(TriggerAnalyzer,self).__str__()
         triglist = str(self.triggerList)
         return '\n'.join([tmp, triglist])
+
 
 setattr(TriggerAnalyzer, 'defaultConfig', 
     cfg.Analyzer(

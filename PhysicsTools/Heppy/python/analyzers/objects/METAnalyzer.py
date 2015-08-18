@@ -6,6 +6,7 @@ from PhysicsTools.HeppyCore.utils.deltar import *
 from PhysicsTools.HeppyCore.statistics.counter import Counter, Counters
 from PhysicsTools.Heppy.physicsutils.JetReCalibrator import JetReCalibrator
 import PhysicsTools.HeppyCore.framework.config as cfg
+from CMGTools.H2TauTau.proto.physicsobjects.DiObject import TauMuon #MF
 
 import operator 
 import itertools
@@ -27,6 +28,8 @@ class METAnalyzer( Analyzer ):
         self.handles['cmgCand'] = AutoHandle( self.cfg_ana.candidates, self.cfg_ana.candidatesTypes )
         self.handles['vertices'] =  AutoHandle( "offlineSlimmedPrimaryVertices", 'std::vector<reco::Vertex>', fallbackLabel="offlinePrimaryVertices" )
         self.mchandles['packedGen'] = AutoHandle( 'packedGenParticles', 'std::vector<pat::PackedGenParticle>' )
+        
+        self.handles['diLeptons'] = AutoHandle( 'cmgTauMuCorSVFitFullSel', 'std::vector<pat::CompositeCandidate>' ) #MF
 
     def beginLoop(self, setup):
         super(METAnalyzer,self).beginLoop(setup)
@@ -184,6 +187,9 @@ class METAnalyzer( Analyzer ):
               m.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, math.hypot(px,py)))
               #event.met_shifted += [m]
               setattr(event, "met{0}_shifted_{1}".format(self.cfg_ana.collectionPostFix, i), m)
+
+        event.diLeptons = map(TauMuon, self.handles['diLeptons'].product()) #MF                                                   
+        event.diLepton = event.diLeptons[0]     
 
         self.met_sig = self.met.significance()
         self.met_sumet = self.met.sumEt()

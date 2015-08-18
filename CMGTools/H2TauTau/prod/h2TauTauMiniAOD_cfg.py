@@ -18,11 +18,11 @@ debugEventContent = False
 
 # choose from 'tau-mu' 'di-tau' 'tau-ele' 'mu-ele' 'all-separate', 'all'
 # channel = 'all'
-channel = 'di-tau'
+channel = 'tau-mu'
 
 # runSVFit enables the svfit mass reconstruction used for the H->tau tau analysis.
 # if false, no mass calculation is carried out
-runSVFit = False
+runSVFit = True
 
 # increase to 1000 before running on the batch, to reduce size of log files
 # on your account
@@ -39,8 +39,8 @@ print 'runSVFit', runSVFit
 # dataset_files = 'miniAOD-prod_PAT_.*root'
 
 dataset_user = 'CMS'
-dataset_name = '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM'
-
+#dataset_name = '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM'
+dataset_name = '/SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM'
 dataset_files = '.*root'
 
 
@@ -50,8 +50,12 @@ process.source = datasetToSource(
     dataset_files,
     )
 
+#process.source = cms.Source("PoolSource",
+#                            fileNames = cms.untracked.vstring("file:/data/jbrandstetter/spring15_test2.root")
+#)
+
 process.source.inputCommands=cms.untracked.vstring(
-    'keep *'
+    'keep *',
     )
 
 process.options = cms.untracked.PSet(
@@ -65,7 +69,6 @@ runOnMC = process.source.fileNames[0].find('Run201')==-1 and process.source.file
 
 if runOnMC == False:
     json = setupJSON(process)
-
 
 # load the channel paths -------------------------------------------
 process.load('CMGTools.H2TauTau.h2TauTau_cff')
@@ -113,7 +116,6 @@ if addAK4:
 #             CovU1 = cms.string("CovU1"),
 #             CovU2 = cms.string("CovU2")
 #         )
-
 
 
 # OUTPUT definition ----------------------------------------------------------
@@ -187,7 +189,7 @@ if channel=='di-tau' or 'all' in channel:
 # Message logger setup.
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = reportInterval
-process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(False))
+process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 
 if runSVFit:
     process.cmgTauMuCorSVFitPreSel.SVFitVersion = 2
@@ -213,3 +215,4 @@ print 'PROCESSING'
 print sep_line
 print 'runOnMC:', runOnMC
 print 
+

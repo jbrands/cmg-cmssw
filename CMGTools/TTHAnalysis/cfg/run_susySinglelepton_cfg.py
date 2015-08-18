@@ -54,7 +54,6 @@ metAna.recalibrate = False #should be false in susycore, already
 
 isoTrackAna.setOff=False
 
-
 from CMGTools.TTHAnalysis.analyzers.ttHLepEventAnalyzer import ttHLepEventAnalyzer
 ttHEventAna = cfg.Analyzer(
     ttHLepEventAnalyzer, name="ttHLepEventAnalyzer",
@@ -81,7 +80,7 @@ ttHReclusterJets = cfg.Analyzer(
     etaSubJet = 5.0,
             )
 
-from CMGTools.RootTools.samples.samples_13TeV_PHYS14  import *
+from CMGTools.RootTools.samples.samples_13TeV_74X  import *
 
 triggerFlagsAna.triggerBits = {
 #put trigger here for data
@@ -105,9 +104,11 @@ treeProducer = cfg.Analyzer(
 
 #-------- SAMPLES AND TRIGGERS -----------
 
-from CMGTools.RootTools.samples.samples_13TeV_PHYS14 import *
-#selectedComponents = [QCD_HT_100To250, QCD_HT_250To500, QCD_HT_500To1000, QCD_HT_1000ToInf,TTJets, TTWJets, TTZJets, TTH, SMS_T1tttt_2J_mGl1500_mLSP100, SMS_T1tttt_2J_mGl1200_mLSP800] + SingleTop + WJetsToLNuHT + DYJetsM50HT + T5ttttDeg + T1ttbbWW + T5qqqqWW
+from CMGTools.RootTools.samples.samples_13TeV_74X import *
+#from samples_13TeV_74X import *
 
+#selectedComponents = [QCD_HT_100To250, QCD_HT_250To500, QCD_HT_500To1000, QCD_HT_1000ToInf,TTJets, TTWJets, TTZJets, TTH, SMS_T1tttt_2J_mGl1500_mLSP100, SMS_T1tttt_2J_mGl1200_mLSP800] + SingleTop + WJetsToLNuHT + DYJetsM50HT + T5ttttDeg + T1ttbbWW + T5qqqqWW
+#selectedComponents = [TTH]
 
 
 
@@ -126,8 +127,10 @@ test = 1
 if test==1:
     # test a single component, using a single thread.
     comp = TTJets
-#    comp = SMS_T1tttt_2J_mGl1500_mLSP100
+    #comp = TTH
+    #    comp = SMS_T1tttt_2J_mGl1500_mLSP100
     comp.files = comp.files[:1]
+    #comp.files = ['/data/jbrandstetter/ntuplesForSynchro/tauMu_fullsel_tree_CMG.root']
     selectedComponents = [comp]
     comp.splitFactor = 1
 elif test==2:    
@@ -141,3 +144,4 @@ config = cfg.Config( components = selectedComponents,
                      sequence = sequence,
                      services = [],
                      events_class = Events)
+

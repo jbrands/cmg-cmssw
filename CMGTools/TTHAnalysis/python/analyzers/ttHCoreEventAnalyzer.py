@@ -5,7 +5,9 @@ from PhysicsTools.HeppyCore.utils.deltar import deltaR, deltaPhi
 from CMGTools.TTHAnalysis.leptonMVA import LeptonMVA
 from CMGTools.TTHAnalysis.signedSip import *
 import os
-        
+
+from ROOT import TMatrixD
+
 class ttHCoreEventAnalyzer( Analyzer ):
     def __init__(self, cfg_ana, cfg_comp, looperName ):
         super(ttHCoreEventAnalyzer,self).__init__(cfg_ana,cfg_comp,looperName)
@@ -172,6 +174,19 @@ class ttHCoreEventAnalyzer( Analyzer ):
         if hasattr(event, 'selectedIsoCleanTrack'):
             objects40j10l5t = [ j for j in event.cleanJets if j.pt() > 40 ] + [ l for l in event.selectedLeptons if l.pt() > 10 ] + [ t for t in event.selectedIsoCleanTrack ]
             objects40j10l5t.sort(key = lambda obj : obj.pt(), reverse = True)
+
+
+        event.v_mvaMetSig00 = [ m.met().getSignificanceMatrix()(0,0) for m in event.diLeptons ]
+
+        event.mvaMetSig00 = event.diLepton.met().getSignificanceMatrix()(0,0)
+        event.mvaMetSig01 = event.diLepton.met().getSignificanceMatrix()(0,1)
+        event.mvaMetSig10 = event.diLepton.met().getSignificanceMatrix()(1,0)
+        event.mvaMetSig11 = event.diLepton.met().getSignificanceMatrix()(1,1)
+
+        event.svfitMass = event.diLepton.svfitMass()
+        event.svfitMassError = event.diLepton.svfitMassError()
+        event.svfitPt = event.diLepton.svfitPt()
+    
 
         event.htJet25 = sum([x.pt() for x in objects25])
         event.mhtJet25vec = ROOT.reco.Particle.LorentzVector(-1.*(sum([x.px() for x in objects25])) , -1.*(sum([x.py() for x in objects25])), 0, 0 )     

@@ -74,6 +74,7 @@ setattr(TriggerBitAnalyzer,"defaultConfig",cfg.Analyzer(
 )
 )
 setattr(TriggerBitAnalyzer,"defaultEventFlagsConfig",cfg.Analyzer(
+    
     TriggerBitAnalyzer, name="EventFlags",
     processName = 'PAT',
     outprefix   = 'Flag',

@@ -18,7 +18,7 @@ triggers_mue   = [
 
 triggers_multilep  = triggers_mumu + triggers_ee + triggers_3e + triggers_mue
 
-triggers_1mu_iso    = [ 'HLT_IsoMu24_eta2p1_IterTrk02_v*', 'HLT_IsoTkMu24_eta2p1_IterTrk02_v*'  ]
+triggers_1mu_iso    = [ 'HLT_IsoMu24_eta2p1_v*', 'HLT_IsoTkMu24_eta2p1_IterTrk02_v*'  ]
 triggers_1mu_isowid = [ 'HLT_IsoMu24_IterTrk02_v*', 'HLT_IsoTkMu24_IterTrk02_v*'  ]
 triggers_1mu_isolow = [ 'HLT_IsoMu20_eta2p1_IterTrk02_v*', 'HLT_IsoTkMu20_eta2p1_IterTrk02_v*'  ]
 triggers_1mu_noniso = [ 'HLT_Mu40_v*' ]

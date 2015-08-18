@@ -169,6 +169,7 @@ class NTupleCollection:
         if self.filter != None: collection = [ o for o in collection if self.filter(o) ]
         if self.sortAscendingBy != None: collection  = sorted(collection, key=self.sortAscendingBy)
         if self.sortDescendingBy != None: collection = sorted(collection, key=self.sortDescendingBy, reverse=True)
+        print self.maxlen, len(collection)
         num = min(self.maxlen,len(collection))
         treeNumpy.fill("n"+self.name, num)
         allvars = self.objectType.allVars(isMC)

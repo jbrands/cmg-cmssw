@@ -1,6 +1,5 @@
 #ROOTTOOLS
 from DataFormats.FWLite import Events, Handle
-        
 
 class AutoHandle( Handle, object ):
     '''Handle + label.'''
