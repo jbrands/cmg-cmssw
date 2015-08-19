@@ -16,7 +16,7 @@ susyCounter = cfg.Analyzer(
 
 PDFWeights = []
 #PDFWeights = [ ("CT10",53), ("MSTW2008lo68cl",41), ("NNPDF21_100",101) ]
-byLooseCombinedIsolationDeltaBetaCorr3Hits
+
 # Find the initial events before the skim
 skimAnalyzer = cfg.Analyzer(
     SkimAnalyzerCount, name='skimAnalyzerCount',
