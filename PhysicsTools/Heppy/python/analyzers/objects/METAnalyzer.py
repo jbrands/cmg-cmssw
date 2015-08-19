@@ -48,7 +48,7 @@ class METAnalyzer( Analyzer ):
         uX = - met.px() - boson.px()
         uY = - met.py() - boson.py()
         u1 = (uX*boson.px() + uY*boson.py())/boson.pt()
-        u2 = (uX*boson.px() - uY*boson.py())/boson.pt()
+        u2 = (uX*boson.py() - uY*boson.px())/boson.pt()
 
         setattr(met, "upara"+postfix, u1)
         setattr(met, "uperp"+postfix, u2)
@@ -195,7 +195,14 @@ class METAnalyzer( Analyzer ):
         self.met_sumet = self.met.sumEt()
         if  hasattr(event,'zll_p4'):
             self.adduParaPerp(self.met,event.zll_p4,"_zll")
-            self.adduParaPerp(self.met,event.zll_p4,"_zll")
+
+        if  hasattr(event,'zll_p4'):
+            px,py=self.met.shiftedPx(self.met.NoShift, self.met.Raw),self.met.shiftedPy(self.met.NoShift, self.met.Raw)
+            self.met_raw=ROOT.reco.Particle.LorentzVector(px,py,0,math.hypot(px,py))
+            self.adduParaPerp(self.met_raw, event.zll_p4,"_zll")
+            event.met_raw=self.met_raw
+            event.met_raw.upara_zll=self.met_raw.upara_zll
+            event.met_raw.uperp_zll=self.met_raw.uperp_zll
 
         if self.cfg_ana.recalibrate and hasattr(event, 'deltaMetFromJetSmearing'+self.cfg_ana.jetAnalyzerCalibrationPostFix):
           deltaMetSmear = getattr(event, 'deltaMetFromJetSmearing'+self.cfg_ana.jetAnalyzerCalibrationPostFix)
@@ -214,7 +221,15 @@ class METAnalyzer( Analyzer ):
         if self.cfg_ana.doMetNoPU: setattr(event, "metNoPU"+self.cfg_ana.collectionPostFix, self.metNoPU)
         setattr(event, "met_sig"+self.cfg_ana.collectionPostFix, self.met_sig)
         setattr(event, "met_sumet"+self.cfg_ana.collectionPostFix, self.met_sumet)
-        
+
+        genMET = self.met.genMET()
+        if genMET:
+          setattr(event, "met_genPt"+self.cfg_ana.collectionPostFix, genMET.pt())
+          setattr(event, "met_genPhi"+self.cfg_ana.collectionPostFix, genMET.phi())
+        else:
+          setattr(event, "met_genPt"+self.cfg_ana.collectionPostFix, float('nan'))
+          setattr(event, "met_genPhi"+self.cfg_ana.collectionPostFix, float('nan'))
+
         if self.cfg_ana.doMetNoMu and hasattr(event, 'selectedMuons'):
             self.makeMETNoMu(event)
 

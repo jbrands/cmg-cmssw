@@ -3,6 +3,11 @@
 from CMGTools.TTHAnalysis.plotter.mcAnalysis import *
 import itertools
 
+if "/bin2Dto1Dlib_cc.so" not in ROOT.gSystem.GetLibraries():
+    ROOT.gROOT.ProcessLine(".L %s/src/CMGTools/TTHAnalysis/python/plotter/bin2Dto1Dlib.cc+" % os.environ['CMSSW_BASE']);
+if "/fakeRate_cc.so" not in ROOT.gSystem.GetLibraries(): 
+    ROOT.gROOT.ProcessLine(".L %s/src/CMGTools/TTHAnalysis/python/plotter/fakeRate.cc+" % os.environ['CMSSW_BASE']);
+
 SAFE_COLOR_LIST=[
 ROOT.kBlack, ROOT.kRed, ROOT.kGreen+2, ROOT.kBlue, ROOT.kMagenta+1, ROOT.kOrange+7, ROOT.kCyan+1, ROOT.kGray+2, ROOT.kViolet+5, ROOT.kSpring+5, ROOT.kAzure+1, ROOT.kPink+7, ROOT.kOrange+3, ROOT.kBlue+3, ROOT.kMagenta+3, ROOT.kRed+2,
 ]
@@ -73,6 +78,22 @@ def getDataPoissonErrors(h, drawZeroBins=False, drawXbars=False):
     ret.SetMarkerStyle(h.GetMarkerStyle())
     return ret
 
+def PrintHisto(h):
+    if not h:
+        return
+    print h.GetName()
+    c=[]
+    if "TH1" in h.ClassName():
+        for i in xrange(h.GetNbinsX()):
+            c.append((h.GetBinContent(i+1),h.GetBinError(i+1)))
+    elif "TH2" in h.ClassName():
+        for i in xrange(h.GetNbinsX()):
+            for j in xrange(h.GetNbinsY()):
+                c.append((h.GetBinContent(i+1,j+1),h.GetBinError(i+1,j+1)))
+    else:
+        print 'not th1 or th2'
+    print c
+
 def doSpam(text,x1,y1,x2,y2,align=12,fill=False,textSize=0.033,_noDelete={}):
     cmsprel = ROOT.TPaveText(x1,y1,x2,y2,"NDC");
     cmsprel.SetTextSize(textSize);
@@ -92,11 +113,17 @@ def doTinyCmsPrelim(textLeft="_default_",textRight="_default_",hasExpo=False,tex
     if textLeft  == "_default_": textLeft  = options.lspam
     if textRight == "_default_": textRight = options.rspam
     if lumi      == None       : lumi      = options.lumi
+    if   lumi > 3.54e+1: lumitext = "%.0f fb^{-1}" % lumi
+    elif lumi > 3.54e+0: lumitext = "%.1f fb^{-1}" % lumi
+    elif lumi > 3.54e-1: lumitext = "%.2f fb^{-1}" % lumi
+    elif lumi > 3.54e-2: lumitext = "%.0f pb^{-1}" % (lumi*1000)
+    elif lumi > 3.54e-3: lumitext = "%.1f pb^{-1}" % (lumi*1000)
+    else               : lumitext = "%.2f pb^{-1}" % (lumi*1000)
+    textLeft = textLeft.replace("%(lumi)",lumitext)
+    textRight = textRight.replace("%(lumi)",lumitext)
     if textLeft not in ['', None]:
         doSpam(textLeft, (.28 if hasExpo else .17)+xoffs, .955, .60+xoffs, .995, align=12, textSize=textSize)
     if textRight not in ['', None]:
-        if "%(lumi)" in textRight: 
-            textRight = textRight % { 'lumi':lumi }
         doSpam(textRight,.68+xoffs, .955, .99+xoffs, .995, align=32, textSize=textSize)
 
 def reMax(hist,hist2,islog,factorLin=1.3,factorLog=2.0):
@@ -193,7 +220,7 @@ def doScaleSigNormData(pspec,pmap,mca):
         if p in signals: h.Scale(sf)
     return sf
 
-def doNormFit(pspec,pmap,mca):
+def doNormFit(pspec,pmap,mca,saveScales=False):
     if "data" not in pmap: return -1.0
     data = pmap["data"]
     w = ROOT.RooWorkspace("w","w")
@@ -236,7 +263,7 @@ def doNormFit(pspec,pmap,mca):
         pdfs.add(hpdf); dontDelete.append(hpdf)
         if mca.getProcessOption(p,'FreeFloat',False):
             syst = mca.getProcessOption(p,'NormSystematic',0.0)
-            normterm = w.factory('syst_%s[%g,%g,%g]' % (p, pmap[p].Integral(), 0.2*pmap[p].Integral(), 5*pmap[p].Integral() ))
+            normterm = w.factory('prod::norm_%s(%g,syst_%s[1,%g,%g])' % (p, pmap[p].Integral(), p, 0.2, 5))
             dontDelete.append((normterm,))
             coeffs.add(normterm)
             procNormMap[p] = normterm
@@ -265,7 +292,9 @@ def doNormFit(pspec,pmap,mca):
         totsig = pmap["signal"]; totsig.Reset()
     if "background" in pmap and "background" not in mca.listBackgrounds(): 
         totbkg = pmap["background"]; totbkg.Reset()
+    fitlog = []
     for p in mca.listBackgrounds() + mca.listSignals():
+        normSystematic = mca.getProcessOption(p,'NormSystematic', 0.0)
         if p in pmap and p in procNormMap:
            # setthe scale
            newscale = procNormMap[p].getVal()/pmap[p].Integral()
@@ -278,18 +307,24 @@ def doNormFit(pspec,pmap,mca):
            v1 =  procNormMap[p].getVal()
            nuis.setVal(val)
            #print [ p, val, err, v0, v1, (v1-v0)/v0, mca.getProcessOption(p,'NormSystematic',0.0) ]
-           mca.setProcessOption(p,'NormSystematic', (v1-v0)/v0);
+           fitlog.append("Process %s scaled by %.3f +/- %.3f" % (p,newscale,newscale*(v1-v0)/v0))
+           if saveScales:
+              print "Scaling process %s by the extracted scale factor %.3f with rel. syst uncertainty %.3f" % (p,newscale,(v1-v0)/v0)
+              mca.setProcessOption(p,'NormSystematic', (v1-v0)/v0);
+              mca.scaleUpProcess(p,newscale)
         # recompute totals
         if p in pmap:
             htot = totsig if mca.isSignal(p) else totbkg
             if htot != None:
                 htot.Add(pmap[p])
-                syst = mca.getProcessOption(p,'NormSystematic',0.0)
+                syst = normSystematic
                 if syst > 0:
                     for b in xrange(1,htot.GetNbinsX()+1):
                         htot.SetBinError(b, hypot(htot.GetBinError(b), pmap[p].GetBinContent(b)*syst))
+    pspec.setLog("Fitting", fitlog)
+    
 
-def doRatioHists(pspec,pmap,total,totalSyst,maxRange,fitRatio=False):
+def doRatioHists(pspec,pmap,total,totalSyst,maxRange,fitRatio=None):
     numkey = "data" 
     if "data" not in pmap: 
         if len(pmap) == 4 and 'signal' in pmap and 'background' in pmap:
@@ -350,7 +385,7 @@ def doRatioHists(pspec,pmap,total,totalSyst,maxRange,fitRatio=False):
     unity0.SetMarkerColor(53);
     ROOT.gStyle.SetErrorX(0.5);
     unity.Draw("E2");
-    if fitRatio:
+    if fitRatio != None:
         from CMGTools.TTHAnalysis.tools.plotDecorations import fitTGraph
         fitTGraph(ratio,order=fitRatio)
         unity.SetFillStyle(3013);
@@ -382,7 +417,7 @@ def doRatioHists(pspec,pmap,total,totalSyst,maxRange,fitRatio=False):
 
 def doStatTests(total,data,test,legendCorner):
     #print "Stat tests for %s:" % total.GetName()
-    ksprob = data.KolmogorovTest(total,"XN")
+    #ksprob = data.KolmogorovTest(total,"XN")
     #print "\tKS  %.4f" % ksprob
     chi2l, chi2p, chi2gq, chi2lp, nb = 0, 0, 0, 0, 0
     for b in xrange(1,data.GetNbinsX()+1):
@@ -403,11 +438,12 @@ def doStatTests(total,data,test,legendCorner):
     if test in chi2s:
         chi2 = chi2s[test]
         pval = ROOT.TMath.Prob(chi2, nb)
-        text = "#chi^{2} p-value %.3f" % pval if pval < 0.02 else "#chi^{2} p-value %.2f" % pval
+        chi2fmt = ("%.1f" if nb < 10 else "%.0f") % chi2
+        text = ("#chi^{2} %s/%d p-value %.3f" if pval < 0.02 else "#chi^{2} %s/%d p-value %.2f") % (chi2fmt, nb, pval)
     else:
         text = "Unknown test %s" % test
     if legendCorner == "TR":
-        doSpam(text, .30, .85, .48, .93, align=32, textSize=0.05)
+        doSpam(text, .23, .85, .48, .93, align=12, textSize=0.05)
     elif legendCorner == "TL":
         doSpam(text, .75, .85, .93, .93, align=32, textSize=0.05)
 
@@ -467,7 +503,7 @@ class PlotMaker:
         sets = [ (None, 'all cuts', cuts.allCuts()) ]
         if not self._options.final:
             allcuts = cuts.sequentialCuts()
-            if self._options.nMinusOne: allcuts = cuts.nMinusOneCuts()
+            if self._options.nMinusOne: allcuts = cuts.nMinusOneCuts()+[None] # add a dummy entry since we use allcuts[:-1] below
             for i,(cn,cv) in enumerate(allcuts[:-1]): # skip the last one which is equal to all cuts
                 cnsafe = "cut_%02d_%s" % (i, re.sub("[^a-zA-Z0-9_.]","",cn.replace(" ","_")))
                 sets.append((cnsafe,cn,cv))
@@ -480,7 +516,12 @@ class PlotMaker:
                 else:
                     dir = self._dir.mkdir(subname,title)
             dir.cd()
-            for pspec in plots.plots():
+            pspecs = plots.plots()
+            if options.preFitData:
+                matchspec = [ p for p in pspecs if p.name == options.preFitData ]
+                if not matchspec: raise RuntimeError, "Error: plot %s not found" % options.preFitData
+                pspecs = matchspec + [ p for p in pspecs if p.name != options.preFitData ]
+            for pspec in pspecs:
                 print "    plot: ",pspec.name
                 pmap = mca.getPlots(pspec,cut,makeSummary=True)
                 #
@@ -546,6 +587,8 @@ class PlotMaker:
                     total.GetYaxis().SetDecimals(True)
                 if options.scaleSignalToData: doScaleSigNormData(pspec,pmap,mca)
                 elif options.fitData: doNormFit(pspec,pmap,mca)
+                elif options.preFitData and pspec.name == options.preFitData: 
+                    doNormFit(pspec,pmap,mca,saveScales=True)
                 #
                 for k,v in pmap.iteritems():
                     if v.InheritsFrom("TH1"): v.SetDirectory(dir) 
@@ -714,15 +757,19 @@ class PlotMaker:
                             if 'data' in pmap: 
                                 dump.write(("-"*(maxlen+45))+"\n");
                                 dump.write(("%%%ds %%7.0f\n" % (maxlen+1)) % ('DATA', pmap['data'].Integral()))
+                            for logname, loglines in pspec.allLogs():
+                                dump.write("\n\n --- %s --- \n" % logname)
+                                for line in loglines: dump.write("%s\n" % line)
+                                dump.write("\n")
                             dump.close()
                         else:
                             if "TH2" in total.ClassName() or "TProfile2D" in total.ClassName():
-                                for p in mca.listSignals(allProcs=True) + mca.listBackgrounds(allProcs=True) + ["signal", "background"]:
+                                for p in mca.listSignals(allProcs=True) + mca.listBackgrounds(allProcs=True) + ["signal", "background", "data"]:
                                     if p not in pmap: continue
                                     plot = pmap[p]
                                     c1.SetRightMargin(0.20)
                                     plot.SetContour(100)
-                                    plot.Draw("COLZ")
+                                    plot.Draw("COLZ TEXT45")
                                     c1.Print("%s/%s_%s.%s" % (fdir, pspec.name, p, ext))
                             else:
                                 c1.Print("%s/%s.%s" % (fdir, pspec.name, ext))
@@ -732,7 +779,7 @@ def addPlotMakerOptions(parser):
     parser.add_option("--ss",  "--scale-signal", dest="signalPlotScale", default=1.0, type="float", help="scale the signal in the plots by this amount");
     #parser.add_option("--lspam", dest="lspam",   type="string", default="CMS Simulation", help="Spam text on the right hand side");
     parser.add_option("--lspam", dest="lspam",   type="string", default="CMS Preliminary", help="Spam text on the right hand side");
-    parser.add_option("--rspam", dest="rspam",   type="string", default="#sqrt{s} = 13 TeV, L = %(lumi).1f fb^{-1}", help="Spam text on the right hand side");
+    parser.add_option("--rspam", dest="rspam",   type="string", default="#sqrt{s} = 13 TeV, L = %(lumi)", help="Spam text on the right hand side");
     parser.add_option("--print", dest="printPlots", type="string", default="png,pdf,txt", help="print out plots in this format or formats (e.g. 'png,pdf,txt')");
     parser.add_option("--pdir", "--print-dir", dest="printDir", type="string", default="plots", help="print out plots in this directory");
     parser.add_option("--showSigShape", dest="showSigShape", action="store_true", default=False, help="Superimpose a normalized signal shape")
@@ -742,14 +789,16 @@ def addPlotMakerOptions(parser):
     parser.add_option("--showDatShape", dest="showDatShape", action="store_true", default=False, help="Stack a normalized data shape")
     parser.add_option("--showSFitShape", dest="showSFitShape", action="store_true", default=False, help="Stack a shape of background + scaled signal normalized to total data")
     parser.add_option("--showRatio", dest="showRatio", action="store_true", default=False, help="Add a data/sim ratio plot at the bottom")
-    parser.add_option("--fitRatio", dest="fitRatio", type="int", default=False, help="Fit the ratio with a polynomial of the specified order")
+    parser.add_option("--fitRatio", dest="fitRatio", type="int", default=None, help="Fit the ratio with a polynomial of the specified order")
     parser.add_option("--scaleSigToData", dest="scaleSignalToData", action="store_true", default=False, help="Scale all signal processes so that the overall event yield matches the observed one")
     parser.add_option("--fitData", dest="fitData", action="store_true", default=False, help="Perform a fit to the data")
+    parser.add_option("--preFitData", dest="preFitData", type="string", default=None, help="Perform a pre-fit to the data using the specified distribution, then plot the rest")
     parser.add_option("--maxRatioRange", dest="maxRatioRange", type="float", nargs=2, default=(0.0, 5.0), help="Min and max for the ratio")
     parser.add_option("--doStatTests", dest="doStatTests", type="string", default=None, help="Do this stat test: chi2p (Pearson chi2), chi2l (binned likelihood equivalent of chi2)")
     parser.add_option("--plotmode", dest="plotmode", type="string", default="stack", help="Show as stacked plot (stack), a non-stacked comparison (nostack) and a non-stacked comparison of normalized shapes (norm)")
     parser.add_option("--rebin", dest="globalRebin", type="int", default="0", help="Rebin all plots by this factor")
-    parser.add_option("--poisson", dest="poisson", action="store_true", default=False, help="Draw Poisson error bars")
+    parser.add_option("--poisson", dest="poisson", action="store_true", default=True, help="Draw Poisson error bars (default)")
+    parser.add_option("--no-poisson", dest="poisson", action="store_false", default=True, help="Don't draw Poisson error bars")
     parser.add_option("--unblind", dest="unblind", action="store_true", default=False, help="Unblind plots irrespectively of plot file")
     parser.add_option("--select-plot", "--sP", dest="plotselect", action="append", default=[], help="Select only these plots out of the full file")
     parser.add_option("--exclude-plot", "--xP", dest="plotexclude", action="append", default=[], help="Exclude these plots from the full file")

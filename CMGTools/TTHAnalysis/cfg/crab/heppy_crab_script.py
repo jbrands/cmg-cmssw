@@ -14,6 +14,12 @@ nevents = None # this means run all events
 nprint  = 0 # quiet printout, change if you want to print the first nprint events
 useAAA = True # use xrootd by default
 
+def XrootdRedirector():
+    americas     = ["CO", "MX","US"]
+    oldcontinent = ["AT", "BE", "CH", "DE", "EE", "ES", "FR", "GR", "HU", "IT", "RU", "UK"]
+    region = os.environ["GLIDEIN_CMSSite"].split("_")[1] if "GLIDEIN_CMSSite" in os.environ else ""
+    return  "xrootd-cms.infn.it/" if region in oldcontinent else "cmsxrootd.fnal.gov/" if region in americas else "cms-xrd-global.cern.ch/" 
+
 # arguments of scriptExe
 print "ARGV:",sys.argv
 JobNumber=sys.argv[1] # 1st crab argument is jobID
@@ -42,7 +48,7 @@ cfo = imp.load_source("heppy_config", "heppy_config.py", handle)
 config = cfo.config
 handle.close()
 
-from PhysicsTools.HeppyCore.framework.heppy import split
+from PhysicsTools.HeppyCore.framework.heppy_loop import split
 # pick right component from dataset and file from jobID
 selectedComponents = []
 for comp in config.components:
@@ -50,7 +56,7 @@ for comp in config.components:
         # this selects the files and events and changes the name to _ChunkX according to fineSplitFactor and splitFactor
         newComp = split([comp])[job-1] # first job number is 1
         if useAAA:
-            newComp.files = [x.replace("root://eoscms.cern.ch//eos/cms","root://cms-xrd-global.cern.ch/") for x in newComp.files]
+            newComp.files = [x.replace("root://eoscms.cern.ch//eos/cms","root://" + XrootdRedirector()) for x in newComp.files]
         selectedComponents.append(newComp)
 
 # check selectedComponents
@@ -80,6 +86,7 @@ looper.write()
 
 # assign the right name
 os.rename("Output/mt2.root", "mt2.root")
+os.rename("Output/RLTInfo.root", "RLTInfo.root")
 
 # print in crab log file the content of the job log files, so one can see it from 'crab getlog'
 print "-"*25

@@ -45,3 +45,4 @@ except NameError:
     pass
 else:
     config.JobType.scriptArgs += ["nevents="+str(NEVENTS)]
+

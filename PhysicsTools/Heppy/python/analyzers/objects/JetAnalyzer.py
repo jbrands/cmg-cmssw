@@ -61,10 +61,14 @@ class JetAnalyzer( Analyzer ):
         elif self.recalibrateJets not in [True,False]: raise RuntimeError, "recalibrateJets must be any of { True, False, 'MC', 'Data' }, while it is %r " % self.recalibrateJets
         self.doJEC = self.recalibrateJets or (self.shiftJEC != 0) or self.addJECShifts
         if self.doJEC:
+          doResidual = getattr(cfg_ana, 'applyL2L3Residual', 'Data')
+          if   doResidual == "MC":   doResidual = self.cfg_comp.isMC
+          elif doResidual == "Data": doResidual = not self.cfg_comp.isMC
+          elif doResidual not in [True,False]: raise RuntimeError, "If specified, applyL2L3Residual must be any of { True, False, 'MC', 'Data'(default)}"
           if self.cfg_comp.isMC:
-            self.jetReCalibrator = JetReCalibrator(mcGT,self.cfg_ana.recalibrationType, False,cfg_ana.jecPath)
+            self.jetReCalibrator = JetReCalibrator(mcGT,self.cfg_ana.recalibrationType, doResidual, cfg_ana.jecPath)
           else:
-            self.jetReCalibrator = JetReCalibrator(dataGT,self.cfg_ana.recalibrationType, True,cfg_ana.jecPath)
+            self.jetReCalibrator = JetReCalibrator(dataGT,self.cfg_ana.recalibrationType, doResidual, cfg_ana.jecPath)
         self.doPuId = getattr(self.cfg_ana, 'doPuId', True)
         self.jetLepDR = getattr(self.cfg_ana, 'jetLepDR', 0.4)
         self.jetLepArbitration = getattr(self.cfg_ana, 'jetLepArbitration', lambda jet,lepton: lepton) 
@@ -115,7 +119,8 @@ class JetAnalyzer( Analyzer ):
 
         if self.cfg_comp.isMC:
             self.genJets = [ x for x in self.handles['genJet'].product() ]
-            self.matchJets(event, allJets)
+            if self.cfg_ana.do_mc_match:
+                self.matchJets(event, allJets)
             if getattr(self.cfg_ana, 'smearJets', False):
                 self.smearJets(event, allJets)
         
@@ -129,17 +134,20 @@ class JetAnalyzer( Analyzer ):
         for jet in allJets:
             if self.testJetNoID( jet ): 
                 self.jetsAllNoID.append(jet) 
-                if self.testJetID (jet ):
-                    
-                    if(self.cfg_ana.doQG):
-                        jet.qgl_calc =  self.qglcalc.computeQGLikelihood
-                        jet.qgl_rho =  rho
+                # temporary fix since the jetID it's not good for eta>3
+                if abs(jet.eta()) <3:
+                    if self.testJetID (jet ):
 
+                        if(self.cfg_ana.doQG):
+                            jet.qgl_calc =  self.qglcalc.computeQGLikelihood
+                            jet.qgl_rho =  rho
 
-                    self.jets.append(jet)
-                    self.jetsIdOnly.append(jet)
+                        self.jets.append(jet)
+                        self.jetsIdOnly.append(jet)
+                    else:
+                        self.jetsFailId.append(jet)
                 else:
-                    self.jetsFailId.append(jet)
+                    self.jets.append(jet)
             elif self.testJetID (jet ):
                 self.jetsIdOnly.append(jet)
 
@@ -209,6 +217,7 @@ class JetAnalyzer( Analyzer ):
                 if hasattr(j, 'deltaMetFromJetSmearing'):
                     self.deltaMetFromJetSmearing[0] += j.deltaMetFromJetSmearing[0]
                     self.deltaMetFromJetSmearing[1] += j.deltaMetFromJetSmearing[1]
+
             self.cleanGenJets = cleanNearestJetOnly(self.genJets, leptons, self.jetLepDR)
             
             if self.cfg_ana.cleanGenJetsFromPhoton:
@@ -223,7 +232,8 @@ class JetAnalyzer( Analyzer ):
             #    if abs(j.eta()) <= 2.4: event.nGenJets25Cen += 1
             #    else:                   event.nGenJets25Fwd += 1
                     
-            self.jetFlavour(event)
+            if self.cfg_ana.do_mc_match:
+                self.jetFlavour(event)
 
         setattr(event,"rho"                    +self.cfg_ana.collectionPostFix, self.rho                    ) 
         setattr(event,"deltaMetFromJEC"        +self.cfg_ana.collectionPostFix, self.deltaMetFromJEC        ) 
@@ -242,13 +252,15 @@ class JetAnalyzer( Analyzer ):
 
 
         if self.cfg_comp.isMC:
-            setattr(event,"cleanGenJets"           +self.cfg_ana.collectionPostFix, self.cleanGenJets           ) 
-            setattr(event,"bqObjects"              +self.cfg_ana.collectionPostFix, self.bqObjects              ) 
-            setattr(event,"cqObjects"              +self.cfg_ana.collectionPostFix, self.cqObjects              ) 
-            setattr(event,"partons"                +self.cfg_ana.collectionPostFix, self.partons                ) 
-            setattr(event,"heaviestQCDFlavour"     +self.cfg_ana.collectionPostFix, self.heaviestQCDFlavour     ) 
             setattr(event,"deltaMetFromJetSmearing"+self.cfg_ana.collectionPostFix, self.deltaMetFromJetSmearing) 
-            setattr(event,"genJets"                +self.cfg_ana.collectionPostFix, self.genJets                ) 
+            setattr(event,"cleanGenJets"           +self.cfg_ana.collectionPostFix, self.cleanGenJets           )
+            setattr(event,"genJets"                +self.cfg_ana.collectionPostFix, self.genJets                )
+            if self.cfg_ana.do_mc_match:
+                setattr(event,"bqObjects"              +self.cfg_ana.collectionPostFix, self.bqObjects              )
+                setattr(event,"cqObjects"              +self.cfg_ana.collectionPostFix, self.cqObjects              )
+                setattr(event,"partons"                +self.cfg_ana.collectionPostFix, self.partons                )
+                setattr(event,"heaviestQCDFlavour"     +self.cfg_ana.collectionPostFix, self.heaviestQCDFlavour     )
+
  
         return True
 
@@ -361,6 +373,7 @@ setattr(JetAnalyzer,"defaultConfig", cfg.Analyzer(
     doPuId = False, # Not commissioned in 7.0.X
     doQG = False, 
     recalibrateJets = False,
+    applyL2L3Residual = 'Data', # if recalibrateJets, apply L2L3Residual to Data only
     recalibrationType = "AK4PFchs",
     shiftJEC = 0, # set to +1 or -1 to apply +/-1 sigma shift to the nominal jet energies
     addJECShifts = False, # if true, add  "corr", "corrJECUp", and "corrJECDown" for each jet (requires uncertainties to be available!)
@@ -371,6 +384,7 @@ setattr(JetAnalyzer,"defaultConfig", cfg.Analyzer(
     cleanJetsFromIsoTracks = False,
     alwaysCleanPhotons = False,
     jecPath = "",
+    do_mc_match=True,
     cleanGenJetsFromPhoton = False,
     collectionPostFix = ""
     )
