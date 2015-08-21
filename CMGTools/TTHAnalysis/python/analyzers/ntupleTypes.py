@@ -214,9 +214,13 @@ fatJetType = NTupleObjectType("fatJet",  baseObjectTypes = [ jetType ], variable
     NTupleVariable("nSubJets", lambda x : (x.tagInfo("caTop").properties().nSubJets if x.tagInfo("caTop") else -99), float, help="CA8 jet nSubJets"),
 ])
 
-jetTypeH = NTupleObjectType("jetH",  baseObjectTypes = [ jetTypeExtra ], variables = [
-    NTupleVariable("mcMatchFlav",  lambda x : x.mcMatchFlav, int, mcOnly=True, help="Flavour of associated parton from hard scatter (if any)"),
-])
+#jetTypeH = NTupleObjectType("jetH",  baseObjectTypes = [ jetTypeExtra ], variables = [
+#    NTupleVariable("mcMatchFlav",  lambda x : x.mcMatchFlav, int, mcOnly=True, help="Flavour of associated parton from hard scatter (if any)"),
+#])
+
+jetTypeH = NTupleObjectType("jetSusy",  baseObjectTypes = [ jetTypeExtra ], variables = [
+    NTupleVariable("mcMatchFlav",  lambda x : getattr(x,'mcMatchFlav',-99), int, mcOnly=True, help="Flavour of associated parton from hard scatter (if any)"),
+])#JB
       
 ##------------------------------------------  
 ## MET

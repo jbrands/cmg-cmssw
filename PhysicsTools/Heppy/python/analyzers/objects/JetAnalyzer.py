@@ -119,8 +119,8 @@ class JetAnalyzer( Analyzer ):
 
         if self.cfg_comp.isMC:
             self.genJets = [ x for x in self.handles['genJet'].product() ]
-            if self.cfg_ana.do_mc_match:
-                self.matchJets(event, allJets)
+            #if self.cfg_ana.do_mc_match:
+            #    self.matchJets(event, allJets)
             if getattr(self.cfg_ana, 'smearJets', False):
                 self.smearJets(event, allJets)
         
@@ -232,8 +232,8 @@ class JetAnalyzer( Analyzer ):
             #    if abs(j.eta()) <= 2.4: event.nGenJets25Cen += 1
             #    else:                   event.nGenJets25Fwd += 1
                     
-            if self.cfg_ana.do_mc_match:
-                self.jetFlavour(event)
+            #if self.cfg_ana.do_mc_match:
+            #    self.jetFlavour(event)
 
         setattr(event,"rho"                    +self.cfg_ana.collectionPostFix, self.rho                    ) 
         setattr(event,"deltaMetFromJEC"        +self.cfg_ana.collectionPostFix, self.deltaMetFromJEC        ) 
@@ -255,11 +255,11 @@ class JetAnalyzer( Analyzer ):
             setattr(event,"deltaMetFromJetSmearing"+self.cfg_ana.collectionPostFix, self.deltaMetFromJetSmearing) 
             setattr(event,"cleanGenJets"           +self.cfg_ana.collectionPostFix, self.cleanGenJets           )
             setattr(event,"genJets"                +self.cfg_ana.collectionPostFix, self.genJets                )
-            if self.cfg_ana.do_mc_match:
-                setattr(event,"bqObjects"              +self.cfg_ana.collectionPostFix, self.bqObjects              )
-                setattr(event,"cqObjects"              +self.cfg_ana.collectionPostFix, self.cqObjects              )
-                setattr(event,"partons"                +self.cfg_ana.collectionPostFix, self.partons                )
-                setattr(event,"heaviestQCDFlavour"     +self.cfg_ana.collectionPostFix, self.heaviestQCDFlavour     )
+            #if self.cfg_ana.do_mc_match:
+            #    setattr(event,"bqObjects"              +self.cfg_ana.collectionPostFix, self.bqObjects              )
+            #    setattr(event,"cqObjects"              +self.cfg_ana.collectionPostFix, self.cqObjects              )
+            #    setattr(event,"partons"                +self.cfg_ana.collectionPostFix, self.partons                )
+            #    setattr(event,"heaviestQCDFlavour"     +self.cfg_ana.collectionPostFix, self.heaviestQCDFlavour     )
 
  
         return True
