@@ -7,7 +7,7 @@ from CMGTools.H2TauTau.tools.setupEmbedding import setupEmbedding
 from CMGTools.H2TauTau.objects.jetreco_cff import addAK4Jets
 from CMGTools.H2TauTau.tools.setupOutput import addTauMuOutput, addTauEleOutput, addDiTauOutput, addMuEleOutput, addDiMuOutput
 #import FWCore.PythonUtilities.LumiList as LumiList
-#import FWCore.ParameterSet.Types as CfgTypes
+import FWCore.ParameterSet.Types as CfgTypes
 
 sep_line = '-'*70
 
@@ -44,7 +44,11 @@ print 'runSVFit', runSVFit
 #dataset_name = '/SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM'
 #dataset_files = '.*root'
 
-#from CMGTools.RootTools.samples.samples_13TeV_DATA2015 import *
+from CMGTools.RootTools.samples.samples_13TeV_DATA2015 import *
+
+dataset_user = 'CMS'                                                                                                                                                                                       
+dataset_name = '/SingleMu/Run2015B-PromptReco-v1/MINIAOD'
+dataset_files = '.*root' 
 
 #dataset_name = '/SingleMuon/Run2015B-PromptReco-v1/MINIAOD'
 #dataset_files= '.*root'
@@ -53,16 +57,16 @@ print 'runSVFit', runSVFit
 #    lumisToProcess = CfgTypes.untracked(CfgTypes.VLuminosityBlockRange())
 #)
 
-#process.source = datasetToSource(
-#    dataset_user,
-#    dataset_name,
-#    dataset_files,
-#    )
+process.source = datasetToSource(
+    dataset_user,
+    dataset_name,
+    dataset_files,
+    )
 
 #process.source.lumisToProcess.extend(myList)
-process.source = cms.Source("PoolSource",
-                            fileNames = cms.untracked.vstring("file:data50nb_test1.root")
-)
+#process.source = cms.Source("PoolSource",
+#                            fileNames = cms.untracked.vstring("file:data50nb_test1.root")
+#)
 
 process.source.inputCommands=cms.untracked.vstring(
     'keep *',
