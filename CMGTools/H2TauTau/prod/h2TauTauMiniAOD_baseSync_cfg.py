@@ -76,6 +76,7 @@ if runOnMC == False:
 
 # load the channel paths -------------------------------------------
 process.load('CMGTools.H2TauTau.tauMu_2015_base_cfg')
+process.load('CMGTools.H2TauTau.htt_ntuple_base_cff')
 #process.load('CMGTools.H2TauTau.h2TauTau_cff')
 
 # JAN: recoil correction disabled for now; reactivate if necessary
