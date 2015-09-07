@@ -362,10 +362,10 @@ setattr(JetAnalyzer,"defaultConfig", cfg.Analyzer(
     copyJetsByValue = False,      #Whether or not to copy the input jets or to work with references (should be 'True' if JetAnalyzer is run more than once)
     genJetCol = 'slimmedGenJets',
     rho = ('fixedGridRhoFastjetAll','',''),
-    jetPt = 25.,
+    jetPt = 20., #JB instead 25
     jetEta = 4.7,
-    jetEtaCentral = 2.4,
-    jetLepDR = 0.4,
+    jetEtaCentral = 4.7, #JB instead 25
+    jetLepDR = 0.4, #JB instead 25
     jetLepArbitration = (lambda jet,lepton : lepton), # you can decide which to keep in case of overlaps; e.g. if the jet is b-tagged you might want to keep the jet
     cleanSelectedLeptons = True, #Whether to clean 'selectedLeptons' after disambiguation. Treat with care (= 'False') if running Jetanalyzer more than once
     minLepPt = 10,
@@ -378,7 +378,7 @@ setattr(JetAnalyzer,"defaultConfig", cfg.Analyzer(
     recalibrationType = "AK4PFchs",
     shiftJEC = 0, # set to +1 or -1 to apply +/-1 sigma shift to the nominal jet energies
     addJECShifts = False, # if true, add  "corr", "corrJECUp", and "corrJECDown" for each jet (requires uncertainties to be available!)
-    smearJets = True,
+    smearJets = True, 
     shiftJER = 0, # set to +1 or -1 to get +/-1 sigma shifts    
     cleanJetsFromFirstPhoton = False,
     cleanJetsFromTaus = False,
