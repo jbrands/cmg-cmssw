@@ -9,7 +9,7 @@ config.General.transferLogs = True
 config.section_("JobType")
 config.JobType.pluginName  = 'Analysis'
 # Name of the CMSSW configuration file
-config.JobType.psetName    = 'h2TauTauMiniAOD_cfg.py'
+config.JobType.psetName    = 'h2TauTauMiniAOD_privat_TauEle_cfg.py'
 
 config.section_("Data")
 config.Data.inputDataset = '/SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM'
@@ -19,7 +19,7 @@ config.Data.totalUnits = -1
 config.Data.publication = True
 #config.Data.publication = False
 # This string is used to construct the output dataset name
-config.Data.publishDataName = 'Spring15_SUSYGluGlu_0309'
+config.Data.publishDataName = 'Spring15_SUSYGluGlu_0809'
 #!!!
 config.Data.ignoreLocality = True
 
