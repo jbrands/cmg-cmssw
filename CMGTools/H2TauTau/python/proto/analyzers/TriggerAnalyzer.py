@@ -42,7 +42,7 @@ class TriggerAnalyzer(Analyzer):
     def beginLoop(self, setup):
         super(TriggerAnalyzer,self).beginLoop(setup)
 
-        self.triggerList = self.cfg_ana.triggers #JB changed from cfg_comp.triggers
+        self.triggerList = self.cfg_comp.triggers #JB changed from cfg_comp.triggers
         self.vetoTriggerList = None
 
         if hasattr(self.cfg_comp, 'vetoTriggers'):
