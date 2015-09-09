@@ -302,6 +302,19 @@ triggerObjectIsoMu24 = NTupleObjectType("triggerTypeIsoMu24",   baseObjectTypes 
         NTupleVariable("pt", lambda x : x.pt(), float, mcOnly=False, help="pt of trigger object"),
 ])
 
+triggerObjectEle22 = NTupleObjectType("triggerTypeEle22",   baseObjectTypes = [  ], variables = [
+        NTupleVariable("eta", lambda x : x.eta(), float, mcOnly=False, help="eta of trigger object"),
+        NTupleVariable("phi", lambda x : x.phi(), float, mcOnly=False, help="phi of trigger object"),
+        NTupleVariable("pdgId", lambda x : x.pdgId(), float, mcOnly=False, help="pdgId of trigger object"),
+        NTupleVariable("pt", lambda x : x.pt(), float, mcOnly=False, help="pt of trigger object"),
+])
+triggerObjectEle32 = NTupleObjectType("triggerTypeEle32",   baseObjectTypes = [  ], variables = [
+        NTupleVariable("eta", lambda x : x.eta(), float, mcOnly=False, help="eta of trigger object"),
+        NTupleVariable("phi", lambda x : x.phi(), float, mcOnly=False, help="phi of trigger object"),
+        NTupleVariable("pdgId", lambda x : x.pdgId(), float, mcOnly=False, help="pdgId of trigger object"),
+        NTupleVariable("pt", lambda x : x.pt(), float, mcOnly=False, help="pt of trigger object"),
+])
+
 def ptRel(p4,axis):
     a = ROOT.TVector3(axis.Vect().X(),axis.Vect().Y(),axis.Vect().Z())
     o = ROOT.TLorentzVector(p4.Px(),p4.Py(),p4.Pz(),p4.E())
