@@ -42,7 +42,7 @@ class TriggerAnalyzer(Analyzer):
     def beginLoop(self, setup):
         super(TriggerAnalyzer,self).beginLoop(setup)
 
-        self.triggerList = self.cfg_comp.triggers #JB changed from cfg_comp.triggers
+        self.triggerList = self.cfg_ana.triggers #JB changed from cfg_comp.triggers
         self.vetoTriggerList = None
 
         if hasattr(self.cfg_comp, 'vetoTriggers'):
@@ -86,7 +86,7 @@ class TriggerAnalyzer(Analyzer):
         event.triggerObjectEvents_IsoMu17 = []
         event.triggerObjectEvents_IsoMu24 = []
         event.triggerObjectEvents_Ele22 = []
-        event.triggerObjectEvents_Ele27 = []
+        event.triggerObjectEvents_Ele32 = []
         if self.cfg_ana.addTriggerObjects:
             triggerObjects = self.handles['triggerObjects'].product()
             for to in triggerObjects:
@@ -100,7 +100,7 @@ class TriggerAnalyzer(Analyzer):
                         if(info.name == 'HLT_Ele22_eta2p1_WP75_Gsf_LooseIsoPFTau20_v1'):
                             event.triggerObjectEvents_Ele22.append(to)
                         if(info.name == 'HLT_Ele32_eta2p1_WP75_Gsf_v1'):
-                            event.triggerObjectEvents_Ele27.append(to)
+                            event.triggerObjectEvents_Ele32.append(to)
                         info.objects.append(to)
                         info.objIds.add(abs(to.pdgId()))
 

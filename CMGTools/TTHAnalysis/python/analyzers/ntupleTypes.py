@@ -72,6 +72,8 @@ leptonTypeSusyExtra = NTupleObjectType("leptonSusyExtra", baseObjectTypes = [ le
 leptonTypeH = NTupleObjectType("leptonH", baseObjectTypes = [ leptonType ], variables = [
     NTupleVariable("eleMVAId",     lambda x : (x.electronID("POG_MVA_ID_NonTrig_full5x5") + 2*x.electronID("POG_MVA_ID_Trig_full5x5")) if abs(x.pdgId()) == 11 else -1, int, help="Electron mva id working point (2012, full5x5 shapes): 0=none, 1=non-trig, 2=trig, 3=both"),
     NTupleVariable("mvaId",         lambda lepton : lepton.mvaNonTrigV0(full5x5=True) if abs(lepton.pdgId()) == 11 else lepton.mvaId(), help="EGamma POG MVA ID for non-triggering electrons (as HZZ); MVA Id for muons (BPH+Calo+Trk variables)"),
+    NTupleVariable("corrGsfTrack",   lambda lepton: lepton.gsfTrack().hitPattern().numberOfHits(ROOT.reco.HitPattern.MISSING_INNER_HITS) <= 1 if abs(lepton.pdgId()) == 11 else 0, help="electron.gsfTrack().hitPattern().numberOfHits(ROOT.reco.HitPattern.MISSING_INNER_HITS) <= 1" ),
+    NTupleVariable("passConversionVeto",   lambda lepton: lepton.passConversionVeto() if abs(lepton.pdgId()) == 11 else 0, help="passConversionVeto" ),
     NTupleVariable("mvaIdTrig",     lambda lepton : lepton.mvaTrigV0(full5x5=True)    if abs(lepton.pdgId()) == 11 else 1, help="EGamma POG MVA ID for triggering electrons; 1 for muons"),
     NTupleVariable("looseId",       lambda lepton : lepton.isLooseMuon() if abs(lepton.pdgId()) == 13 else 0, help="loose lepton id"),
     NTupleVariable("validFraction",       lambda lepton : lepton.innerTrack().validFraction() if abs(lepton.pdgId()) == 13 else 0, help="fraction of valid tracker hits"),
