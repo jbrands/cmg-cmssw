@@ -81,8 +81,8 @@ class TriggerAnalyzer(Analyzer):
 
             if fired and (prescale == 1 or self.cfg_ana.usePrescaled):
                 trigger_passed = True
-                
-        
+ 
+
         event.triggerObjectEvents_IsoMu17 = []
         event.triggerObjectEvents_IsoMu24 = []
         event.triggerObjectEvents_Ele22 = []
