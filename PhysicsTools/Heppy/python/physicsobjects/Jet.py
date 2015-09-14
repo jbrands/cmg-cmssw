@@ -99,6 +99,7 @@ class Jet(PhysicsObject):
             if not(eta>=etamin and eta<etamax):
                 continue
             return puMva>cut
+        return -99
         
     def rawFactor(self):
         return self.jecFactor('Uncorrected') * self._rawFactorMultiplier
