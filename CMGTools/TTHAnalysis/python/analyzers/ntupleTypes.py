@@ -87,7 +87,7 @@ leptonTypeH = NTupleObjectType("leptonH", baseObjectTypes = [ leptonType ], vari
     NTupleVariable("chargedHadrIsoR03",           lambda lepton : lepton.chargedHadronIsoR(0.3),  help= "self.physObj.pfIsolationR03().sumChargedHadronPt"),
     NTupleVariable("chargedHadrIsoR04",           lambda lepton : lepton.chargedHadronIsoR(0.4),  help= "self.physObj.pfIsolationR04().sumChargedHadronPt"),
     NTupleVariable("neutralHadrIsoR03",           lambda lepton : lepton.neutralHadronIsoR(0.3),  help= "self.physObj.pfIsolationR03().sumNeutralHadronEt"),
-    NTupleVariable("neutralHadrIsoR04",           lambda lepton : lepton.chargedHadronIsoR(0.4),  help= "self.physObj.pfIsolationR04().sumNeutralHadronEt"),
+    NTupleVariable("neutralHadrIsoR04",           lambda lepton : lepton.neutralHadronIsoR(0.4),  help= "self.physObj.pfIsolationR04().sumNeutralHadronEt"),
     NTupleVariable("photonIsoR03",           lambda lepton : lepton.photonIsoR(0.3),  help= "self.physObj.pfIsolationR03().sumPhotonEt"),
     NTupleVariable("photonIsoR04",           lambda lepton : lepton.photonIsoR(0.4),  help= "self.physObj.pfIsolationR04().sumPhotonEt"),
     NTupleVariable("puChargedHadronIsoR03",           lambda lepton : lepton.puChargedHadronIsoR(0.3),  help= "self.physObj.pfIsolationR03().sumPUPt"),
