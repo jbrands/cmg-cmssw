@@ -30,7 +30,7 @@ class METAnalyzer( Analyzer ):
         self.mchandles['packedGen'] = AutoHandle( 'packedGenParticles', 'std::vector<pat::PackedGenParticle>' )
         
         #self.handles['diLeptons'] = AutoHandle( 'cmgTauMuCorSVFitFullSel', 'std::vector<pat::CompositeCandidate>' ) #MF
-        self.handles['diLeptons'] = AutoHandle( 'cmgTauEleCorSVFitFullSel', 'std::vector<pat::CompositeCandidate>' )
+        #self.handles['diLeptons'] = AutoHandle( 'cmgTauEleCorSVFitFullSel', 'std::vector<pat::CompositeCandidate>' )
 
     def beginLoop(self, setup):
         super(METAnalyzer,self).beginLoop(setup)
@@ -190,9 +190,9 @@ class METAnalyzer( Analyzer ):
               setattr(event, "met{0}_shifted_{1}".format(self.cfg_ana.collectionPostFix, i), m)
 
         #event.diLeptons = map(TauMuon, self.handles['diLeptons'].product()) #MF
-        event.diLeptons = map(TauElectron, self.handles['diLeptons'].product())
+        #event.diLeptons = map(TauElectron, self.handles['diLeptons'].product())
                                                    
-        event.diLepton = event.diLeptons[0]     
+        #event.diLepton = event.diLeptons[0]     
 
         self.met_sig = self.met.significance()
         self.met_sumet = self.met.sumEt()

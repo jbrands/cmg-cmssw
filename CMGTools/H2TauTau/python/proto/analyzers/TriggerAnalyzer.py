@@ -93,13 +93,13 @@ class TriggerAnalyzer(Analyzer):
                 to.unpackPathNames(names)
                 for info in trigger_infos:
                     if to.hasPathName(info.name, True):
-                        if(info.name == 'HLT_IsoMu17_eta2p1_LooseIsoPFTau20_v1'):
+                        if(info.name == 'HLT_IsoMu17_eta2p1_LooseIsoPFTau20_v2'):
                             event.triggerObjectEvents_IsoMu17.append(to)
-                        if(info.name == 'HLT_IsoMu24_eta2p1_v1'):
+                        if(info.name == 'HLT_IsoMu24_eta2p1_v2'):
                             event.triggerObjectEvents_IsoMu24.append(to)
-                        if(info.name == 'HLT_Ele22_eta2p1_WP75_Gsf_LooseIsoPFTau20_v1'):
+                        if(info.name == 'HLT_Ele22_eta2p1_WP75_Gsf_LooseIsoPFTau20_v*'):
                             event.triggerObjectEvents_Ele22.append(to)
-                        if(info.name == 'HLT_Ele32_eta2p1_WP75_Gsf_v1'):
+                        if(info.name == 'HLT_Ele32_eta2p1_WP75_Gsf_v*'):
                             event.triggerObjectEvents_Ele32.append(to)
                         info.objects.append(to)
                         info.objIds.add(abs(to.pdgId()))
