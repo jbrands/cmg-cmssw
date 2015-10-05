@@ -35,7 +35,7 @@ mvaMetInputPath = cms.Path(
 # tau-mu ---
 tauMuPath = cms.Path(
     # metRegressionSequence + 
-    tauMuSequence + 
+    #tauMuSequence + 
     tauMuFullSelSkimSequence
     )
 

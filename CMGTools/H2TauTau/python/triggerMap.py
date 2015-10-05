@@ -53,8 +53,16 @@ pathsAndFilters = {
     # note: pdgId for taus incorrectly set to 0...
     'HLT_IsoMu18_eta2p1_LooseIsoPFTau20_v*': ( ('hltOverlapFilterIsoMu18LooseIsoPFTau20', [15,0]), ('hltOverlapFilterIsoMu18LooseIsoPFTau20',[13])),
     #COLIN FIXME
-    'HLT_IsoMu17_eta2p1_LooseIsoPFTau20_v*': ( ('hltOverlapFilterIsoMu17LooseIsoPFTau20', [15,0]), ('hltOverlapFilterIsoMu17LooseIsoPFTau20',[13])),
-    # 'HLT_IsoMu17_eta2p1_LooseIsoPFTau20_v*': ( ('hltOverlapFilterIsoMu17LooseIsoPFTau20', [15,0]), 'hltL3crIsoL1sMu14erORMu16erL1f0L2f14QL3f17QL3crIsoRhoFiltered0p15'),
+    #'HLT_IsoMu17_eta2p1_LooseIsoPFTau20_v*': ( ('hltOverlapFilterIsoMu17LooseIsoPFTau20', [15,0]), ('hltOverlapFilterIsoMu17LooseIsoPFTau20',[13])),
+     
+    'HLT_IsoMu17_eta2p1_LooseIsoPFTau20_v*': ( ('hltOverlapFilterIsoMu17LooseIsoPFTau20', [15,0]), 'hltL3crIsoL1sMu16erTauJet20erL1f0L2f10QL3f17QL3trkIsoFiltered0p09'), #Trigger path updated by JB
+
+    'HLT_Ele22_eta2p1_WP75_Gsf_LooseIsoPFTau20_v*': ( ('hltEle22WP75L1IsoEG20erTau20erGsfTrackIsoFilter', [15,0]), 'hltOverlapFilterIsoEle22WP75GsfLooseIsoPFTau20'),
+     #'HLT_IsoMu24_eta2p1_v*': ( ('hltL3crIsoL1sMu20Eta2p1L1f0L2f10QL3f24QL3trkIsoFiltered0p09' [15,0]), ('hltL3crIsoL1sMu20Eta2p1L1f0L2f10QL3f24QL3trkIsoFiltered0p09',[13])),
+
+    #'HLT_IsoMu17_eta2p1_LooseIsoPFTau20_v*': ('hltOverlapFilterIsoMu17LooseIsoPFTau20', 'hltL3crIsoL1sMu14erORMu16erL1f0L2f14QL3f17QL3crIsoRhoFiltered0p15'),
+    #'HLT_IsoMu24_eta2p1_v*': ( 'hltL3crIsoL1sMu20Eta2p1L1f0L2f10QL3f24QL3trkIsoFiltered0p09','hltL3crIsoL1sMu20Eta2p1L1f0L2f10QL3f24QL3trkIsoFiltered0p09'),
+
     # hadronic tau triggers 2011
     'HLT_DoubleIsoPFTau20_Trk5_v1': ("hltFilterDoubleIsoPFTau25Trk5LeadTrack5IsolationL1HLTMatched","hltFilterDoubleIsoPFTau25Trk5LeadTrack5IsolationL1HLTMatched"),
     'HLT_DoubleIsoPFTau20_Trk5_v2': ("hltFilterDoubleIsoPFTau25Trk5LeadTrack5IsolationL1HLTMatched","hltFilterDoubleIsoPFTau25Trk5LeadTrack5IsolationL1HLTMatched"),
