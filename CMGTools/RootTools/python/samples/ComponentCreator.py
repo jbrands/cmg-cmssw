@@ -191,13 +191,12 @@ class ComponentCreator(object):
         if useAAA: mapping = 'root://cms-xrd-global.cern.ch/%s'
         return [ mapping % f for f in files]
 
-    def getMyFiles(self, dataset, user, pattern, dbsInstance, useAAA=False):
-        # print 'getting files for', dataset,user,pattern 
+    def getMyFilesHEPHY(self, dataset, user, pattern, dbsInstance):
+        # print 'getting files for', dataset,user,pattern
         ds = myDatasetToSource( user, dataset, pattern, dbsInstance, True )
         files = ds.fileNames
-        mapping = 'root://eoscms.cern.ch//eos/cms%s'
-#        if useAAA: mapping = 'root://cms-xrd-global.cern.ch/%s'  
-        if useAAA: mapping = 'root://xrootd-cms.infn.it/%s'
+#        mapping = 'root://xrootd-cms.infn.it/%s'
+        mapping = 'root://hephyse.oeaw.ac.at/%s'
         return [ mapping % f for f in files]
 
 
