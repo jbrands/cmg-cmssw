@@ -1,4 +1,5 @@
 import PhysicsTools.HeppyCore.framework.config as cfg
+from CMGTools.Production.datasetToSource import datasetToSource, myDatasetToSource
 from CMGTools.Production import eostools
 from CMGTools.Production.dataset import createDataset, createMyDataset
 import re
@@ -18,6 +19,21 @@ class ComponentCreator(object):
 
          component.dataset_entries = self.getPrimaryDatasetEntries(dataset,user,pattern,useAAA=useAAA)
          return component
+
+
+    def makeComponentHEPHY(self,name,dataset,user,pattern,dbsInstance, xSec=1):
+
+        component = cfg.MCComponent(
+            dataset=dataset,
+            name = name,
+            files = self.getMyFilesHEPHY(dataset, user, pattern, dbsInstance),
+            xSection = xSec,
+            nGenEvents = 1,
+            triggers = [],
+            effCorrFactor = 1,
+        )
+
+        return component
 
     def makePrivateMCComponent(self,name,dataset,files,xSec=1):
          if len(files) == 0:
@@ -174,6 +190,16 @@ class ComponentCreator(object):
         mapping = 'root://eoscms.cern.ch//eos/cms%s'
         if useAAA: mapping = 'root://cms-xrd-global.cern.ch/%s'
         return [ mapping % f for f in files]
+
+    def getMyFiles(self, dataset, user, pattern, dbsInstance, useAAA=False):
+        # print 'getting files for', dataset,user,pattern 
+        ds = myDatasetToSource( user, dataset, pattern, dbsInstance, True )
+        files = ds.fileNames
+        mapping = 'root://eoscms.cern.ch//eos/cms%s'
+#        if useAAA: mapping = 'root://cms-xrd-global.cern.ch/%s'  
+        if useAAA: mapping = 'root://xrootd-cms.infn.it/%s'
+        return [ mapping % f for f in files]
+
 
     def getPrimaryDatasetEntries(self, dataset, user, pattern, useAAA=False):
         # print 'getting files for', dataset,user,pattern
