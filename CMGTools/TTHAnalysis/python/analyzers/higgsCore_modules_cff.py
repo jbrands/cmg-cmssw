@@ -235,7 +235,10 @@ tauAna = cfg.Analyzer(
     loose_vetoLeptons = False,
     loose_decayModeID = "decayModeFindingNewDMs",
     loose_tauID = "decayModeFindingNewDMs",
-    loose_vetoLeptonsPOG = False
+    loose_vetoLeptonsPOG = False,
+
+    loose_tauAntiMuonID = "againstMuonLoose",
+    loose_tauAntiElectronID = "againstElectronLooseMVA5"
 )
 
 ##------------------------------------------
@@ -365,9 +368,9 @@ higgsCoreSequence = [
     tauAna,
     #isoTrackAna,                                                                                                                                                                                           
     jetAna,
-    metAna,
-    ttHCoreEventAna,
+#    metAna,
+#    ttHCoreEventAna,
     #ttHJetMETSkim                                                                                                                                                                                          
-    triggerFlagsAna,
-    eventFlagsAna,
+#    triggerFlagsAna,
+#    eventFlagsAna,
 ]

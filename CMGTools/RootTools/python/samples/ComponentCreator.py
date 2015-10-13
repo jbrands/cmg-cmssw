@@ -35,6 +35,15 @@ class ComponentCreator(object):
 
         return component
 
+    def makeDataComponentHEPHY(self,name,dataset,user,pattern,dbsInstance,json=None):
+        component = cfg.DataComponent(
+            #dataset = dataset,
+            name = name,
+            files = self.getMyFilesHEPHY(dataset, user, pattern, dbsInstance),
+            json = json
+            )
+        return component
+
     def makePrivateMCComponent(self,name,dataset,files,xSec=1):
          if len(files) == 0:
             raise RuntimeError, "Trying to make a component %s with no files" % name
