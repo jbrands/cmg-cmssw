@@ -40,6 +40,8 @@ class ComponentCreator(object):
             #dataset = dataset,
             name = name,
             files = self.getMyFilesHEPHY(dataset, user, pattern, dbsInstance),
+            intLumi=1,
+            triggers = [],
             json = json
             )
         return component

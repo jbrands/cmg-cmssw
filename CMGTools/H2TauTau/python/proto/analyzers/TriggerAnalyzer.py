@@ -85,6 +85,7 @@ class TriggerAnalyzer(Analyzer):
 
         event.triggerObjectEvents_IsoMu17 = []
         event.triggerObjectEvents_IsoMu24 = []
+        event.triggerObjectEvents_IsoMu22 = []
         event.triggerObjectEvents_Ele22 = []
         event.triggerObjectEvents_Ele32 = []
         if self.cfg_ana.addTriggerObjects:
@@ -95,8 +96,14 @@ class TriggerAnalyzer(Analyzer):
                     if to.hasPathName(info.name, True):
                         if(info.name == 'HLT_IsoMu17_eta2p1_LooseIsoPFTau20_v1'):
                             event.triggerObjectEvents_IsoMu17.append(to)
+                        if(info.name == 'HLT_IsoMu17_eta2p1_LooseIsoPFTau20_v2'):
+                            event.triggerObjectEvents_IsoMu17.append(to)
                         if(info.name == 'HLT_IsoMu24_eta2p1_v1'):
                             event.triggerObjectEvents_IsoMu24.append(to)
+                        if(info.name == 'HLT_IsoMu24_eta2p1_v2'):
+                            event.triggerObjectEvents_IsoMu24.append(to)
+                        if(info.name == 'HLT_IsoMu22_v1'):
+                            event.triggerObjectEvents_IsoMu22.append(to)
                         if(info.name == 'HLT_Ele22_eta2p1_WP75_Gsf_LooseIsoPFTau20_v1'):
                             event.triggerObjectEvents_Ele22.append(to)
                         if(info.name == 'HLT_Ele32_eta2p1_WP75_Gsf_v1'):

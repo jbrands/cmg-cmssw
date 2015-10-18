@@ -68,6 +68,8 @@ higgsToTauTau_collections.update({
             
             "triggerObjectEvents_IsoMu24"            : NTupleCollection("triggerObject_IsoMu24",     triggerObjectIsoMu24, 20, help="trigger objects HLT_IsoMu24_eta2p1_v1"),
 
+            "triggerObjectEvents_IsoMu22"            : NTupleCollection("triggerObject_IsoMu22",     triggerObjectIsoMu24, 20, help="trigger objects HLT_IsoMu22_v1"),
+
 
             "triggerObjectEvents_Ele22"            : NTupleCollection("triggerObject_Ele22",     triggerObjectEle22, 20, help="trigger objects HLT_Ele22_eta2p1_WP75_Gsf_LooseIsoPFTau20_v1"),
 

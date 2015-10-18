@@ -236,9 +236,6 @@ tauAna = cfg.Analyzer(
     loose_decayModeID = "decayModeFindingNewDMs",
     loose_tauID = "decayModeFindingNewDMs",
     loose_vetoLeptonsPOG = False,
-
-    loose_tauAntiMuonID = "againstMuonLoose",
-    loose_tauAntiElectronID = "againstElectronLooseMVA5"
 )
 
 ##------------------------------------------
@@ -289,8 +286,8 @@ jetAna = cfg.Analyzer(
     doPuId = False, # Not commissioned in 7.0.X                                                       
     recalibrateJets = False, # True, False, 'MC', 'Data'                                               
     recalibrationType = "AK4PFchs",
-    mcGT     = "Summer15_50nsV4_MC",
-    data     = "Summer15_50nsV4_DATA",
+    mcGT     = "Summer15_25nsV2_MC",
+    data     = "Summer15_25nsV5_DATA",
     jecPath = "${CMSSW_BASE}/src/CMGTools/RootTools/data/jec/",
 
     shiftJEC = 0, # set to +1 or -1 to apply +/-1 sigma shift to the nominal jet energies             
@@ -368,9 +365,9 @@ higgsCoreSequence = [
     tauAna,
     #isoTrackAna,                                                                                                                                                                                           
     jetAna,
-#    metAna,
-#    ttHCoreEventAna,
+    metAna,
+    ttHCoreEventAna,
     #ttHJetMETSkim                                                                                                                                                                                          
-#    triggerFlagsAna,
-#    eventFlagsAna,
+    triggerFlagsAna,
+    eventFlagsAna,
 ]

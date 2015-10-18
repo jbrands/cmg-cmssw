@@ -105,14 +105,14 @@ leptonTypeH = NTupleObjectType("leptonH", baseObjectTypes = [ leptonType ], vari
 tauTypeSusy = NTupleObjectType("tauSusy",  baseObjectTypes = [ tauType ], variables = [
 ])
 tauTypeH = NTupleObjectType("tauH",  baseObjectTypes = [ tauType ], variables = [
-    NTupleVariable("againstElectronLoose",  lambda x : x.tauID("againstElectronLoose"), int, help="Tau discriminant against electrons, loose"),
-    NTupleVariable("againstElectronMedium",  lambda x : x.tauID("againstElectronMedium"), int, help="Tau discriminant against electrons, medium"),
-    NTupleVariable("againstElectronTight",  lambda x : x.tauID("againstElectronTight"), int, help="Tau discriminant against electrons, tight"),
+    #NTupleVariable("againstElectronLoose",  lambda x : x.tauID("againstElectronLoose"), int, help="Tau discriminant against electrons, loose"),
+    #NTupleVariable("againstElectronMedium",  lambda x : x.tauID("againstElectronMedium"), int, help="Tau discriminant against electrons, medium"),
+    #NTupleVariable("againstElectronTight",  lambda x : x.tauID("againstElectronTight"), int, help="Tau discriminant against electrons, tight"),
     NTupleVariable("againstElectronLooseMVA5",  lambda x : x.tauID("againstElectronLooseMVA5"), int, help="Tau discriminant against electrons, MVA5 loose"),
     NTupleVariable("againstElectronMediumMVA5",  lambda x : x.tauID("againstElectronMediumMVA5"), int, help="Tau discriminant against electrons, MVA5 medium"),
     NTupleVariable("againstElectronTightMVA5",  lambda x : x.tauID("againstElectronTightMVA5"), int, help="Tau discriminant against electrons, MVA5 tight"),
     NTupleVariable("againstMuonLoose3",  lambda x : x.tauID("againstMuonLoose3"), int, help="Tau discriminant against muons, loose3"),
-    NTupleVariable("againstMuonMedium2",  lambda x : x.tauID("againstMuonMedium2"), int, help="Tau discriminant against muons, medium2"),
+    #NTupleVariable("againstMuonMedium2",  lambda x : x.tauID("againstMuonMedium2"), int, help="Tau discriminant against muons, medium2"),
     NTupleVariable("againstMuonTight3",  lambda x : x.tauID("againstMuonTight3"), int, help="Tau discriminant against muons, tight3"),
 
     NTupleVariable("byCombinedIsolationDeltaBetaCorrRaw3Hits",  lambda x : x.tauID("byCombinedIsolationDeltaBetaCorrRaw3Hits"), int, help="Combined DB 3 Hits isolation"),
@@ -298,6 +298,13 @@ triggerObjectIsoMu17 = NTupleObjectType("triggerTypeIsoMu17",   baseObjectTypes 
         NTupleVariable("pt", lambda x : x.pt(), float, mcOnly=False, help="pt of trigger object"),
 ])
 triggerObjectIsoMu24 = NTupleObjectType("triggerTypeIsoMu24",   baseObjectTypes = [  ], variables = [
+        NTupleVariable("eta", lambda x : x.eta(), float, mcOnly=False, help="eta of trigger object"),
+        NTupleVariable("phi", lambda x : x.phi(), float, mcOnly=False, help="phi of trigger object"),
+        NTupleVariable("pdgId", lambda x : x.pdgId(), float, mcOnly=False, help="pdgId of trigger object"),
+        NTupleVariable("pt", lambda x : x.pt(), float, mcOnly=False, help="pt of trigger object"),
+])
+
+triggerObjectIsoMu22 = NTupleObjectType("triggerTypeIsoMu22",   baseObjectTypes = [  ], variables = [
         NTupleVariable("eta", lambda x : x.eta(), float, mcOnly=False, help="eta of trigger object"),
         NTupleVariable("phi", lambda x : x.phi(), float, mcOnly=False, help="phi of trigger object"),
         NTupleVariable("pdgId", lambda x : x.pdgId(), float, mcOnly=False, help="pdgId of trigger object"),

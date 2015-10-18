@@ -13,7 +13,8 @@ WJetsToLNu_TuneCUETP8M1 = kreator.makeComponentHEPHY("WJetsToLNu_TuneCUETP8M1","
 QCD_Pt15TTo7000_TuneZ2starFlat = kreator.makeComponentHEPHY("QCD_Pt15TTo7000_TuneZ2starFlat","/QCD_Pt-15TTo7000_TuneZ2star-Flat_13TeV_pythia6/jbrandst-Spring15_QCD_Asympt25ns_2209-944f06e45b67adf54f7518dd64f83326/USER","PRIVATE",".*root","phys03",1.0)
 TT_TuneCUETP8M1 = kreator.makeComponentHEPHY("TT_TuneCUETP8M1","/TT_TuneCUETP8M1_13TeV-powheg-pythia8/jbrandst-Spring15_TT_Asympt25ns_2109-944f06e45b67adf54f7518dd64f83326/USER","PRIVATE","*.root","phys03",1.0)
 DYJetsToLL_M50 = kreator.makeComponentHEPHY("DYJetsToLL_M50","/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/jbrandst-Spring15_DYJets_Asympt25ns_2109-944f06e45b67adf54f7518dd64f83326/USER","PRIVATE","*.root","phys03",1.0)
-Run2015D_PromptReco_v3 = kreator.makeDataComponentHEPHY("Run2015D_PromptReco_v3","/SingleMuon/jbrandst-Run2015D-PromptReco-v3-c83e672fc034baa1893ed04e7be76a51/USER", "PRIVATE", ".*root","phys03","/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-258159_13TeV_PromptReco_Collisions15_25ns_JSON.txt")
+Run2015D_PromptReco_v3 = kreator.makeDataComponentHEPHY("Run2015D_PromptReco_v3","/SingleMuon/jbrandst-Run2015D-PromptReco-v3-c83e672fc034baa1893ed04e7be76a51/USER", "PRIVATE", "*.root","phys03","/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-258159_13TeV_PromptReco_Collisions15_25ns_JSON.txt")
+Run2015D_05Oct2015_v1 = kreator.makeDataComponentHEPHY("Run2015D_05Oct2015_v1","/SingleMuon/jbrandst-Run2015D-05Oct2015-v1-c83e672fc034baa1893ed04e7be76a51/USER", "PRIVATE", "*.root","phys03","/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-258159_13TeV_PromptReco_Collisions15_25ns_JSON.txt")
 
 
 HiggsSignalSamples = [

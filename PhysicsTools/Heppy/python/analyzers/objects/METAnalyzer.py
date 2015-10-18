@@ -180,14 +180,14 @@ class METAnalyzer( Analyzer ):
         #Shifted METs
         #Uncertainties defined in https://github.com/cms-sw/cmssw/blob/CMSSW_7_2_X/DataFormats/PatCandidates/interface/MET.h#L168
         #event.met_shifted = []
-        if not self.cfg_ana.copyMETsByValue:
-          for i in range(self.met.METUncertaintySize):
-              m = ROOT.pat.MET(self.met)
-              px  = m.shiftedPx(i);
-              py  = m.shiftedPy(i);
-              m.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, math.hypot(px,py)))
+        #if not self.cfg_ana.copyMETsByValue:
+          #for i in range(self.met.METUncertaintySize):
+          #    m = ROOT.pat.MET(self.met)
+          #    px  = m.shiftedPx(i);
+          #    py  = m.shiftedPy(i);
+          #    m.setP4(ROOT.reco.Particle.LorentzVector(px,py, 0, math.hypot(px,py)))
               #event.met_shifted += [m]
-              setattr(event, "met{0}_shifted_{1}".format(self.cfg_ana.collectionPostFix, i), m)
+          #    setattr(event, "met{0}_shifted_{1}".format(self.cfg_ana.collectionPostFix, i), m)
 
         event.diLeptons = map(TauMuon, self.handles['diLeptons'].product()) #MF
         #event.diLeptons = map(TauElectron, self.handles['diLeptons'].product())
