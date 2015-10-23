@@ -69,7 +69,7 @@ class VertexAnalyzer( Analyzer ):
                                                              'double' )
 
         self.mchandles['pusi'] =  AutoHandle(
-            'addPileupInfo',
+            'slimmedAddPileupInfo',
             'std::vector<PileupSummaryInfo>' 
             )        
 

@@ -64,6 +64,9 @@ higgsToTauTau_collections.update({
 #mf            "genDHadrons"  : NTupleCollection("GenDHad", heavyFlavourHadronType, 20, mcOnly=True, help="Gen-level D hadrons"),
             "diLeptons"          : NTupleCollection("dilepton",     dileptonH, 10, help="system of decay products of the two tau leptons"),
 
+            #"met" : NTupleCollection("met", metTypeH, help="PF E_{T}^{miss}, after type 1 corrections"),                             
+
+
             "triggerObjectEvents_IsoMu17"            : NTupleCollection("triggerObject_IsoMu17",     triggerObjectIsoMu17, 20, help="trigger objects HLT_IsoMu17_eta2p1_LooseIsoPFTau20_v1"),
             
             "triggerObjectEvents_IsoMu24"            : NTupleCollection("triggerObject_IsoMu24",     triggerObjectIsoMu24, 20, help="trigger objects HLT_IsoMu24_eta2p1_v1"),
@@ -76,6 +79,8 @@ higgsToTauTau_collections.update({
             "triggerObjectEvents_Ele32"            : NTupleCollection("triggerObject_Ele32",     triggerObjectEle32, 20, help="trigger objects HLT_Ele32_eta2p1_WP75_Gsf_v1"),
 
 })
+
+
 
 #Event.diLeptons[0].met().getSignificanceMatrix()(0,0)
  

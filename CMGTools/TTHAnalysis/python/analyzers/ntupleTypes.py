@@ -147,8 +147,13 @@ dileptonH = NTupleObjectType("dileptonH",  baseObjectTypes = [ fourVectorType ],
     NTupleVariable("met_pt", lambda x : x.met().pt(), help="met"),
     NTupleVariable("met_phi", lambda x : x.met().phi(), help="met phi"),
 ])
-#event.diLeptons[0].met().getSignificanceMatrix()(0,0) 
-#dileptonH = NTupleObjectType("dileptonH",  baseObjectTypes = [ objectFloat ], variables = [                                                                                            
+
+#metH = NTupleObjectType("metH", baseObjectTypes = [ metType ], variables= [
+
+#        NTupleVariable("pt", lambda x : x.met().pt(), float, help="SVFit mass"),
+#        NTupleVariable()
+
+#])
 
 ##------------------------------------------  
 ##  ISOTRACK

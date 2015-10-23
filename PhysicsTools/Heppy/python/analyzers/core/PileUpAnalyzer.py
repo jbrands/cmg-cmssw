@@ -83,7 +83,7 @@ class PileUpAnalyzer( Analyzer ):
     def declareHandles(self):
         super(PileUpAnalyzer, self).declareHandles()
         self.mchandles['pusi'] =  AutoHandle(
-            'addPileupInfo',
+            'slimmedAddPileupInfo',
             'std::vector<PileupSummaryInfo>' 
             ) 
         if self.allVertices == '_AUTO_':
