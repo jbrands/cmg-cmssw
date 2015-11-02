@@ -84,6 +84,7 @@ class TriggerAnalyzer(Analyzer):
  
 
         event.triggerObjectEvents_IsoMu17 = []
+        event.triggerObjectEvents_IsoMu18 = []
         event.triggerObjectEvents_IsoMu24 = []
         event.triggerObjectEvents_IsoMu22 = []
         event.triggerObjectEvents_Ele22 = []
@@ -94,10 +95,10 @@ class TriggerAnalyzer(Analyzer):
                 to.unpackPathNames(names)
                 for info in trigger_infos:
                     if to.hasPathName(info.name, True):
-                        if(info.name == 'HLT_IsoMu17_eta2p1_LooseIsoPFTau20_v1'):
+                        if(info.name == 'HLT_IsoMu17_eta2p1'):
                             event.triggerObjectEvents_IsoMu17.append(to)
-                        if(info.name == 'HLT_IsoMu17_eta2p1_LooseIsoPFTau20_v2'):
-                            event.triggerObjectEvents_IsoMu17.append(to)
+                        if(info.name == 'HLT_IsoMu18_v'):
+                            event.triggerObjectEvents_IsoMu18.append(to)
                         if(info.name == 'HLT_IsoMu24_eta2p1_v1'):
                             event.triggerObjectEvents_IsoMu24.append(to)
                         if(info.name == 'HLT_IsoMu24_eta2p1_v2'):
