@@ -3,6 +3,9 @@ import copy
 
 common = [
     'drop *',
+    'keep *_l1extraParticles_*_*',
+    'keep selectedPatTrigger*_*_*_*',
+    'keep GenEventInfoProduct*_*_*_*',
     'keep double_fixedGridRho*_*_*',
     'keep edmTriggerResults_TriggerResults_*_*',
     'keep patPackedTriggerPrescales_*_*_*',

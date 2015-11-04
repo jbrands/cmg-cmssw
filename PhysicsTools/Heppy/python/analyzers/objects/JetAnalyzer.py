@@ -132,10 +132,12 @@ class JetAnalyzer( Analyzer ):
 
         if self.cfg_comp.isMC:
             self.genJets = [ x for x in self.handles['genJet'].product() ]
+
             if self.cfg_ana.do_mc_match:
                 for igj, gj in enumerate(self.genJets):
                     gj.index = igj
                 self.matchJets(event, allJets)
+
             if getattr(self.cfg_ana, 'smearJets', False):
                 self.smearJets(event, allJets)
         
@@ -274,8 +276,8 @@ class JetAnalyzer( Analyzer ):
             #    if abs(j.eta()) <= 2.4: event.nGenJets25Cen += 1
             #    else:                   event.nGenJets25Fwd += 1
                     
-            if self.cfg_ana.do_mc_match:
-                self.jetFlavour(event)
+            #if self.cfg_ana.do_mc_match:
+            #    self.jetFlavour(event)
 
         if hasattr(event,"jets"+self.cfg_ana.collectionPostFix): raise RuntimeError, "Event already contains a jet collection with the following postfix: "+self.cfg_ana.collectionPostFix
         setattr(event,"rho"                    +self.cfg_ana.collectionPostFix, self.rho                    ) 
@@ -303,11 +305,11 @@ class JetAnalyzer( Analyzer ):
             setattr(event,"deltaMetFromJetSmearing"+self.cfg_ana.collectionPostFix, self.deltaMetFromJetSmearing) 
             setattr(event,"cleanGenJets"           +self.cfg_ana.collectionPostFix, self.cleanGenJets           )
             setattr(event,"genJets"                +self.cfg_ana.collectionPostFix, self.genJets                )
-            if self.cfg_ana.do_mc_match:
-                setattr(event,"bqObjects"              +self.cfg_ana.collectionPostFix, self.bqObjects              )
-                setattr(event,"cqObjects"              +self.cfg_ana.collectionPostFix, self.cqObjects              )
-                setattr(event,"partons"                +self.cfg_ana.collectionPostFix, self.partons                )
-                setattr(event,"heaviestQCDFlavour"     +self.cfg_ana.collectionPostFix, self.heaviestQCDFlavour     )
+            #if self.cfg_ana.do_mc_match:
+            #    setattr(event,"bqObjects"              +self.cfg_ana.collectionPostFix, self.bqObjects              )
+            #    setattr(event,"cqObjects"              +self.cfg_ana.collectionPostFix, self.cqObjects              )
+            #    setattr(event,"partons"                +self.cfg_ana.collectionPostFix, self.partons                )
+            #    setattr(event,"heaviestQCDFlavour"     +self.cfg_ana.collectionPostFix, self.heaviestQCDFlavour     )
 
  
         return True
@@ -413,10 +415,10 @@ setattr(JetAnalyzer,"defaultConfig", cfg.Analyzer(
     copyJetsByValue = False,      #Whether or not to copy the input jets or to work with references (should be 'True' if JetAnalyzer is run more than once)
     genJetCol = 'slimmedGenJets',
     rho = ('fixedGridRhoFastjetAll','',''),
-    jetPt = 25.,
+    jetPt = 20., #JB instead 25
     jetEta = 4.7,
-    jetEtaCentral = 2.4,
-    jetLepDR = 0.4,
+    jetEtaCentral = 4.7, #JB instead 25
+    jetLepDR = 0.4, #JB instead 25
     jetLepArbitration = (lambda jet,lepton : lepton), # you can decide which to keep in case of overlaps; e.g. if the jet is b-tagged you might want to keep the jet
     cleanSelectedLeptons = True, #Whether to clean 'selectedLeptons' after disambiguation. Treat with care (= 'False') if running Jetanalyzer more than once
     minLepPt = 10,
@@ -429,7 +431,7 @@ setattr(JetAnalyzer,"defaultConfig", cfg.Analyzer(
     recalibrationType = "AK4PFchs",
     shiftJEC = 0, # set to +1 or -1 to apply +/-1 sigma shift to the nominal jet energies
     addJECShifts = False, # if true, add  "corr", "corrJECUp", and "corrJECDown" for each jet (requires uncertainties to be available!)
-    smearJets = True,
+    smearJets = True, 
     shiftJER = 0, # set to +1 or -1 to get +/-1 sigma shifts    
     jecPath = "",
     calculateSeparateCorrections = False,

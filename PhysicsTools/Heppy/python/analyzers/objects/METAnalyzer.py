@@ -6,6 +6,7 @@ from PhysicsTools.HeppyCore.utils.deltar import *
 from PhysicsTools.HeppyCore.statistics.counter import Counter, Counters
 from PhysicsTools.Heppy.physicsutils.JetReCalibrator import Type1METCorrector, setFakeRawMETOnOldMiniAODs
 import PhysicsTools.HeppyCore.framework.config as cfg
+from CMGTools.H2TauTau.proto.physicsobjects.DiObject import TauMuon, TauElectron #MF
 
 import operator 
 import itertools
@@ -36,6 +37,9 @@ class METAnalyzer( Analyzer ):
         self.handles['cmgCand'] = AutoHandle( self.cfg_ana.candidates, self.cfg_ana.candidatesTypes )
         self.handles['vertices'] =  AutoHandle( "offlineSlimmedPrimaryVertices", 'std::vector<reco::Vertex>', fallbackLabel="offlinePrimaryVertices" )
         self.mchandles['packedGen'] = AutoHandle( 'packedGenParticles', 'std::vector<pat::PackedGenParticle>' )
+        
+        self.handles['diLeptons'] = AutoHandle( 'cmgTauMuCorSVFitFullSel', 'std::vector<pat::CompositeCandidate>' ) #MF
+        #self.handles['diLeptons'] = AutoHandle( 'cmgTauEleCorSVFitFullSel', 'std::vector<pat::CompositeCandidate>' )
 
     def beginLoop(self, setup):
         super(METAnalyzer,self).beginLoop(setup)
@@ -207,16 +211,21 @@ class METAnalyzer( Analyzer ):
         #      #event.met_shifted += [m]
         #      setattr(event, "met{0}_shifted_{1}".format(self.cfg_ana.collectionPostFix, i), m)
 
+        event.diLeptons = map(TauMuon, self.handles['diLeptons'].product()) #MF
+        #event.diLeptons = map(TauElectron, self.handles['diLeptons'].product())
+                                                   
+        event.diLepton = event.diLeptons[0]     
+
         self.met_sig = self.met.significance()
         self.met_sumet = self.met.sumEt()
 
-        if self.old74XMiniAODs and self.recalibrateMET != "type1":
-           oldraw = self.met.shiftedP2_74x(12,0);
-           setFakeRawMETOnOldMiniAODs( self.met, oldraw.px, oldraw.py, self.met.shiftedSumEt_74x(12,0) )
-           px, py = oldraw.px, oldraw.py
-        else:
-           px, py = self.met.uncorPx(), self.met.uncorPy()
-        self.met_raw = ROOT.reco.Particle.LorentzVector(px,py,0,math.hypot(px,py))
+        #f self.old74XMiniAODs and self.recalibrateMET != "type1":
+        #  oldraw = self.met.shiftedP2_74x(12,0);
+        #   setFakeRawMETOnOldMiniAODs( self.met, oldraw.px, oldraw.py, self.met.shiftedSumEt_74x(12,0) )
+        #   px, py = oldraw.px, oldraw.py
+        #else:
+        #   px, py = self.met.uncorPx(), self.met.uncorPy()
+        #self.met_raw = ROOT.reco.Particle.LorentzVector(px,py,0,math.hypot(px,py))
 
         if hasattr(event,'zll_p4'):
             self.adduParaPerp(self.met,event.zll_p4,"_zll")

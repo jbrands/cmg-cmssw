@@ -22,7 +22,7 @@ channel = 'tau-mu'
 
 # runSVFit enables the svfit mass reconstruction used for the H->tau tau analysis.
 # if false, no mass calculation is carried out
-runSVFit = False
+runSVFit = True
 
 # increase to 1000 before running on the batch, to reduce size of log files
 # on your account
@@ -38,31 +38,23 @@ print 'runSVFit', runSVFit
 # dataset_name = '/VBF_HToTauTau_M-125_13TeV-powheg-pythia6/Spring14dr-PU20bx25_POSTLS170_V5-v1/AODSIM/SS14/'
 # dataset_files = 'miniAOD-prod_PAT_.*root'
 
-local_run = False
-if local_run:
+dataset_user = 'CMS'
+#dataset_name = '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v2/MINIAODSIM'
+dataset_name = '/SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v1/MINIAODSIM'
+dataset_files = '.*root'
 
-    dataset_user = 'CMS'
-    dataset_name = '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISpring15DR74-Asympt25ns_MCRUN2_74_V9-v3/MINIAODSIM'
+#process.source = datasetToSource(
+#    dataset_user,
+#    dataset_name,
+#    dataset_files,
+#    )
 
-    dataset_files = '.*root'
+process.source = cms.Source("PoolSource",
+                            fileNames = cms.untracked.vstring("file:/data/jbrandstetter/spring15_test2.root")
+)
 
-    process.source = datasetToSource(
-        dataset_user,
-        dataset_name,
-        dataset_files,
-    )
-
-else:
-    process.source = cms.Source(
-        "PoolSource",
-        noEventSort = cms.untracked.bool(True),
-        duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
-        fileNames = cms.untracked.vstring('/store/mc/RunIISpring15DR74/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/Asympt25ns_MCRUN2_74_V9-v3/10000/8CF409BF-6A14-E511-A190-0025905964C2.root')
-    )
-
-
-process.source.inputCommands = cms.untracked.vstring(
-    'keep *'
+process.source.inputCommands=cms.untracked.vstring(
+    'keep *',
 )
 
 process.options = cms.untracked.PSet(
@@ -82,10 +74,10 @@ runOnMC = process.source.fileNames[0].find('Run201') == -1 and process.source.fi
 if runOnMC == False:
     json = setupJSON(process)
 
-
 # load the channel paths -------------------------------------------
-process.load('CMGTools.H2TauTau.h2TauTau_cff')
-#process.load('CMGTools.H2TauTau.tauMu_2015_base_cfg')
+process.load('CMGTools.H2TauTau.tauMu_2015_base_cfg')
+process.load('CMGTools.H2TauTau.htt_ntuple_base_cff')
+#process.load('CMGTools.H2TauTau.h2TauTau_cff')
 
 # JAN: recoil correction disabled for now; reactivate if necessary
 # setting up the recoil correction according to the input file
@@ -106,7 +98,8 @@ process.GlobalTag.globaltag = 'MCRUN2_74_V9::All'
 
 process.load('JetMETCorrections.Configuration.DefaultJEC_cff')
 process.load('PhysicsTools.PatAlgos.slimming.unpackedTracksAndVertices_cfi')
-process.load("Configuration.StandardSequences.Geometry_cff")
+process.load('Configuration.StandardSequences.Geometry_cff')
+#process.load("Configuration.Geometry.GeometryIdeal_cff")
 process.load("Configuration.StandardSequences.MagneticField_38T_cff")
 process.load('TrackingTools.TransientTrack.TransientTrackBuilder_cfi')
 process.load('RecoBTag.Configuration.RecoBTag_cff')
@@ -156,7 +149,6 @@ if addPuppi:
 #     #     CovU1 = cms.FileInPath('RecoMET/METPUSubtraction/data/gbru1cov_53_Dec2012.root'),
 #     #     CovU2 = cms.FileInPath('RecoMET/METPUSubtraction/data/gbru2cov_53_Dec2012.root')
 #     # )
-
 
 # OUTPUT definition ----------------------------------------------------------
 process.outpath = cms.EndPath()
@@ -237,7 +229,7 @@ if channel == 'di-tau' or 'all' in channel:
 # Message logger setup.
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = reportInterval
-process.options = cms.untracked.PSet(wantSummary=cms.untracked.bool(False))
+process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 
 if runSVFit:
     process.cmgTauMuCorSVFitPreSel.SVFitVersion = 2

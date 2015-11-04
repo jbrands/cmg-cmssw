@@ -64,7 +64,7 @@ class JetAnalyzer( Analyzer ):
         count.register('at least 2 clean jets')
         
     def process(self, iEvent, event):
-        
+
         self.readCollections( iEvent )
         cmgJets = self.handles['jets'].product()
 

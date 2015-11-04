@@ -168,7 +168,7 @@ class LeptonAnalyzer( Analyzer ):
 
         # make loose leptons (basic selection)
         for mu in inclusiveMuons:
-                if (mu.muonID(self.cfg_ana.loose_muon_id) and 
+                if(mu.muonID(self.cfg_ana.loose_muon_id) and 
                         mu.pt() > self.cfg_ana.loose_muon_pt and abs(mu.eta()) < self.cfg_ana.loose_muon_eta and 
                         abs(mu.dxy()) < self.cfg_ana.loose_muon_dxy and abs(mu.dz()) < self.cfg_ana.loose_muon_dz and
                         self.muIsoCut(mu)):

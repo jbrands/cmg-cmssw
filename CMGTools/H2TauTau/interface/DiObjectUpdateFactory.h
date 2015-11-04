@@ -60,8 +60,8 @@ void cmg::DiObjectUpdateFactory<T, U>::produce(edm::Event& iEvent, const edm::Ev
   edm::Handle<collection> diObjects;
   iEvent.getByLabel(diObjectLabel_,diObjects);
 
-  edm::Handle< std::vector<reco::GenParticle> > genparticles;
-  iEvent.getByLabel(genParticleLabel_, genparticles);
+  //edm::Handle< std::vector<reco::GenParticle> > genparticles;
+  //iEvent.getByLabel(genParticleLabel_, genparticles);
    
   std::auto_ptr<collection> result(new collection);
   
@@ -105,36 +105,36 @@ void cmg::DiObjectUpdateFactory<T, U>::produce(edm::Event& iEvent, const edm::Ev
     bool l1genMatched = false ;
     bool l2genMatched = false ;
     
-    for ( size_t i=0; i< genparticles->size(); ++i) 
-    {
-      const reco::GenParticle &p = (*genparticles)[i];
-      int id       = p.pdgId()           ;
-      int status   = p.status()          ;
-      int motherId = 0                   ; 
-      if ( p.numberOfMothers()>0 ) {
-        //std::cout << __LINE__ << "]\tnum of mothers " << p.numberOfMothers() << "\tmy mom " << p.mother()->pdgId() << std::endl ;
-        motherId = p.mother(0)->pdgId() ;
-      }
-      // PDG Id: e 11, mu 13, tau 15, Z 23, h 25, H 35, A 35  
-      if ( status == 3 && abs(id) == 15 && (motherId == 23 || motherId == 25 || motherId == 35 || motherId == 36 )){
-        // match leg 1
-        if(typeid(T)==typeid(pat::Tau)){
-          const pat::Tau& tau1 = dynamic_cast<const pat::Tau&>(*diObject.daughter(0));
-          if (deltaR(tau1.eta(),tau1.phi(),p.eta(),p.phi())<0.3) {
-            l1genMatched = true ;
-            //std::cout << __LINE__ << "]\tleg1 matched to a tau" << std::endl ;
-          }
-        }
-        // match leg 2
-        if(typeid(U)==typeid(pat::Tau)){
-          const pat::Tau& tau2 = dynamic_cast<const pat::Tau&>(*diObject.daughter(1));
-          if (deltaR(tau2.eta(),tau2.phi(),p.eta(),p.phi())<0.3) {
-            l2genMatched = true ;
-            //std::cout << __LINE__ << "]\tleg2 matched to a tau" << std::endl ;
-          }
-        }
-      }
-    }
+    /* for ( size_t i=0; i< genparticles->size(); ++i) */
+    /* { */
+    /*   const reco::GenParticle &p = (*genparticles)[i]; */
+    /*   int id       = p.pdgId()           ; */
+    /*   int status   = p.status()          ; */
+    /*   int motherId = 0                   ; */
+    /*   if ( p.numberOfMothers()>0 ) { */
+    /*     //std::cout << __LINE__ << "]\tnum of mothers " << p.numberOfMothers() << "\tmy mom " << p.mother()->pdgId() << std::endl ; */
+    /*     motherId = p.mother(0)->pdgId() ; */
+    /*   } */
+    /*   // PDG Id: e 11, mu 13, tau 15, Z 23, h 25, H 35, A 35 */
+    /*   if ( status == 3 && abs(id) == 15 && (motherId == 23 || motherId == 25 || motherId == 35 || motherId == 36 )){ */
+    /*     // match leg 1 */
+    /*     if(typeid(T)==typeid(pat::Tau)){ */
+    /*       const pat::Tau& tau1 = dynamic_cast<const pat::Tau&>(*diObject.daughter(0)); */
+    /*       if (deltaR(tau1.eta(),tau1.phi(),p.eta(),p.phi())<0.3) { */
+    /*         l1genMatched = true ; */
+    /*         //std::cout << __LINE__ << "]\tleg1 matched to a tau" << std::endl ; */
+    /*       } */
+    /*     } */
+    /*     // match leg 2 */
+    /*     if(typeid(U)==typeid(pat::Tau)){ */
+    /*       const pat::Tau& tau2 = dynamic_cast<const pat::Tau&>(*diObject.daughter(1)); */
+    /*       if (deltaR(tau2.eta(),tau2.phi(),p.eta(),p.phi())<0.3) { */
+    /*         l2genMatched = true ; */
+    /*         //std::cout << __LINE__ << "]\tleg2 matched to a tau" << std::endl ; */
+    /*       } */
+    /*     } */
+    /*   } */
+    /* } */
 
     reco::Candidate::LorentzVector leg1Vec = diObject.daughter(0)->p4();
     reco::Candidate::LorentzVector leg2Vec = diObject.daughter(1)->p4();
