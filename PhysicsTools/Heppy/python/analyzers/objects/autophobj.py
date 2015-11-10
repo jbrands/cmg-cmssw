@@ -237,6 +237,10 @@ metType = NTupleObjectType("met", baseObjectTypes = [ fourVectorType ], variable
 genParticleType = NTupleObjectType("genParticle", baseObjectTypes = [ particleType ], mcOnly=True, variables = [
     NTupleVariable("charge",   lambda x : x.threeCharge()/3.0, float),
     NTupleVariable("status",   lambda x : x.status(),int),
+    NTupleVariable("isPrompt",   lambda x : x.isPrompt(), int),
+    NTupleVariable("isPromptFinalState",   lambda x : x.isPromptFinalState(), int),
+    NTupleVariable("isDirectPromptTauDecayProduct",   lambda x : x.isDirectPromptTauDecayProduct(), int),
+    NTupleVariable("isDirectPromptTauDecayProductFinalState",   lambda x : x.isDirectPromptTauDecayProductFinalState(), int),
 ])
 genParticleWithMotherId = NTupleObjectType("genParticleWithMotherId", baseObjectTypes = [ genParticleType ], mcOnly=True, variables = [
     NTupleVariable("motherId", lambda x : x.mother(0).pdgId() if x.mother(0) else 0, int, help="pdgId of the mother of the particle"),

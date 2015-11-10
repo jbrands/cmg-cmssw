@@ -51,6 +51,7 @@ namespace reco {
     //mainly final state particles, but also intermediate hadrons/taus
     
     //is particle prompt (not from hadron, muon, or tau decay) and final state
+    bool isPrompt() const { return statusFlags_.isPrompt(); }
     bool isPromptFinalState() const { return status()==1 && statusFlags_.isPrompt(); }
     
     //is particle prompt (not from hadron, muon, or tau decay) and decayed
@@ -59,6 +60,7 @@ namespace reco {
     
     //this particle is a direct decay product of a prompt tau and is final state
     //(eg an electron or muon from a leptonic decay of a prompt tau)
+    bool isDirectPromptTauDecayProduct() const { return statusFlags_.isDirectPromptTauDecayProduct(); }
     bool isDirectPromptTauDecayProductFinalState() const { return status()==1 && statusFlags_.isDirectPromptTauDecayProduct(); }
     
     /////////////////////////////////////////////////////////////////////////////
