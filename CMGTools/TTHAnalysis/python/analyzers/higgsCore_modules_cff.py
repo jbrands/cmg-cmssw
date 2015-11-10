@@ -215,7 +215,7 @@ tauAna = cfg.Analyzer(
     TauAnalyzer, name="tauAnalyzer",
     inclusive_ptMin = 18,
     inclusive_etaMax = 2.5,
-    inclusive_dxyMax = 10,
+    inclusive_dxyMax = 1000,
     inclusive_dzMax = 10,
 #    vetoLeptons = True,
     inclusive_vetoLeptons = False,
@@ -223,7 +223,7 @@ tauAna = cfg.Analyzer(
     inclusive_vetoLeptonsPOG = False,
     inclusive_tauID = "decayModeFindingNewDMs",
     inclusive_tauLooseID = "decayModeFindingNewDMs",
-
+    
     inclusive_tauAntiMuonID = "",
     inclusive_tauAntiElectronID = "",
 

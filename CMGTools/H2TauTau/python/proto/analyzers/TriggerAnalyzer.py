@@ -97,7 +97,7 @@ class TriggerAnalyzer(Analyzer):
                     if to.hasPathName(info.name, True):
                         if(info.name == 'HLT_IsoMu17_eta2p1_v1'):
                             event.triggerObjectEvents_IsoMu17.append(to)
-                        if(info.name == 'HLT_IsoMu18_v'):
+                        if(info.name == 'HLT_IsoMu18_v1'):
                             event.triggerObjectEvents_IsoMu18.append(to)
                         if(info.name == 'HLT_IsoMu24_eta2p1_v1'):
                             event.triggerObjectEvents_IsoMu24.append(to)

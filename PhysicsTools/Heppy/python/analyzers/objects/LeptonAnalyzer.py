@@ -140,8 +140,8 @@ class LeptonAnalyzer( Analyzer ):
         inclusiveElectrons = []
         for mu in allmuons:
             if (mu.track().isNonnull() and mu.muonID(self.cfg_ana.inclusive_muon_id) and 
-                    mu.pt()>self.cfg_ana.inclusive_muon_pt and abs(mu.eta())<self.cfg_ana.inclusive_muon_eta and 
-                    abs(mu.dxy())<self.cfg_ana.inclusive_muon_dxy and abs(mu.dz())<self.cfg_ana.inclusive_muon_dz):
+                mu.pt()>self.cfg_ana.inclusive_muon_pt and abs(mu.eta())<self.cfg_ana.inclusive_muon_eta and 
+                abs(mu.dxy())<self.cfg_ana.inclusive_muon_dxy and abs(mu.dz())<self.cfg_ana.inclusive_muon_dz):
                 inclusiveMuons.append(mu)
         for ele in allelectrons:
             if ( ele.electronID(self.cfg_ana.inclusive_electron_id) and
@@ -168,16 +168,16 @@ class LeptonAnalyzer( Analyzer ):
 
         # make loose leptons (basic selection)
         for mu in inclusiveMuons:
-                if(mu.muonID(self.cfg_ana.loose_muon_id) and 
-                        mu.pt() > self.cfg_ana.loose_muon_pt and abs(mu.eta()) < self.cfg_ana.loose_muon_eta and 
-                        abs(mu.dxy()) < self.cfg_ana.loose_muon_dxy and abs(mu.dz()) < self.cfg_ana.loose_muon_dz and
-                        self.muIsoCut(mu)):
-                    mu.looseIdSusy = True
-                    event.selectedLeptons.append(mu)
-                    event.selectedMuons.append(mu)
-                else:
-                    mu.looseIdSusy = False
-                    event.otherLeptons.append(mu)
+            if( mu.muonID(self.cfg_ana.loose_muon_id) and 
+                mu.pt() > self.cfg_ana.loose_muon_pt and abs(mu.eta()) < self.cfg_ana.loose_muon_eta and 
+                abs(mu.dxy()) < self.cfg_ana.loose_muon_dxy and abs(mu.dz()) < self.cfg_ana.loose_muon_dz and
+                self.muIsoCut(mu)):
+                mu.looseIdSusy = True
+                event.selectedLeptons.append(mu)
+                event.selectedMuons.append(mu)
+            else:
+                mu.looseIdSusy = False
+                event.otherLeptons.append(mu)
         looseMuons = event.selectedLeptons[:]
         for ele in inclusiveElectrons:
                if (ele.electronID(self.cfg_ana.loose_electron_id) and
@@ -266,7 +266,7 @@ class LeptonAnalyzer( Analyzer ):
           else: raise RuntimeError,  "Unsupported value for mu_effectiveAreas: can only use Data2012 (rho: ?) and Phys14_25ns_v1 or Spring15_25ns_v1 (rho: fixedGridRhoFastjetAll)"
         # Attach the vertex to them, for dxy/dz calculation
         for mu in allmuons:
-            mu.associatedVertex = event.goodVertices[0] if len(event.goodVertices)>0 else event.vertices[0]
+            mu.associatedVertex = event.vertices[0] #JB instead of event.goodVertices[0] if len(event.goodVertices)>0 else event.vertices[0]
             mu.setTrackForDxyDz(self.cfg_ana.muon_dxydz_track)
 
         # Set tight id if specified
@@ -369,7 +369,7 @@ class LeptonAnalyzer( Analyzer ):
 
         # Attach the vertex
         for ele in allelectrons:
-            ele.associatedVertex = event.goodVertices[0] if len(event.goodVertices)>0 else event.vertices[0]
+            ele.associatedVertex = event.vertices[0] #JB instead of event.goodVertices[0] if len(event.goodVertices)>0 else event.vertices[0]
 
         # Compute relIso with R=0.3 and R=0.4 cones
         for ele in allelectrons:

@@ -129,10 +129,16 @@ tauTypeH = NTupleObjectType("tauH",  baseObjectTypes = [ tauType ], variables = 
     #NTupleVariable("againstMuonMedium2",  lambda x : x.tauID("againstMuonMedium2"), int, help="Tau discriminant against muons, medium2"),
     NTupleVariable("againstMuonTight3",  lambda x : x.tauID("againstMuonTight3"), int, help="Tau discriminant against muons, tight3"),
 
-    NTupleVariable("byCombinedIsolationDeltaBetaCorrRaw3Hits",  lambda x : x.tauID("byCombinedIsolationDeltaBetaCorrRaw3Hits"), int, help="Combined DB 3 Hits isolation"),
+    NTupleVariable("byCombinedIsolationDeltaBetaCorrRaw3Hits",  lambda x : x.tauID("byCombinedIsolationDeltaBetaCorrRaw3Hits"), float, help="Combined DB 3 Hits isolation"),
     NTupleVariable("byLooseCombinedIsolationDeltaBetaCorr3Hits",  lambda x : x.tauID("byLooseCombinedIsolationDeltaBetaCorr3Hits"), int, help="Combined DB 3 Hits isolation, loose"),
     NTupleVariable("byMediumCombinedIsolationDeltaBetaCorr3Hits",  lambda x : x.tauID("byMediumCombinedIsolationDeltaBetaCorr3Hits"), int, help="Combined DB 3 Hits isolation, medium"),
     NTupleVariable("byTightCombinedIsolationDeltaBetaCorr3Hits",  lambda x : x.tauID("byTightCombinedIsolationDeltaBetaCorr3Hits"), int, help="Combined DB 3 Hits isolation, tight"),
+
+    NTupleVariable("byIsolationMVA3newDMwLTraw",  lambda x : x.tauID("byIsolationMVA3newDMwLTraw"), float, help="raw MVA output of BDT based tau ID discriminator based on isolation Pt sums, trained on 1-prong, 2-prong and 3-prong tau candidates plus lifetime information"),
+    NTupleVariable("byIsolationMVA3oldDMwLTraw",  lambda x : x.tauID("byIsolationMVA3oldDMwLTraw"), float, help="raw MVA output of BDT based tau ID discriminator based on isolation Pt sums, trained on 1-prong, 2-prong and 3-prong tau candidates plus lifetime information"),
+    #NTupleVariable("byIsolationMVA3newDMwoLTraw",  lambda x : x.tauID("byIsolationMVA3newDMwoLTraw"), float, help="raw MVA output of BDT based tau ID discriminator based on isolation Pt sums, trained on 1-prong, 2-prong and 3-prong tau candidates"),
+    #NTupleVariable("byIsolationMVA3oldDMwoLTraw",  lambda x : x.tauID("byIsolationMVA3oldDMwoLTraw"), float, help="raw MVA output of BDT based tau ID discriminator based on isolation Pt sums, trained on 1-prong, 2-prong and 3-prong tau candidates"),
+    
 
     NTupleVariable("decayModeFinding",  lambda x : x.tauID("decayModeFinding"), int, help="Tau discriminant"),
     NTupleVariable("decayModeFindingNewDMs",  lambda x : x.tauID("decayModeFindingNewDMs"), int, help="Tau discriminant"),
@@ -148,6 +154,9 @@ dileptonH = NTupleObjectType("dileptonH",  baseObjectTypes = [ fourVectorType ],
     NTupleVariable("svfitMassError", lambda x : x.svfitMassError(), float, help="SVFit mass error"),
     NTupleVariable("svfitPt", lambda x : x.svfitPt(), float, help="SVFit mass"),
     NTupleVariable("svfitPtError", lambda x : x.svfitPtError(), float, help="SVFit mass error"),
+    NTupleVariable("svfitEta", lambda x : x.svfitEta(), float, help="SVFit eta"),
+    NTupleVariable("svfitPhi", lambda x : x.svfitPhi(), float, help="SVFit phi"),
+    NTupleVariable("svfitMET", lambda x : x.svfitMET(), float, help="SVFit MET"),
     NTupleVariable("metsig00", lambda x : x.met().getSignificanceMatrix()(0,0), help="MET significance matrix(0,0)"),
     NTupleVariable("metsig01", lambda x : x.met().getSignificanceMatrix()(0,1), help="MET significance matrix(0,1)"),
     NTupleVariable("metsig10", lambda x : x.met().getSignificanceMatrix()(1,0), help="MET significance matrix(1,0)"),

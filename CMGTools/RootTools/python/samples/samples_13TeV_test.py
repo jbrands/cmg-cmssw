@@ -32,6 +32,8 @@ Run2015D_05Oct2015_v1_2 = kreator.makeDataComponentHEPHY("Run2015D_05Oct2015_v1"
 #################################################################################
 SUSYGluGlu_miniAOD2 = kreator.makeComponentHEPHY("SUSYGluGlu_miniAOD2","/SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/jbrandst-SUSYGluGlu_miniAOD2-a4c76ddf8463ab427a155ae017238a46/USER","PRIVATE","*.root","phys03",1.0)
 
+SUSYGluGlu_miniAOD2_2 = kreator.makeComponentHEPHY("SUSYGluGlu_miniAOD2_2","/SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/jbrandst-SUSYGluGlu_miniAOD2_2-3df5eb2bbc96f095c4d99a0e2c009a64/USER","PRIVATE","*.root","phys03",1.0)
+
 ################################################################################
 
 HiggsSignalSamples = [

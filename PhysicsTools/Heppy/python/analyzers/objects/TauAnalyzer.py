@@ -42,7 +42,7 @@ class TauAnalyzer( Analyzer ):
 
         #make inclusive taus
         for tau in alltaus:
-            tau.associatedVertex = event.goodVertices[0] if len(event.goodVertices)>0 else event.vertices[0]
+            tau.associatedVertex = event.vertices[0]#event.goodVertices[0] if len(event.goodVertices)>0 else event.vertices[0]
             tau.lepVeto = False
             tau.idDecayMode = tau.tauID("decayModeFinding")
             tau.idDecayModeNewDMs = tau.tauID("decayModeFindingNewDMs")
@@ -102,10 +102,10 @@ class TauAnalyzer( Analyzer ):
                 if not tau.tauID(self.cfg_ana.loose_tauAntiElectronID):
                         tau.loose_lepVeto = True
 
-            if tau.tauID(self.cfg_ana.loose_decayModeID) and \
-                      tau.pt() > self.cfg_ana.loose_ptMin and abs(tau.eta()) < self.cfg_ana.loose_etaMax and \
-                      abs(tau.dxy()) < self.cfg_ana.loose_dxyMax and abs(tau.dz()) < self.cfg_ana.loose_dzMax and \
-                      tau.tauID(self.cfg_ana.loose_tauID) and not tau.loose_lepVeto:
+            if tau.tauID(self.cfg_ana.loose_decayModeID):# and \
+                      #tau.pt() > self.cfg_ana.loose_ptMin and abs(tau.eta()) < self.cfg_ana.loose_etaMax and \
+                      #abs(tau.dxy()) < self.cfg_ana.loose_dxyMax and abs(tau.dz()) < self.cfg_ana.loose_dzMax and \
+                      #tau.tauID(self.cfg_ana.loose_tauID) and not tau.loose_lepVeto:
                 event.selectedTaus.append(tau)
             else:
                 event.otherTaus.append(tau)

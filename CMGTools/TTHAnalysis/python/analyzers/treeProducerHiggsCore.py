@@ -3,7 +3,8 @@ from CMGTools.TTHAnalysis.analyzers.ntupleTypes import *
 
 higgsCore_globalVariables = [
             NTupleVariable("rho",  lambda ev: ev.rho, float, help="kt6PFJets rho"),
-            NTupleVariable("nVert",  lambda ev: len(ev.goodVertices), int, help="Number of good vertices"),
+            NTupleVariable("nVertGood",  lambda ev: len(ev.goodVertices), int, help="Number of good vertices"),
+            NTupleVariable("nVert",  lambda ev: len(ev.vertices), int, help="Number of good vertices"),
 #            NTupleVariable("nJet25", lambda ev: len(ev.cleanJets), int, help="Number of jets with pt > 25"),
 #            NTupleVariable("nBJetLoose25", lambda ev: len(ev.bjetsLoose), int, help="Number of jets with pt > 25 passing CSV loose"),
 #            NTupleVariable("nBJetMedium25", lambda ev: len(ev.bjetsMedium), int, help="Number of jets with pt > 25 passing CSV medium"),
