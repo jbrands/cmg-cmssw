@@ -8,12 +8,14 @@ from CMGTools.H2TauTau.objects.tauMuSVFit_cfi import tauMuSVFit
 
 from CMGTools.H2TauTau.objects.tauCuts_cff import tauPreSelection
 from CMGTools.H2TauTau.objects.muCuts_cff import muonPreSelection
+from CMGTools.H2TauTau.objects.testCuts_cff import testPreSelection
 
 from RecoMET.METPUSubtraction.mvaPFMET_cff import pfMVAMEt
 
 # tau pre-selection
 tauPreSelectionTauMu = tauPreSelection.clone()
 muonPreSelectionTauMu = muonPreSelection.clone()
+testPreSelectionTauMu = testPreSelection.clone()
 
 # mva MET
 mvaMETTauMu = cms.EDProducer('PFMETProducerMVATauTau', 
@@ -24,6 +26,7 @@ mvaMETTauMu.srcVertices = cms.InputTag("offlineSlimmedPrimaryVertices")
 mvaMETTauMu.srcLeptons = cms.VInputTag(
   cms.InputTag("tauPreSelectionTauMu", "", ""),
   cms.InputTag("muonPreSelectionTauMu", "", ""),
+#  cms.InputTag("testPreSelectionTauMu", "", ""),
   )
 mvaMETTauMu.permuteLeptons = cms.bool(True)
 

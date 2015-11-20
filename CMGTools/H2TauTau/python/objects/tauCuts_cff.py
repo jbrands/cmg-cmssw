@@ -10,7 +10,6 @@ tauPreSelection = cms.EDFilter(
     # as well
     )
 
-
 cutsElectronMVA3Medium = [0.933,0.921,0.944,0.945,0.918,0.941,0.981,0.943,0.956,0.947,0.951,0.95,0.897,0.958,0.955,0.942]
 
 electronMVA3MediumString = ''
