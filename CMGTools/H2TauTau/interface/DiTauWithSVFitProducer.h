@@ -12,6 +12,8 @@
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
 
+#include "TLorentzVector.h"
+
 #include "TauAnalysis/SVfitStandalone/interface/SVfitStandaloneAlgorithm.h"
 
 #include <sstream>
@@ -140,6 +142,20 @@ void DiTauWithSVFitProducer<T, U>::produce(edm::Event& iEvent, const edm::EventS
         auto leg2Mass = diTau.daughter(1)->mass();
         auto leg1Mass = diTau.daughter(0)->mass();
 
+	//auto leg1Isolation = static_cast<pat::Tau*>(diTau.daughter(0))->tauID("byCombinedIsolationDeltaBetaCorrRaw3Hits");
+	double leg2Isolation_charged = (static_cast<pat::Muon*>(diTau.daughter(1))->pfIsolationR03().sumChargedHadronPt);
+	double leg2Isolation_help = static_cast<pat::Muon*>(diTau.daughter(1))->pfIsolationR03().sumNeutralHadronEt + static_cast<pat::Muon*>(diTau.daughter(1))->pfIsolationR03().sumPhotonEt + static_cast<pat::Muon*>(diTau.daughter(1))->pfIsolationR03().sumPUPt;
+	double leg2Isolation_neutral = std::max(leg2Isolation_help,0.0);
+	auto leg2Isolation = (leg2Isolation_charged+leg2Isolation_neutral)/(static_cast<pat::Muon*>(diTau.daughter(1))->pt());
+	//std::cout << "Tau Isolation: " << leg1Isolation << std::endl;
+	//std::cout << "Muon Isolation: " << leg2Isolation << std::endl;
+	auto leg1EleVeto = static_cast<pat::Tau*>(diTau.daughter(0))->tauID("againstElectronVLooseMVA5");
+	auto leg1MuVeto = static_cast<pat::Tau*>(diTau.daughter(0))->tauID("againstMuonTight3");
+
+	//double dR = deltaR( diTau.daughter(0)->eta(), diTau.daughter(0)->phi(), diTau.daughter(1)->eta(), diTau.daughter(1)->phi() );
+	//std::cout << "deltaR: " << dR << std::endl;
+	
+
         if (leg1type == svFitStandalone::kTauToHadDecay) {
           leg1DecayMode = static_cast<pat::Tau*>(diTau.daughter(0))->decayMode();
         }
@@ -171,31 +187,46 @@ void DiTauWithSVFitProducer<T, U>::produce(edm::Event& iEvent, const edm::EventS
         SVfitStandaloneAlgorithm algo(measuredTauLeptons, met.px(), met.py(), tmsig, 0);
         algo.addLogM(false);
 
-        if (fitAlgo_ == "VEGAS")
-          algo.integrateVEGAS();
-        else if (fitAlgo_ == "MC")
-          algo.integrateMarkovChain();
-        else
-          algo.integrate();
+	//if(leg1Isolation >= 0.5 && leg2Isolation <= 0.1 && std::fabs(diTau.daughter(0)->eta()) < 2.3 && std::fabs(diTau.daughter(1)->eta()) < 2.1 && leg1EleVeto >= 0.5 && leg1MuVeto >= 0.5 ) {
+	//if(leg2Isolation <= 0.1 && std::fabs(diTau.daughter(0)->eta()) < 2.3 && std::fabs(diTau.daughter(1)->eta()) < 2.1 && leg1EleVeto >= 0.5 && dR >= 0.5 ) {
+	if(leg2Isolation <= 0.1 && std::fabs(diTau.daughter(0)->eta()) <= 2.3 && std::fabs(diTau.daughter(1)->eta()) <= 2.1 && leg1EleVeto >= 0.5 && leg1MuVeto >= 0.5) {
+	//if(leg2Isolation <= 0.1 && std::fabs(diTau.daughter(0)->eta()) < 2.3 && std::fabs(diTau.daughter(1)->eta()) < 2.1 && leg1EleVeto >= 0.5 && leg1MuVeto >= 0.5 && dR >= 0.5) {
+	//if(leg2Isolation <= 0.1 && dR >= 0.5) {
+	  if (fitAlgo_ == "VEGAS")
+	    algo.integrateVEGAS();
+	  else if (fitAlgo_ == "MC")
+	    algo.integrateMarkovChain();
+	  else
+	    algo.integrate();
 
-        massSVFit = algo.mass();
+	  massSVFit = algo.mass();
 
-        // Add more fit results as user floats
-        diTau.addUserFloat("massUncert", algo.massUncert());
+	  // Add more fit results as user floats
+	  diTau.addUserFloat("massUncert", algo.massUncert());
 
-        if (fitAlgo_ == "MC"){
-          diTau.addUserFloat("pt"        , algo.pt()        );
-          diTau.addUserFloat("ptUncert"  , algo.ptUncert()  );
-          diTau.addUserFloat("fittedEta" , algo.eta()       );
-          diTau.addUserFloat("fittedPhi" , algo.phi()       );
-        }
-        else {
-          diTau.addUserFloat("pt"        , -99.);
-          diTau.addUserFloat("ptUncert"  , -99.);
-          diTau.addUserFloat("fittedEta" , -99.);
-          diTau.addUserFloat("fittedPhi" , -99.);
-        }
-
+	  if (fitAlgo_ == "MC"){
+	    diTau.addUserFloat("pt"        , algo.pt()        );
+	    diTau.addUserFloat("ptUncert"  , algo.ptUncert()  );
+	    diTau.addUserFloat("fittedEta" , algo.eta()       );
+	    diTau.addUserFloat("fittedPhi" , algo.phi()       );
+	  }
+	  else {
+	    diTau.addUserFloat("pt"        , -99.);
+	    diTau.addUserFloat("ptUncert"  , -99.);
+	    diTau.addUserFloat("fittedEta" , -99.);
+	    diTau.addUserFloat("fittedPhi" , -99.);
+	  }
+	}
+	else{
+	  //std::cout << "No svfit mass calculation" << std::endl;
+	  massSVFit = -99;
+	  diTau.addUserFloat("massUncert", -99.);
+	  diTau.addUserFloat("pt"        , -99.);
+	  diTau.addUserFloat("ptUncert"  , -99.);
+	  diTau.addUserFloat("fittedEta" , -99.);
+	  diTau.addUserFloat("fittedPhi" , -99.);
+	}
+	//std::cout << "svfit mass: " << massSVFit << std::endl; 
       }
     }
     // This is now handled via the user floats so we can keep the visible mass
@@ -203,6 +234,7 @@ void DiTauWithSVFitProducer<T, U>::produce(edm::Event& iEvent, const edm::EventS
 
     pOut->push_back(diTau);
 
+    //std::cout << "\tm_vis = " << diTau.mass() << ", m_svfit = " << massSVFit << std::endl;
     if(verbose_) {
       std::cout << "\tm_vis = " << diTau.mass() << ", m_svfit = " << massSVFit << std::endl;
     }
