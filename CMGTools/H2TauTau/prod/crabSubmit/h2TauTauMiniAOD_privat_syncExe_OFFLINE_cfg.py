@@ -11,7 +11,7 @@ sep_line = '-'*70
 
 process = cms.Process("H2TAUTAU")
 
-process.maxEvents = cms.untracked.PSet(input=cms.untracked.int32(100))
+process.maxEvents = cms.untracked.PSet(input=cms.untracked.int32(5))
 
 numberOfFilesToProcess = -1
 debugEventContent = False
