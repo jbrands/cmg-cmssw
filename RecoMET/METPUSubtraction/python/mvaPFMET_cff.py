@@ -40,6 +40,7 @@ puJetIdForPFMVAMEt = pileupJetIdEvaluator.clone(
             ),
         tmvaWeights = cms.string("RecoJets/JetProducers/data/TMVAClassificationCategory_JetID_MET_53X_Dec2012.weights.xml.gz"),
         tmvaMethod = cms.string("JetID"),
+        etaBinnedWeights = cms.bool(False),
         tmvaSpectators = cms.vstring(),
         JetIdParams = JetIdParams,                  
         impactParTkThreshold = cms.double(0.),

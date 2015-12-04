@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 
 from RecoJets.JetProducers.ak4PFJets_cfi import ak4PFJets as ak4PF
-from RecoJets.JetProducers.puJetIDAlgo_cff import met_53x, full_53x
+from RecoJets.JetProducers.PileupJetID_cfi import *
 
 pileupJetIdMET = cms.EDProducer(
     'PileupJetIdProducer',
