@@ -107,6 +107,8 @@ leptonTypeH = NTupleObjectType("leptonH", baseObjectTypes = [ leptonType ], vari
     NTupleVariable("puChargedHadronIsoR03",           lambda lepton : lepton.puChargedHadronIsoR(0.3),  help= "self.physObj.pfIsolationR03().sumPUPt"),
     NTupleVariable("puChargedHadronIsoR04",           lambda lepton : lepton.puChargedHadronIsoR(0.4),  help= "self.physObj.pfIsolationR03().sumPUPt"),
         
+    #NTupleVariable("mvaIdSpring15",   lambda lepton : lepton.mvaRun2("NonTrigSpring15") if abs(lepton.pdgId()) == 11 else 1, help="EGamma POG MVA ID for non-triggering electrons, Spring15 re-training; 1 for muons"),
+        
 ])
 
 
@@ -125,6 +127,9 @@ tauTypeH = NTupleObjectType("tauH",  baseObjectTypes = [ tauType ], variables = 
     NTupleVariable("againstElectronLooseMVA5",  lambda x : x.tauID("againstElectronLooseMVA5"), int, help="Tau discriminant against electrons, MVA5 loose"),
     NTupleVariable("againstElectronMediumMVA5",  lambda x : x.tauID("againstElectronMediumMVA5"), int, help="Tau discriminant against electrons, MVA5 medium"),
     NTupleVariable("againstElectronTightMVA5",  lambda x : x.tauID("againstElectronTightMVA5"), int, help="Tau discriminant against electrons, MVA5 tight"),
+    NTupleVariable("againstElectronVLooseMVA5",  lambda x : x.tauID("againstElectronVLooseMVA5"), int, help="Tau discriminant against electrons, MVA5 Vloose"),
+    #NTupleVariable("againstElectronVMediumMVA5",  lambda x : x.tauID("againstElectronMediumMVA5"), int, help="Tau discriminant against electrons, MVA5 Vmedium"),
+    NTupleVariable("againstElectronVTightMVA5",  lambda x : x.tauID("againstElectronVTightMVA5"), int, help="Tau discriminant against electrons, MVA5 Vtight"),
     NTupleVariable("againstMuonLoose3",  lambda x : x.tauID("againstMuonLoose3"), int, help="Tau discriminant against muons, loose3"),
     #NTupleVariable("againstMuonMedium2",  lambda x : x.tauID("againstMuonMedium2"), int, help="Tau discriminant against muons, medium2"),
     NTupleVariable("againstMuonTight3",  lambda x : x.tauID("againstMuonTight3"), int, help="Tau discriminant against muons, tight3"),

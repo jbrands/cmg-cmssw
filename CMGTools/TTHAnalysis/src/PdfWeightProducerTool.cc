@@ -28,12 +28,25 @@ void PdfWeightProducerTool::processEvent(const GenEventInfoProduct & pdfstuff) {
     float Q = pdfstuff.pdf()->scalePDF;
 
     int id1 = pdfstuff.pdf()->id.first;
+    if(std::abs(id1)==21) id1=0;
     double x1 = pdfstuff.pdf()->x.first;
-    double pdf1 = pdfstuff.pdf()->xPDF.first;
+    //    double pdf1 = pdfstuff.pdf()->xPDF.first;
 
     int id2 = pdfstuff.pdf()->id.second;
+    if(std::abs(id2)==21) id2=0;
     double x2 = pdfstuff.pdf()->x.second;
-    double pdf2 = pdfstuff.pdf()->xPDF.second; 
+    //double pdf2 = pdfstuff.pdf()->xPDF.second;
+
+    LHAPDF::usePDFMember(1,0);
+    double pdf1 = LHAPDF::xfx(1, x1, Q, id1);
+    double pdf2 = LHAPDF::xfx(1, x2, Q, id2);
+    
+    /*printf("pdf1: (%+8.4f), pdf2: (%+8.4f)\n",pdf1, pdf2);
+    printf("Q: (%+8.4f)\n",Q);
+    printf("id1: (%i)\n",id1);
+    printf("x1: (%+8.4f)\n",x1);
+    printf("id2: (%i)\n",id2);
+    printf("x2: (%+8.4f)\n",x2);*/
 
     for (unsigned int i = 0, n = pdfs_.size(); i < n; ++i) {
         std::vector<double> & weights = weights_[pdfs_[i]];
@@ -43,9 +56,11 @@ void PdfWeightProducerTool::processEvent(const GenEventInfoProduct & pdfstuff) {
 
         for (unsigned int j = 0; j < nweights; ++j) { 
             LHAPDF::usePDFMember(i+1,j);
-            double newpdf1 = LHAPDF::xfx(i+1, x1, Q, id1)/x1;
-            double newpdf2 = LHAPDF::xfx(i+1, x2, Q, id2)/x2;
-            weights[j] = newpdf1/pdf1*newpdf2/pdf2;
+            double newpdf1 = LHAPDF::xfx(i+1, x1, Q, id1);
+            double newpdf2 = LHAPDF::xfx(i+1, x2, Q, id2);
+	    //printf("newpdf1: (%+8.4f), newpdf2: (%+8.4f)\n", newpdf1, newpdf2);
+            weights[j] = (newpdf1/pdf1)*(newpdf2/pdf2);
+	    //printf("weight: (%+8.4f)\n", weights[j]);
         }
     }
 }

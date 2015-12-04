@@ -46,6 +46,8 @@ higgsToTauTau_collections.update({
 
             # put more here
             "genParticles"     : NTupleCollection("gen",  genParticleWithMotherId, 200, help="all pruned genparticles"), # need to decide which gen collection ?
+            "generatorSummary"     : NTupleCollection("genSum",  genParticleWithLinksType, 200, help="all pruned genparticles"),
+            #"gentaus"     : NTupleCollection("genTau",  genParticleWithLinksType, 200, help="all pruned genparticles"),
             ## ---------------------------------------------
 #            "selectedLeptons" : NTupleCollection("LepGood", leptonTypeH, 8, help="Leptons after the preselection"),
             "selectedElectrons" : NTupleCollection("el", leptonTypeH, 4, help="Electrons after the preselection"),
@@ -62,7 +64,7 @@ higgsToTauTau_collections.update({
 #mf            "ivf"       : NTupleCollection("SV",     svType, 20, help="SVs from IVF"),
 #mf            "genBHadrons"  : NTupleCollection("GenBHad", heavyFlavourHadronType, 20, mcOnly=True, help="Gen-level B hadrons"),
 #mf            "genDHadrons"  : NTupleCollection("GenDHad", heavyFlavourHadronType, 20, mcOnly=True, help="Gen-level D hadrons"),
-            "diLeptons"          : NTupleCollection("dilepton",     dileptonH, 10, help="system of decay products of the two tau leptons"),
+            "diLeptons"          : NTupleCollection("dilepton",     dileptonH, 100, help="system of decay products of the two tau leptons"),
 
             #"met" : NTupleCollection("met", metTypeH, help="PF E_{T}^{miss}, after type 1 corrections"),                             
 

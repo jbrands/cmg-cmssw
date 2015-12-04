@@ -49,7 +49,7 @@ class TauAnalyzer( Analyzer ):
 
             if hasattr(self.cfg_ana, 'inclusive_decayModeID') and self.cfg_ana.inclusive_decayModeID and not tau.tauID(self.cfg_ana.inclusive_decayModeID):
                 continue
-
+            
             tau.inclusive_lepVeto = False
             if self.cfg_ana.inclusive_vetoLeptons:
                 for lep in event.selectedLeptons:
@@ -62,10 +62,10 @@ class TauAnalyzer( Analyzer ):
                 if not tau.tauID(self.cfg_ana.inclusive_tauAntiElectronID):
                         tau.inclusive_lepVeto = True
                 if tau.inclusive_lepVeto: continue
-
+                
             if tau.pt() < self.cfg_ana.inclusive_ptMin: continue
             if abs(tau.eta()) > self.cfg_ana.inclusive_etaMax: continue
-            if abs(tau.dxy()) > self.cfg_ana.inclusive_dxyMax or abs(tau.dz()) > self.cfg_ana.inclusive_dzMax: continue
+            #if abs(tau.dxy()) > self.cfg_ana.inclusive_dxyMax or abs(tau.dz()) > self.cfg_ana.inclusive_dzMax: continue
 
             def id3(tau,X):
                 """Create an integer equal to 1-2-3 for (loose,medium,tight)"""
@@ -88,7 +88,7 @@ class TauAnalyzer( Analyzer ):
 
             if tau.tauID(self.cfg_ana.inclusive_tauID):
                 event.inclusiveTaus.append(tau)
-            
+
         for tau in event.inclusiveTaus:
 
             tau.loose_lepVeto = False

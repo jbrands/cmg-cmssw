@@ -293,5 +293,7 @@ setattr(METAnalyzer,"defaultConfig", cfg.Analyzer(
     candidatesTypes='std::vector<pat::PackedCandidate>',
     dzMax = 0.1,
     collectionPostFix = "",
+    isTauMu = False,
+    isTauEle = False,
     )
 )

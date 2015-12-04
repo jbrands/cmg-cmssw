@@ -103,10 +103,10 @@ class JetAnalyzer( Analyzer ):
 
         ## Read jets, if necessary recalibrate and shift MET
         if self.cfg_ana.copyJetsByValue: 
-          import ROOT
-          allJets = map(lambda j:Jet(ROOT.pat.Jet(ROOT.edm.Ptr(ROOT.pat.Jet)(ROOT.edm.ProductID(),j,0))), self.handles['jets'].product()) #copy-by-value is safe if JetAnalyzer is ran more than once
+            import ROOT
+            allJets = map(lambda j:Jet(ROOT.pat.Jet(ROOT.edm.Ptr(ROOT.pat.Jet)(ROOT.edm.ProductID(),j,0))), self.handles['jets'].product()) #copy-by-value is safe if JetAnalyzer is ran more than once
         else: 
-          allJets = map(Jet, self.handles['jets'].product()) 
+            allJets = map(Jet, self.handles['jets'].product()) 
 
         self.deltaMetFromJEC = [0.,0.]
         self.type1METCorr    = [0.,0.,0.]
@@ -116,7 +116,7 @@ class JetAnalyzer( Analyzer ):
                 jetsBefore = [ (j.pt(),j.eta(),j.phi(),j.rawFactor()) for j in allJets ]
             self.jetReCalibrator.correctAll(allJets, rho, delta=self.shiftJEC, 
                                                 addCorr=True, addShifts=self.addJECShifts,
-                                                metShift=self.deltaMetFromJEC, type1METCorr=self.type1METCorr )           
+                                                metShift=self.deltaMetFromJEC, type1METCorr=self.type1METCorr ) 
             if not self.recalibrateJets: 
                 jetsAfter = [ (j.pt(),j.eta(),j.phi(),j.rawFactor()) for j in allJets ]
                 if len(jetsBefore) != len(jetsAfter): 
@@ -415,10 +415,10 @@ setattr(JetAnalyzer,"defaultConfig", cfg.Analyzer(
     copyJetsByValue = False,      #Whether or not to copy the input jets or to work with references (should be 'True' if JetAnalyzer is run more than once)
     genJetCol = 'slimmedGenJets',
     rho = ('fixedGridRhoFastjetAll','',''),
-    jetPt = 20., #JB instead 25
+    jetPt = 20.,
     jetEta = 4.7,
-    jetEtaCentral = 4.7, #JB instead 25
-    jetLepDR = 0.4, #JB instead 25
+    jetEtaCentral = 4.7, 
+    jetLepDR = 0.4, 
     jetLepArbitration = (lambda jet,lepton : lepton), # you can decide which to keep in case of overlaps; e.g. if the jet is b-tagged you might want to keep the jet
     cleanSelectedLeptons = True, #Whether to clean 'selectedLeptons' after disambiguation. Treat with care (= 'False') if running Jetanalyzer more than once
     minLepPt = 10,

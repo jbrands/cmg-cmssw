@@ -31,6 +31,7 @@ class PDFWeightsAnalyzer( Analyzer ):
         self.pdfWeightTool = PdfWeightProducerTool()
         for pdf in self.cfg_ana.PDFWeights:
             self.pdfWeightTool.addPdfSet(pdf+".LHgrid")
+            #self.pdfWeightTool.addPdfSet(pdf+".lhagrid1")
         self.pdfWeightTool.beginJob()
 
     def makePDFWeights(self, event):
@@ -39,6 +40,7 @@ class PDFWeightsAnalyzer( Analyzer ):
         event.pdfWeights = {}
         for pdf in self.cfg_ana.PDFWeights:
             ws = self.pdfWeightTool.getWeights(pdf+".LHgrid")
+            #print pdf,ws[1]
             event.pdfWeights[pdf] = [w for w in ws]
 
     def process(self, event):

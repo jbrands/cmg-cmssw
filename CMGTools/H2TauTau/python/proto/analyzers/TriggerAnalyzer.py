@@ -55,7 +55,7 @@ class TriggerAnalyzer(Analyzer):
         
     def process(self, event):
         self.readCollections(event.input)
-        
+
         event.run = event.input.eventAuxiliary().id().run()
         event.lumi = event.input.eventAuxiliary().id().luminosityBlock()
         event.eventId = event.input.eventAuxiliary().id().event()
@@ -105,7 +105,7 @@ class TriggerAnalyzer(Analyzer):
                             event.triggerObjectEvents_IsoMu24.append(to)
                         if(info.name == 'HLT_IsoMu22_v1'):
                             event.triggerObjectEvents_IsoMu22.append(to)
-                        if(info.name == 'HLT_Ele22_eta2p1_WP75_Gsf_LooseIsoPFTau20_v1'):
+                        if(info.name == 'HLT_Ele22_eta2p1_WP75_Gsf'):
                             event.triggerObjectEvents_Ele22.append(to)
                         if(info.name == 'HLT_Ele32_eta2p1_WP75_Gsf_v1'):
                             event.triggerObjectEvents_Ele32.append(to)
