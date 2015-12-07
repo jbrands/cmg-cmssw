@@ -143,14 +143,45 @@ void DiTauWithSVFitProducer<T, U>::produce(edm::Event& iEvent, const edm::EventS
         auto leg1Mass = diTau.daughter(0)->mass();
 
 	//auto leg1Isolation = static_cast<pat::Tau*>(diTau.daughter(0))->tauID("byCombinedIsolationDeltaBetaCorrRaw3Hits");
-	double leg2Isolation_charged = (static_cast<pat::Muon*>(diTau.daughter(1))->pfIsolationR03().sumChargedHadronPt);
-	double leg2Isolation_help = static_cast<pat::Muon*>(diTau.daughter(1))->pfIsolationR03().sumNeutralHadronEt + static_cast<pat::Muon*>(diTau.daughter(1))->pfIsolationR03().sumPhotonEt + static_cast<pat::Muon*>(diTau.daughter(1))->pfIsolationR03().sumPUPt;
-	double leg2Isolation_neutral = std::max(leg2Isolation_help,0.0);
-	auto leg2Isolation = (leg2Isolation_charged+leg2Isolation_neutral)/(static_cast<pat::Muon*>(diTau.daughter(1))->pt());
-	//std::cout << "Tau Isolation: " << leg1Isolation << std::endl;
-	//std::cout << "Muon Isolation: " << leg2Isolation << std::endl;
-	auto leg1EleVeto = static_cast<pat::Tau*>(diTau.daughter(0))->tauID("againstElectronVLooseMVA5");
-	auto leg1MuVeto = static_cast<pat::Tau*>(diTau.daughter(0))->tauID("againstMuonTight3");
+	double leg2Isolation_help;
+	double leg2Isolation_neutral;
+	double leg2Isolation_charged;
+	double leg2Isolation_combined;
+	if (leg2type == svFitStandalone::kTauToMuDecay){
+	  leg2Isolation_charged = (static_cast<pat::Muon*>(diTau.daughter(1))->pfIsolationR03().sumChargedHadronPt);
+	  leg2Isolation_help = static_cast<pat::Muon*>(diTau.daughter(1))->pfIsolationR03().sumNeutralHadronEt + static_cast<pat::Muon*>(diTau.daughter(1))->pfIsolationR03().sumPhotonEt - 0.5*static_cast<pat::Muon*>(diTau.daughter(1))->pfIsolationR03().sumPUPt;
+	  leg2Isolation_neutral = std::max(leg2Isolation_help,0.0);
+	  leg2Isolation_combined = (leg2Isolation_charged+leg2Isolation_neutral)/(diTau.daughter(1)->pt());
+	}
+	else if (leg2type == svFitStandalone::kTauToElecDecay){
+	  leg2Isolation_charged = (static_cast<pat::Electron*>(diTau.daughter(1))->pfIsolationVariables().sumChargedHadronPt);
+	  leg2Isolation_help = static_cast<pat::Electron*>(diTau.daughter(1))->pfIsolationVariables().sumNeutralHadronEt + static_cast<pat::Electron*>(diTau.daughter(1))->pfIsolationVariables().sumPhotonEt - 0.5*static_cast<pat::Electron*>(diTau.daughter(1))->pfIsolationVariables().sumPUPt;
+	  leg2Isolation_neutral = std::max(leg2Isolation_help,0.0);
+	  leg2Isolation_combined = (leg2Isolation_charged+leg2Isolation_neutral)/(diTau.daughter(1)->pt());
+	}
+	else{
+	  leg2Isolation_combined = 0;
+	}
+	auto leg2Isolation = leg2Isolation_combined;
+
+	double leg1EleVeto_tmp;
+	double leg1MuVeto_tmp;
+
+	if (leg2type == svFitStandalone::kTauToMuDecay){
+	  leg1EleVeto_tmp = static_cast<pat::Tau*>(diTau.daughter(0))->tauID("againstElectronVLooseMVA5");
+	  leg1MuVeto_tmp = static_cast<pat::Tau*>(diTau.daughter(0))->tauID("againstMuonTight3");
+	}
+	else if (leg2type == svFitStandalone::kTauToElecDecay){
+	  leg1EleVeto_tmp = static_cast<pat::Tau*>(diTau.daughter(0))->tauID("againstElectronTightMVA5");
+	  leg1MuVeto_tmp = static_cast<pat::Tau*>(diTau.daughter(0))->tauID("againstMuonLoose3");
+	}
+	else{
+	  leg1EleVeto_tmp = 1;
+	  leg1MuVeto_tmp = 1;
+	}
+
+	auto leg1EleVeto = leg1EleVeto_tmp;
+	auto leg1MuVeto = leg1MuVeto_tmp;
 
 	//double dR = deltaR( diTau.daughter(0)->eta(), diTau.daughter(0)->phi(), diTau.daughter(1)->eta(), diTau.daughter(1)->phi() );
 	//std::cout << "deltaR: " << dR << std::endl;

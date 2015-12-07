@@ -21,6 +21,7 @@ common = [
     'keep cmgMETSignificances_*_*_*',
     'keep patCompositeCandidates_cmg*CorSVFitFullSel_*_*',
     'keep patJets_patJetsAK4PF_*_*',
+    'keep pat*_*_*_*',
     'keep PileupSummaryInfos_*_*_*',
     'keep recoGenParticles_prunedGenParticles_*_*',
     'keep patPackedGenParticles_packedGenParticles__PAT', # these are status 1
@@ -33,7 +34,9 @@ common = [
     'keep *_particleFlowNoMuonPUPPI_*_*',
     'keep *_pfMetPuppi_*_*',
     'keep *_generator_*_*',
-    'keep *_genEvtWeightsCounter_*_*'
+    'keep *_genEvtWeightsCounter_*_*',
+    'keep *_offlineBeamSpot_*_*',
+    'keep *_reducedEgamma_*_*',
     ]
 
 commonDebug = copy.deepcopy(common) 
