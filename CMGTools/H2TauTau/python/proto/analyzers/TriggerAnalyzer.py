@@ -22,9 +22,8 @@ class TriggerAnalyzer(Analyzer):
     trigger names need to be attached to the components.'''
 
     def declareHandles(self):
-        super(TriggerAnalyzer, self).declareHandles()
-
-        self.handles['triggerResultsHLT'] = AutoHandle(
+        super(TriggerAnalyzer, self).declareHandles()        
+        self.handles['TriggerResultsHLT'] = AutoHandle(
             ('TriggerResults', '', 'HLT'),
             'edm::TriggerResults'
             )
@@ -33,7 +32,7 @@ class TriggerAnalyzer(Analyzer):
             'selectedPatTrigger',
             'std::vector<pat::TriggerObjectStandAlone>'
             )
- 
+  
         self.handles['triggerPrescales'] =  AutoHandle(
             'patTrigger',
             'pat::PackedTriggerPrescales'
@@ -60,12 +59,11 @@ class TriggerAnalyzer(Analyzer):
         event.lumi = event.input.eventAuxiliary().id().luminosityBlock()
         event.eventId = event.input.eventAuxiliary().id().event()
 
-        triggerBits = self.handles['triggerResultsHLT'].product()
+        triggerBits = self.handles['TriggerResultsHLT'].product()
         names = event.input.object().triggerNames(triggerBits)
-        
         preScales = self.handles['triggerPrescales'].product()
-
         self.counters.counter('Trigger').inc('All events')
+
 
         trigger_passed = False
 
@@ -74,9 +72,9 @@ class TriggerAnalyzer(Analyzer):
             index = names.triggerIndex(trigger_name)
             if index == len(triggerBits):
                 continue
+
             prescale = preScales.getPrescaleForIndex(index)
             fired = triggerBits.accept(index)
-
             trigger_infos.append(TriggerInfo(trigger_name, index, fired, prescale))
 
             if fired and (prescale == 1 or self.cfg_ana.usePrescaled):
@@ -97,7 +95,7 @@ class TriggerAnalyzer(Analyzer):
                     if to.hasPathName(info.name, True):
                         if(info.name == 'HLT_IsoMu17_eta2p1_v1'):
                             event.triggerObjectEvents_IsoMu17.append(to)
-                        if(info.name == 'HLT_IsoMu18_v1'):
+                        if(info.name == 'HLT_IsoMu18_v2' or info.name == 'HLT_IsoMu18_v1' or info.name == 'HLT_IsoMu18_v3' or info.name == 'HLT_IsoMu18_v4'):
                             event.triggerObjectEvents_IsoMu18.append(to)
                         if(info.name == 'HLT_IsoMu24_eta2p1_v1'):
                             event.triggerObjectEvents_IsoMu24.append(to)
@@ -105,7 +103,7 @@ class TriggerAnalyzer(Analyzer):
                             event.triggerObjectEvents_IsoMu24.append(to)
                         if(info.name == 'HLT_IsoMu22_v1'):
                             event.triggerObjectEvents_IsoMu22.append(to)
-                        if(info.name == 'HLT_Ele22_eta2p1_WP75_Gsf'):
+                        if(info.name == 'HLT_Ele22_eta2p1_WP75_Gsf_v1'):
                             event.triggerObjectEvents_Ele22.append(to)
                         if(info.name == 'HLT_Ele32_eta2p1_WP75_Gsf_v1'):
                             event.triggerObjectEvents_Ele32.append(to)
@@ -118,7 +116,6 @@ class TriggerAnalyzer(Analyzer):
             if not trigger_passed:
                 return False
 
-            
         self.counters.counter('Trigger').inc('HLT')
         return True
 

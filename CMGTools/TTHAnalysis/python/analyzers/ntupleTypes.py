@@ -92,6 +92,8 @@ leptonTypeH = NTupleObjectType("leptonH", baseObjectTypes = [ leptonType ], vari
     NTupleVariable("looseId",       lambda lepton : lepton.isLooseMuon() if abs(lepton.pdgId()) == 13 else 0, help="loose lepton id"),
     NTupleVariable("validFraction",       lambda lepton : lepton.innerTrack().validFraction() if abs(lepton.pdgId()) == 13 else 0, help="fraction of valid tracker hits"),
     NTupleVariable("globalMuon",       lambda lepton : lepton.isGlobalMuon() if abs(lepton.pdgId()) == 13 else 0, help="global muon"),
+    NTupleVariable("isTrackerMuon",       lambda lepton : lepton.isTrackerMuon() if abs(lepton.pdgId()) == 13 else 0, help="tracker muon"),
+    NTupleVariable("isPFMuon",       lambda lepton : lepton.isPFMuon() if abs(lepton.pdgId()) == 13 else 0, help="PF muon"),
     NTupleVariable("normChi2Track",       lambda lepton : lepton.globalTrack().normalizedChi2() if abs(lepton.pdgId()) == 13 & lepton.isGlobalMuon() else 0, help="normChi2Track"),
     NTupleVariable("trackPosMatch",       lambda lepton : lepton.combinedQuality().chi2LocalPosition if abs(lepton.pdgId()) == 13 else 0, help="trackPosMatch"),
     NTupleVariable("kickFinder",       lambda lepton : lepton.combinedQuality().trkKink if abs(lepton.pdgId()) == 13 else 0, help="kickFinder"),
@@ -107,10 +109,11 @@ leptonTypeH = NTupleObjectType("leptonH", baseObjectTypes = [ leptonType ], vari
     NTupleVariable("puChargedHadronIsoR03",           lambda lepton : lepton.puChargedHadronIsoR(0.3),  help= "self.physObj.pfIsolationR03().sumPUPt"),
     NTupleVariable("puChargedHadronIsoR04",           lambda lepton : lepton.puChargedHadronIsoR(0.4),  help= "self.physObj.pfIsolationR03().sumPUPt"),
         
-    #NTupleVariable("mvaIdSpring15",   lambda lepton : lepton.mvaRun2("NonTrigSpring15") if abs(lepton.pdgId()) == 11 else 1, help="EGamma POG MVA ID for non-triggering electrons, Spring15 re-training; 1 for muons"),
-        
-])
+    NTupleVariable("mvaIdSpring15NonTrig",   lambda lepton : lepton.mvaRun2("NonTrigSpring15") if abs(lepton.pdgId()) == 11 else 1, help="EGamma POG MVA ID for non-triggering electrons, Spring15 re-training; 1 for muons"),
+    NTupleVariable("POG_PHYS14_25ns_v1_Veto",   lambda lepton : lepton.cutBasedId('POG_PHYS14_25ns_v1_Veto') if abs(lepton.pdgId()) == 11 else 1, help="POG Phys14 25ns cut-based Veto ID"),
+    NTupleVariable("superClusterEta", lambda x : x.superCluster().eta() if abs(x.pdgId())==11 else -100, help="Electron supercluster pseudorapidity"),
 
+] )
 
 
 
@@ -150,6 +153,7 @@ tauTypeH = NTupleObjectType("tauH",  baseObjectTypes = [ tauType ], variables = 
 
     NTupleVariable("chargedIsoPtSum",  lambda x : x.tauID("chargedIsoPtSum"), float, help="Deposition by charged particles in isolation cone"),
 
+    NTupleVariable("packedLeadTauCanddXY",  lambda x : x.leadChargedHadrCand().dxy(), float, help="dxy of leadChargedHadrCand"),
     NTupleVariable("packedLeadTauCanddZ",  lambda x : x.leadChargedHadrCand().dz(), float, help="dz of leadChargedHadrCand"),
 ])
 dileptonH = NTupleObjectType("dileptonH",  baseObjectTypes = [ fourVectorType ], variables = [

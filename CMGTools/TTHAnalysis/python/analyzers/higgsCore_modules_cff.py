@@ -11,7 +11,7 @@ import os
 
 PDFWeights = []
 #PDFWeights = [ ("CT10",53), ("MSTW2008lo68cl",41), ("MMHT2014lo68cl",51), ("NNPDF21_100",101) ]
-#PDFWeights = [ ("NNPDF30_lo_as_0130",101), ("NNPDF30_lo_as_0130_nf_4",101)] 
+#PDFWeights = [ ("NNPDF30_lo_as_0130",101) ] #("NNPDF30_lo_as_0130_nf_4",101)] 
 
 # Find the initial events before the skim
 skimAnalyzer = cfg.Analyzer(
@@ -286,7 +286,7 @@ jetAna = cfg.Analyzer(
     doPuId = False, # Not commissioned in 7.0.X
     recalibrateJets = True, # True, False, 'MC', 'Data' 
     applyL2L3Residual = True,
-    recalibrationType = "AK8PFchs",
+    recalibrationType = "AK4PFchs",
     mcGT     = "Summer15_25nsV2_MC",
     data     = "Summer15_25nsV5_DATA",
     jecPath = "${CMSSW_BASE}/src/CMGTools/RootTools/data/jec/",
@@ -375,5 +375,5 @@ higgsCoreSequence = [
     ttHCoreEventAna,
     #ttHJetMETSkim                                                                                                                                                                                          
     triggerFlagsAna,
-    eventFlagsAna,
+#    eventFlagsAna,
 ]
