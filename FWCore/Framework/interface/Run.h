@@ -34,6 +34,8 @@ For its usage, see "FWCore/Framework/interface/PrincipalGetAdapter.h"
 namespace edm {
   class ModuleCallingContext;
   class ProducerBase;
+  class SharedResourcesAcquirer;
+  
   namespace stream {
     template< typename T> class ProducingModuleAdaptorBase;
   }
@@ -49,6 +51,9 @@ namespace edm {
       provRecorder_.setConsumer(iConsumer);
     }
     
+    void setSharedResourcesAcquirer( SharedResourcesAcquirer* iResourceAcquirer) {
+      provRecorder_.setSharedResourcesAcquirer(iResourceAcquirer);
+    }
 
     typedef PrincipalGetAdapter Base;
     // AUX functions are defined in RunBase
@@ -142,6 +147,8 @@ namespace edm {
 
     ModuleCallingContext const* moduleCallingContext() const { return moduleCallingContext_; }
 
+    void labelsForToken(EDGetToken const& iToken, ProductLabels& oLabels) const { provRecorder_.labelsForToken(iToken, oLabels); }
+
   private:
     RunPrincipal const&
     runPrincipal() const;
@@ -174,6 +181,7 @@ namespace edm {
     typedef std::set<BranchID> BranchIDSet;
     mutable BranchIDSet gotBranchIDs_;
     ModuleCallingContext const* moduleCallingContext_;
+    SharedResourcesAcquirer* sharedResourcesAcquirer_;
 
     static const std::string emptyString_;
   };

@@ -148,7 +148,7 @@ PhotonValidator::PhotonValidator( const edm::ParameterSet& pset )
       edm::InputTag("famosSimHits"));
   famos_simVtx_Token_ = consumes<edm::SimVertexContainer>(
       edm::InputTag("famosSimHits"));
-  hepMC_Token_ = consumes<edm::HepMCProduct>(edm::InputTag("generator"));
+  hepMC_Token_ = consumes<edm::HepMCProduct>(edm::InputTag("generatorSmeared"));
   genjets_Token_ = consumes<reco::GenJetCollection>(
       edm::InputTag("ak4GenJets"));
 
@@ -1578,7 +1578,7 @@ void PhotonValidator::bookHistograms( DQMStore::IBooker & iBooker, edm::Run cons
   h_trkProv_[0] = iBooker.book1D("allTrkProv"," Track pair provenance ",4, 0., 4.);
   h_trkProv_[1] = iBooker.book1D("assTrkProv"," Track pair provenance ",4, 0., 4.);
   //
-  h_trkAlgo_ = iBooker.book1D("allTrackAlgo"," Track Algo ",30, -0.5, 29.5);
+  h_trkAlgo_ = iBooker.book1D("allTrackAlgo"," Track Algo ", reco::TrackBase::algoSize, -0.5, reco::TrackBase::algoSize-0.5);
   h_convAlgo_ = iBooker.book1D("allConvAlgo"," Conv Algo ",5, -0.5, 4.5);
   h_convQuality_ = iBooker.book1D("allConvQuality","Conv quality ",11,-0.5,11.);
   

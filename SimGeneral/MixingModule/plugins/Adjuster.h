@@ -2,18 +2,21 @@
 #define SimGeneral_MixingModule_Adjuster_h
 
 #include "DataFormats/Common/interface/Wrapper.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/EventPrincipal.h"
+#include "FWCore/Utilities/interface/EDGetToken.h"
 #include "FWCore/Utilities/interface/InputTag.h"
 #include "SimDataFormats/CaloHit/interface/PCaloHitContainer.h"
 #include "SimDataFormats/Track/interface/SimTrackContainer.h"
 #include "SimDataFormats/TrackingHit/interface/PSimHitContainer.h"
 #include "SimDataFormats/Vertex/interface/SimVertexContainer.h"
 #include "DataFormats/TrackingRecHit/interface/TrackingRecHitFwd.h"
-#include "DataFormats/TrackerRecHit2D/interface/SiTrackerGSMatchedRecHit2D.h"
 
 #include <memory>
 #include <vector>
+
+class FastTrackerRecHit;
 
 namespace edm {
   class ModuleCallingContext;
@@ -29,7 +32,7 @@ namespace edm {
   class Adjuster : public AdjusterBase {
 
   public:
-    Adjuster(InputTag const& tag);
+    Adjuster(InputTag const& tag, edm::ConsumesCollector&& iC);
 
     virtual ~Adjuster() {}
 
@@ -38,12 +41,13 @@ namespace edm {
     virtual bool checkSignal(edm::Event const& event) {
       bool got = false;
       edm::Handle<T> result_t;
-      got = event.getByLabel(tag_, result_t);
+      got = event.getByToken(token_, result_t);
       return got;
     }
 
    private:
     InputTag tag_;
+    EDGetTokenT<T> token_;
   };
 
   //==============================================================================
@@ -68,7 +72,7 @@ namespace edm {
   }
 
   template<typename T>
-  Adjuster<T>::Adjuster(InputTag const& tag) : tag_(tag) {
+  Adjuster<T>::Adjuster(InputTag const& tag, ConsumesCollector&& iC) : tag_(tag), token_(iC.consumes<T>(tag)) {
   }
 }
 

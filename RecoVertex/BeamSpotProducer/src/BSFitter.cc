@@ -578,6 +578,7 @@ reco::BeamSpot BSFitter::Fit_d0phi() {
 	//std::cout << "got function" << std::endl;
 	if (status){
 	  //edm::LogError("NoBeamSpotFit")<<"gaussian fit failed. no BS d0 fit";
+
 	  return reco::BeamSpot();
 	}
 	double fpar[2] = {fgaus.GetParameter(1), fgaus.GetParameter(2) };
@@ -741,7 +742,6 @@ for( iparam = fBSvector.begin(); iparam != fBSvector.end(); ++iparam)
                                            tracksfixed++; }
 
                        function = function + log(tot_pdf);
-                       tot_pdf=0.0;
 
 
        }//loop over tracks

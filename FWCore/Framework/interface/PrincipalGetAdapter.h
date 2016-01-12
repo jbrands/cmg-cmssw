@@ -86,6 +86,7 @@ edm::Ref<AppleCollection> ref(refApples, index);
 #include <typeinfo>
 #include <string>
 #include <vector>
+#include <boost/type_traits.hpp>
 
 #include "DataFormats/Common/interface/EDProductfwd.h"
 #include "DataFormats/Provenance/interface/ProvenanceFwd.h"
@@ -104,11 +105,13 @@ edm::Ref<AppleCollection> ref(refApples, index);
 #include "FWCore/Utilities/interface/InputTag.h"
 #include "FWCore/Utilities/interface/EDGetToken.h"
 #include "FWCore/Utilities/interface/ProductKindOfType.h"
+#include "FWCore/Utilities/interface/ProductLabels.h"
 
 
 namespace edm {
 
   class ModuleCallingContext;
+  class SharedResourcesAcquirer;
 
   namespace principal_get_adapter_detail {
     void
@@ -137,6 +140,11 @@ namespace edm {
     void setConsumer(EDConsumerBase const* iConsumer) {
       consumer_ = iConsumer;
     }
+    
+    void setSharedResourcesAcquirer(SharedResourcesAcquirer* iSra) {
+      resourcesAcquirer_ = iSra;
+    }
+
 
     bool isComplete() const;
 
@@ -202,6 +210,8 @@ namespace edm {
     // from the Principal class.
     EDProductGetter const* prodGetter() const;
 
+    void labelsForToken(EDGetToken const& iToken, ProductLabels& oLabels) const;
+
   private:
     // Is this an Event, a LuminosityBlock, or a Run.
     BranchType const& branchType() const;
@@ -226,7 +236,7 @@ namespace edm {
     ModuleDescription const& md_;
     
     EDConsumerBase const* consumer_;
-
+    SharedResourcesAcquirer* resourcesAcquirer_;
   };
 
   template <typename PROD>

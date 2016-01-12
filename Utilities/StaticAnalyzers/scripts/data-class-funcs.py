@@ -7,7 +7,7 @@ farg = re.compile("(.*)\(\w+\)")
 nsep = re.compile("\:\:")
 topfunc = re.compile("::(produce|analyze|filter|beginLuminosityBlock|beginRun)\(")
 baseclass = re.compile("edm::(one::|stream::|global::)?ED(Producer|Filter|Analyzer)(Base)?")
-getfunc = re.compile("edm::eventsetup::EventSetupRecord::get\((.*)&\) const")
+getfunc = re.compile("edm::eventsetup::EventSetupRecord::get\<.*\>\((.*)&\) const")
 handle = re.compile("(.*),?class edm::ES(.*)Handle<(.*)>")
 skip = re.compile("edm::serviceregistry::ServicesManager::MakerHolder::add() const")
 statics = set()
@@ -167,9 +167,12 @@ for dataclassfunc in sorted(dataclassfuncs):
 			if n : o = n.group(3)
 			else : o = m.group(1)
 			p = re.sub("class ","",o)
-			dataclass = re.sub("struct ","",p)
+			q = re.sub("struct ","",p)
+			dataclass = re.sub("\<.*\> ","",q)
 			for flaggedclass in sorted(flaggedclasses):
-				if re.match(flaggedclass,dataclass) :
+				exact= r"^" + re.escape(flaggedclass) + r"$"
+				exactmatch=re.match(exact,dataclass)
+				if exactmatch:
 					print "Flagged event setup data class '"+dataclass+"' is accessed in call stack '",
 					path = nx.shortest_path(G,tfunc,dataclassfunc)
 					for p in path:

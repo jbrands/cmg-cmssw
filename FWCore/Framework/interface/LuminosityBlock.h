@@ -35,6 +35,8 @@ For its usage, see "FWCore/Framework/interface/PrincipalGetAdapter.h"
 namespace edm {
   class ModuleCallingContext;
   class ProducerBase;
+  class SharedResourcesAcquirer;
+  
   namespace stream {
     template< typename T> class ProducingModuleAdaptorBase;
   }
@@ -65,6 +67,9 @@ namespace edm {
     
     //Used in conjunction with EDGetToken
     void setConsumer(EDConsumerBase const* iConsumer);
+    
+    void setSharedResourcesAcquirer( SharedResourcesAcquirer* iResourceAcquirer);
+
     template <typename PROD>
     bool
     getByLabel(std::string const& label, Handle<PROD>& result) const;
@@ -128,6 +133,8 @@ namespace edm {
     processHistory() const;
 
     ModuleCallingContext const* moduleCallingContext() const { return moduleCallingContext_; }
+
+    void labelsForToken(EDGetToken const& iToken, ProductLabels& oLabels) const { provRecorder_.labelsForToken(iToken, oLabels); }
 
   private:
     LuminosityBlockPrincipal const&

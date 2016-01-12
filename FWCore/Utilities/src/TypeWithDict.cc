@@ -147,7 +147,7 @@ namespace edm {
 
     // Handle classes
     TClass* theClass = TClass::GetClass(name.c_str());
-    if (theClass != nullptr && theClass->GetTypeInfo() != nullptr) {
+    if (theClass != nullptr) {
       return TypeWithDict(theClass, property);
     }
 
@@ -210,17 +210,11 @@ namespace edm {
     }
 
     // For a reason not understood, TClass::GetClass sometimes cannot find std::vector<T>::value_type
-    // or std::map<X,T>::value_type when T is a nested class.
-    // This workaround bypasses the problem. The problem really should be debugged.
+    // when T is a nested class.
     if(stripNamespace(name) == "value_type") {
       size_t begin = name.find('<');
       size_t end = name.rfind('>');
       if(begin != std::string::npos && end != std::string::npos && end > ++begin) {
-        size_t amap = name.find("map");
-        if(amap != std::string::npos && amap < begin) {
-           ++end;
-           return TypeWithDict::byName(std::string("std::pair<const ") + name.substr(begin, end - begin), property);
-        }
         return TypeWithDict::byName(name.substr(begin, end - begin), property);
       }
     }
@@ -323,9 +317,7 @@ namespace edm {
     arrayDimensions_(nullptr),
     property_(property) {
     if(ti_ == nullptr) {
-      ti_ = &typeid(TypeWithDict::invalidType);
-      class_ = nullptr;
-      property_ = 0L;
+      ti_ = &typeid(TypeWithDict::dummyType);
     }
   }
 
@@ -362,7 +354,24 @@ namespace edm {
   TypeWithDict::typeInfo() const {
     if(*ti_ == typeid(dummyType) || isPointer() || isArray()) {
       // No accurate type_info
-      assert(qualifiedName().c_str() == nullptr);
+      if(qualifiedName().c_str() != nullptr) {
+        std::string category("unknown");
+        if(isPointer()) {
+          category = "a pointer";
+        } else if(isArray()) {
+          category = "an array";
+        } else if(isEnum()) {
+          category = "an enum";
+        } else if(isClass()) {
+          throw Exception(errors::DictionaryNotFound)
+          << "No Dictionary for class: '" << name() << "'" << std::endl;
+        }
+        throw Exception(errors::LogicError)
+          << "Function TypeWithDict::typeInfo: Type\n"
+          << qualifiedName()
+          << "\ndoes not have valid type_info information in ROOT\n"
+          << "because it is " << category << ".\n";
+      }
     }
     return *ti_;
   }
@@ -498,6 +507,8 @@ namespace edm {
          out <<  "::";
       }
       out << enum_->GetName();
+    } else if (*ti_ == typeid(dummyType) && isClass())  {
+      out << class_->GetName();
     } else {
       out << TypeID(*ti_).className();
     }

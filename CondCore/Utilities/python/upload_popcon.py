@@ -402,7 +402,7 @@ class HTTP(object):
 
 def addToTarFile(tarFile, fileobj, arcname):
     tarInfo = tarFile.gettarinfo(fileobj = fileobj, arcname = arcname)
-    tarInfo.mode = 0400
+    tarInfo.mode = 0o400
     tarInfo.uid = tarInfo.gid = tarInfo.mtime = 0
     tarInfo.uname = tarInfo.gname = 'root'
     tarFile.addfile(tarInfo, fileobj)
@@ -416,7 +416,8 @@ class DropBox(object):
         self.hostname = hostname
         self.http = HTTP()
         self.http.setBaseUrl(urlTemplate % hostname)
-
+        os.environ['http_proxy'] = 'http://cmsproxy.cms:3128/'
+        os.environ['https_proxy'] = 'https://cmsproxy.cms:3128/'
 
     def signInSSO(self, secure = True):
         '''Signs in the server via CERN SSO.
@@ -538,7 +539,7 @@ class DropBox(object):
 
         logging.info('%s: %s: Uploading file for the %s backend...', self.hostname, basename, backend)
         os.rename(temporaryFile, fileHash)
-        self.http.query('uploadFile', {
+        self.http.query('uploadPopcon', {
             'backend': backend,
             'fileName': basename,
         }, files = {

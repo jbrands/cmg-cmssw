@@ -116,6 +116,8 @@ namespace edm {
     std::vector<ModuleDescription const*>
     getAllModuleDescriptions() const;
 
+    ProcessConfiguration const& processConfiguration() const { return *processConfiguration_; }
+
     /// Return the number of events this EventProcessor has tried to process
     /// (inclues both successes and failures, including failures due
     /// to exceptions during processing).
@@ -228,8 +230,8 @@ namespace edm {
 
     void setupSignal();
 
-    bool hasSubProcess() const {
-      return subProcess_.get() != 0;
+    bool hasSubProcesses() const {
+      return subProcesses_.get() != nullptr && !subProcesses_->empty();
     }
 
     void possiblyContinueAfterForkChildFailure();
@@ -255,7 +257,7 @@ namespace edm {
     // really needed, we should remove them.
 
     std::shared_ptr<ActivityRegistry>           actReg_;
-    std::shared_ptr<ProductRegistry const>      preg_;
+    std::shared_ptr<ProductRegistry>            preg_;
     std::shared_ptr<BranchIDListHelper>         branchIDListHelper_;
     std::shared_ptr<ThinnedAssociationsHelper>  thinnedAssociationsHelper_;
     ServiceToken                                  serviceToken_;
@@ -267,7 +269,7 @@ namespace edm {
     ProcessContext                                processContext_;
     PathsAndConsumesOfModules                     pathsAndConsumesOfModules_;
     std::auto_ptr<Schedule>                       schedule_;
-    std::auto_ptr<SubProcess>                     subProcess_;
+    std::unique_ptr<std::vector<SubProcess> >     subProcesses_;
     std::unique_ptr<HistoryAppender>            historyAppender_;
 
     std::unique_ptr<FileBlock>                    fb_;

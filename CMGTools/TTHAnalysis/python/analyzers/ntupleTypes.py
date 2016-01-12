@@ -114,7 +114,7 @@ leptonTypeH = NTupleObjectType("leptonH", baseObjectTypes = [ leptonType ], vari
     NTupleVariable("POG_PHYS14_25ns_v2_Veto",   lambda lepton : lepton.cutBasedId('POG_PHYS14_25ns_v2_Veto') if abs(lepton.pdgId()) == 11 else 1, help="POG Phys14 25ns cut-based v2 Veto ID"),
     NTupleVariable("POG_PHYS14_25ns_v1_ConvVeto_Veto",   lambda lepton : lepton.cutBasedId('POG_PHYS14_25ns_v1_ConvVeto_Veto') if abs(lepton.pdgId()) == 11 else 1, help="POG Phys14 25ns cut-based v1 ConvVeto Veto ID"),
     NTupleVariable("POG_PHYS14_25ns_v2_ConvVeto_Veto",   lambda lepton : lepton.cutBasedId('POG_PHYS14_25ns_v2_ConvVeto_Veto') if abs(lepton.pdgId()) == 11 else 1, help="POG Phys14 25ns cut-based v2 ConvVeto Veto ID"),
-    NTupleVariable("cutBasedElectronID_PHYS14_PU20bx25_V2_standalone_veto",   lambda lepton : lepton.cutBasedId('cutBasedElectronID_PHYS14_PU20bx25_V2_standalone_veto') if abs(lepton.pdgId()) == 11 else 1, help="cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-veto"),
+    #NTupleVariable("cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-veto",   lambda lepton : lepton.cutBasedId('cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-veto') if abs(lepton.pdgId()) == 11 else 1, help="cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-veto"),
     
     NTupleVariable("superClusterEta", lambda x : x.superCluster().eta() if abs(x.pdgId())==11 else -100, help="Electron supercluster pseudorapidity"),
 

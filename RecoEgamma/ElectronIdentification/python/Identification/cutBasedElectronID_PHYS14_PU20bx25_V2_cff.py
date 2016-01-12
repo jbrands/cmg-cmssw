@@ -25,11 +25,11 @@ WP_Veto_EB = EleWorkingPoint_V2(
     0.230374 , # dPhiInCut
     0.011586 , # full5x5_sigmaIEtaIEtaCut
     0.181130 , # hOverECut
-    0.094095 , # dxyCut
-    0.713070 , # dzCut
+#    0.094095 , # dxyCut
+#    0.713070 , # dzCut
     0.295751 , # absEInverseMinusPInverseCut
-    0.158721 , # relCombIsolationWithEALowPtCut
-    0.158721 , # relCombIsolationWithEAHighPtCut
+#    0.158721 , # relCombIsolationWithEALowPtCut
+#    0.158721 , # relCombIsolationWithEAHighPtCut
     # conversion veto cut needs no parameters, so not mentioned
     2          # missingHitsCut
     )

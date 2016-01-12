@@ -1,4 +1,4 @@
-#include "DQM/CastorMonitor/interface/CastorMonitorModule.h"
+#include <DQM/CastorMonitor/interface/CastorMonitorModule.h>
 #include "DataFormats/FEDRawData/interface/FEDNumbering.h"
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/Framework/interface/ESHandle.h"
@@ -19,19 +19,22 @@
 
 //==================================================================//
 //======================= Constructor ==============================//
-CastorMonitorModule::CastorMonitorModule(const edm::ParameterSet& ps):
-  fVerbosity{ps.getUntrackedParameter<int>("debug", 0)}
+CastorMonitorModule::CastorMonitorModule(const edm::ParameterSet& ps)
 {
+  fVerbosity		= ps.getUntrackedParameter<int>("debug", 0);
   if(fVerbosity>0) std::cout<<"CastorMonitorModule Constructor(start)"<<std::endl;
 
-  inputLabelRaw_ 	= ps.getParameter<edm::InputTag>("rawLabel");
-  inputLabelReport_     = ps.getParameter<edm::InputTag>("unpackerReportLabel");
-  inputLabelDigi_ 	= ps.getParameter<edm::InputTag>("digiLabel");
-  inputLabelRecHitCASTOR_  = ps.getParameter<edm::InputTag>("CastorRecHitLabel");
+  inputTokenRaw_ 	= consumes<FEDRawDataCollection>(ps.getParameter<edm::InputTag>("rawLabel"));
+  inputTokenReport_     = consumes<HcalUnpackerReport>(ps.getParameter<edm::InputTag>("unpackerReportLabel"));
+ inputTokenDigi_ 	= consumes<CastorDigiCollection>(ps.getParameter<edm::InputTag>("digiLabel"));
+ inputTokenRecHitCASTOR_ = consumes<CastorRecHitCollection>(ps.getParameter<edm::InputTag>("CastorRecHitLabel"));
+ inputTokenCastorTowers_ = consumes<CastorTowerCollection>(ps.getParameter<edm::InputTag>("CastorTowerLabel")); 
+ JetAlgorithm		= consumes<BasicJetCollection>(ps.getParameter<edm::InputTag>("CastorBasicJetsLabel"));
+
   NBunchesOrbit		= ps.getUntrackedParameter<int>("nBunchesOrbit",3563);
   showTiming_ 		= ps.getUntrackedParameter<bool>("showTiming",false);
-//inputLabelCastorTowers_  = ps.getParameter<edm::InputTag>("CastorTowerLabel"); 
-//dump2database_   	= ps.getUntrackedParameter<bool>("dump2database",false);
+
+// inputLabelCastorTowers_  = ps.getParameter<edm::InputTag>("CastorTowerLabel"); 
 
   irun_=0; 
   ilumisec_=0; 
@@ -111,7 +114,6 @@ void CastorMonitorModule::bookHistograms(DQMStore::IBooker& ibooker,
     CastorEventProduct->getTH1F()->GetXaxis()->SetBinLabel(3,"CastorDigi");
     CastorEventProduct->getTH1F()->GetXaxis()->SetBinLabel(4,"CastorRecHits");
 
-// reset();
  if(fVerbosity>0) 
  std::cout<<"CastorMonitorModule::bookHistogram(end)"<< std::endl;
  return;
@@ -152,14 +154,14 @@ void CastorMonitorModule::analyze(const edm::Event& iEvent, const edm::EventSetu
   bool rechitOK_ = true;
 
   edm::Handle<FEDRawDataCollection> RawData;  
-  iEvent.getByLabel(inputLabelRaw_,RawData);
+  iEvent.getByToken(inputTokenRaw_,RawData);
   if (!RawData.isValid()) {
     rawOK_=false;
     if (fVerbosity>0)  std::cout << "RAW DATA NOT FOUND!" << std::endl;
   }
   
   edm::Handle<HcalUnpackerReport> report; 
-  iEvent.getByLabel(inputLabelReport_,report);  
+  iEvent.getByToken(inputTokenReport_,report);  
   if (!report.isValid()) {
     rawOK_=false;
     if (fVerbosity>0)  std::cout << "UNPACK REPORT HAS FAILED!" << std::endl;
@@ -171,14 +173,14 @@ void CastorMonitorModule::analyze(const edm::Event& iEvent, const edm::EventSetu
   }
   
   edm::Handle<CastorDigiCollection> CastorDigi;
-  iEvent.getByLabel(inputLabelDigi_,CastorDigi);
+  iEvent.getByToken(inputTokenDigi_,CastorDigi);
   if (!CastorDigi.isValid()) {
     digiOK_=false;
     if (fVerbosity>0)  std::cout << "DIGI DATA NOT FOUND!" << std::endl;
   }
   
   edm::Handle<CastorRecHitCollection> CastorHits;
-  iEvent.getByLabel(inputLabelRecHitCASTOR_,CastorHits);
+  iEvent.getByToken(inputTokenRecHitCASTOR_,CastorHits);
   if (!CastorHits.isValid()) {
     rechitOK_ = false;
     if (fVerbosity>0)  std::cout << "RECO DATA NOT FOUND!" << std::endl;
@@ -189,15 +191,26 @@ void CastorMonitorModule::analyze(const edm::Event& iEvent, const edm::EventSetu
  CastorEventProduct->Fill(2,int(digiOK_));
  CastorEventProduct->Fill(3,int(rechitOK_));
 
-  // if((DigiMon_!=NULL) && (evtMask&DO_CASTOR_PED_CALIBMON) && digiOK_) 
-  if(digiOK_) DigiMon_->processEvent(*CastorDigi,*conditions_,ibunch_);
+  if(digiOK_) DigiMon_->processEvent(*CastorDigi,*conditions_);
   if (showTiming_){
       cpu_timer.stop();
       if (DigiMon_!=NULL) std::cout <<"TIMER:: DIGI MONITOR ->"<<cpu_timer.cpuTime()<<std::endl;
       cpu_timer.reset(); cpu_timer.start();
     }
 
- if(rechitOK_) RecHitMon_->processEvent(*CastorHits);
+ if(rechitOK_) { 
+//	RecHitMon_->processEvent(*CastorHits,*hltResults);
+	RecHitMon_->processEvent(*CastorHits);
+   edm::Handle<reco::CastorTowerCollection> castorTowers;
+// iEvent.getByLabel(inputLabelCastorTowers_,castorTowers);
+   iEvent.getByToken(inputTokenCastorTowers_,castorTowers);
+	RecHitMon_->processEventTowers(*castorTowers);
+  edm::Handle<reco::BasicJetCollection> jets;
+//  iEvent.getByLabel(JetAlgorithm,jets);
+  iEvent.getByToken(JetAlgorithm,jets);
+	RecHitMon_->processEventJets(*jets);
+ }
+
  if (showTiming_){
       cpu_timer.stop();
       if (RecHitMon_!=NULL) std::cout <<"TIMER:: RECHIT MONITOR ->"<<cpu_timer.cpuTime()<<std::endl;

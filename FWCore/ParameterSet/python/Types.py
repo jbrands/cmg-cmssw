@@ -266,7 +266,7 @@ class LuminosityBlockRange(_ParameterTypeBase):
         if self.__end < self.__start:
             raise RuntimeError('LuminosityBlockRange '+str(self.__start)+':'+str(self.__startSub)+'-'+str(self.__end)+':'+str(self.__endSub)+' out of order')
         # 0 luminosity block number is a special case that means no limit
-        if self.__end == self.__start and (self.__endSub <> 0 and self.__endSub < self.__startSub):
+        if self.__end == self.__start and (self.__endSub != 0 and self.__endSub < self.__startSub):
             raise RuntimeError('LuminosityBlockRange '+str(self.__start)+':'+str(self.__startSub)+'-'+str(self.__end)+':'+str(self.__endSub)+' out of order')
     def start(self):
         return self.__start
@@ -340,7 +340,7 @@ class EventRange(_ParameterTypeBase):
         if self.__end < self.__start or (self.__end == self.__start and self.__endLumi < self.__startLumi):
             raise RuntimeError('EventRange '+str(self.__start)+':'+str(self.__startLumi)+':'+str(self.__startSub)+'-'+str(self.__end)+':'+str(self.__endLumi)+':'+str(self.__endSub)+' out of order')
         # 0 event number is a special case that means no limit
-        if self.__end == self.__start and self.__endLumi == self.__startLumi and (self.__endSub <> 0 and self.__endSub < self.__startSub):
+        if self.__end == self.__start and self.__endLumi == self.__startLumi and (self.__endSub != 0 and self.__endSub < self.__startSub):
             raise RuntimeError('EventRange '+str(self.__start)+':'+str(self.__startLumi)+':'+str(self.__startSub)+'-'+str(self.__end)+':'+str(self.__endLumi)+':'+str(self.__endSub)+' out of order')
     def start(self):
         return self.__start
@@ -462,11 +462,11 @@ class InputTag(_ParameterTypeBase):
     def _isValid(value):
         return True
     def __cmp__(self,other):
-        v = self.__moduleLabel <> other.__moduleLabel
+        v = self.__moduleLabel != other.__moduleLabel
         if not v:
-            v= self.__productInstance <> other.__productInstance
+            v= self.__productInstance != other.__productInstance
             if not v:
-                v=self.__processName <> other.__processName
+                v=self.__processName != other.__processName
         return v
     def value(self):
         "Return the string rep"
@@ -538,9 +538,9 @@ class ESInputTag(_ParameterTypeBase):
     def _isValid(value):
         return True
     def __cmp__(self,other):
-        v = self.__moduleLabel <> other.__moduleLabel
+        v = self.__moduleLabel != other.__moduleLabel
         if not v:
-            v= self.__data <> other.__data
+            v= self.__data != other.__data
         return v
     def value(self):
         "Return the string rep"
@@ -1385,17 +1385,17 @@ if __name__ == "__main__":
             f = FileInPath("FWCore/ParameterSet/python/Types.py")
             self.assertEqual(f.configValue(), "'FWCore/ParameterSet/python/Types.py'")
         def testSecSource(self):
-            s1 = SecSource("PoolSource", fileNames = vstring("foo.root"))
-            self.assertEqual(s1.type_(), "PoolSource")
+            s1 = SecSource("EmbeddedRootSource", fileNames = vstring("foo.root"))
+            self.assertEqual(s1.type_(), "EmbeddedRootSource")
             self.assertEqual(s1.configValue(),
-"""PoolSource { """+"""
+"""EmbeddedRootSource { """+"""
     vstring fileNames = {
         'foo.root'
     }
 
 }
 """)
-            s1=SecSource("PoolSource",type=int32(1))
+            s1=SecSource("EmbeddedRootSource",type=int32(1))
             self.assertEqual(s1.type.value(),1)
         def testEventID(self):
             eid = EventID(2, 0, 3)

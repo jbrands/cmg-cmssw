@@ -17,7 +17,6 @@
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/ParameterSet/interface/ParameterSetDescription.h"
-#include "FWCore/ParameterSet/interface/Registry.h"
 #include "FWCore/Utilities/interface/Algorithms.h"
 #include "FWCore/Utilities/interface/ConvertException.h"
 #include "FWCore/Utilities/interface/ExceptionCollector.h"
@@ -363,7 +362,7 @@ namespace edm {
                      ExceptionToActionTable const& actions,
                      std::shared_ptr<ActivityRegistry> areg,
                      std::shared_ptr<ProcessConfiguration> processConfiguration,
-                     const ParameterSet* subProcPSet,
+                     bool hasSubprocesses,
                      PreallocationConfiguration const& prealloc,
                      ProcessContext const* processContext) :
   //Only create a resultsInserter if there is a trigger path
@@ -377,7 +376,7 @@ namespace edm {
     assert(0<prealloc.numberOfStreams());
     streamSchedules_.reserve(prealloc.numberOfStreams());
     for(unsigned int i=0; i<prealloc.numberOfStreams();++i) {
-      streamSchedules_.emplace_back(std::make_shared<StreamSchedule>(resultsInserter_,moduleRegistry_,proc_pset,tns,prealloc,preg,branchIDListHelper,actions,areg,processConfiguration,nullptr==subProcPSet,StreamID{i},processContext));
+      streamSchedules_.emplace_back(std::make_shared<StreamSchedule>(resultsInserter_,moduleRegistry_,proc_pset,tns,prealloc,preg,branchIDListHelper,actions,areg,processConfiguration,!hasSubprocesses,StreamID{i},processContext));
     }
     
     //TriggerResults are injected automatically by StreamSchedules and are
@@ -421,7 +420,6 @@ namespace edm {
                        outputModulePathPositions);
     processEDAliases(proc_pset, processConfiguration->processName(), preg);
     proc_pset.registerIt();
-    pset::setProcessParameterSetID(proc_pset.id());
     processConfiguration->setParameterSetID(proc_pset.id());
     processConfiguration->setProcessConfigurationID();
 

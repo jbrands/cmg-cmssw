@@ -1,7 +1,6 @@
 #ifndef SimG4Core_RunManagerMT_H
 #define SimG4Core_RunManagerMT_H
 
-#include <memory>
 #include "FWCore/Framework/interface/Event.h"
 #include "DataFormats/Common/interface/Handle.h"
 #include "FWCore/Framework/interface/EventSetup.h"
@@ -55,9 +54,12 @@ namespace HepPDT {
  * (acting as the Geant4 master thread), and there should be exactly
  * one instance of it. 
  */
+class RunManagerMTWorker;
 
 class RunManagerMT 
 {
+  friend class RunManagerMTWorker;
+
 public:
   RunManagerMT(edm::ParameterSet const & p);
   ~RunManagerMT();
@@ -112,7 +114,7 @@ private:
   std::unique_ptr<PhysicsList> m_physicsList;
   bool m_managerInitialized;
   bool m_runTerminated;
-  const bool m_pUseMagneticField;
+  bool m_pUseMagneticField;
   RunAction* m_userRunAction;
   G4Run* m_currentRun;
   std::unique_ptr<SimRunInterface> m_runInterface;
@@ -124,6 +126,7 @@ private:
   edm::ParameterSet m_pField;
   edm::ParameterSet m_pPhysics; 
   edm::ParameterSet m_pRunAction;      
+  edm::ParameterSet m_g4overlap;
   std::vector<std::string> m_G4Commands;
 
   std::unique_ptr<DDDWorld> m_world;
@@ -135,6 +138,7 @@ private:
     
   std::string m_FieldFile;
   std::string m_WriteFile;
+  std::string m_RegionFile;
 };
 
 #endif

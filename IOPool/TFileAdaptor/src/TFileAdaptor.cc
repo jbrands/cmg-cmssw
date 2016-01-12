@@ -6,7 +6,6 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/ParameterSet/interface/ParameterSetDescription.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
-#include "FWCore/ServiceRegistry/interface/ServiceMaker.h"
 #include "FWCore/Utilities/interface/EDMException.h"
 #include "Utilities/StorageFactory/interface/StorageAccount.h"
 #include "Utilities/StorageFactory/interface/StorageFactory.h"
@@ -92,7 +91,7 @@
     if (!(enabled_ = pset.getUntrackedParameter<bool> ("enable", enabled_)))
       return;
 
-    StorageFactory* f = StorageFactory::get();
+    StorageFactory* f = StorageFactory::getToModify();
     doStats_ = pset.getUntrackedParameter<bool> ("stats", doStats_);
 
     // values set in the site local config or in SiteLocalConfigService override
@@ -272,7 +271,3 @@ TFileAdaptorUI::~TFileAdaptorUI() {}
 void TFileAdaptorUI::stats() const {
   me->stats(std::cout); std::cout << std::endl;
 }
-
-typedef TFileAdaptor AdaptorConfig;
-
-DEFINE_FWK_SERVICE(AdaptorConfig);

@@ -169,6 +169,12 @@ private:
     void updateSiteInfo(std::string orig_site="");
 
     /**
+     * Update the StatisticsSenderService, if necessary, with the current server.
+     */
+    inline void updateCurrentServer();
+    void queueUpdateCurrentServer(const std::string &);
+
+    /**
      * Picks a single source for the next operation.
      */
     std::shared_ptr<Source> pickSingleSource();
@@ -189,6 +195,9 @@ private:
     std::set<std::string> m_disabledExcludeStrings;
     std::set<std::shared_ptr<Source> > m_disabledSources;
     std::string m_activeSites;
+    // StatisticsSenderService wants to know what our current server is;
+    // this holds last-successfully-opened server name
+    std::atomic<std::string*> m_serverToAdvertise;
 
     timespec m_lastSourceCheck;
     int m_timeout;
@@ -231,6 +240,10 @@ private:
          * Future-based version of the handler
          * If called while a file-open is in progress, we will not start a new file-open.
          * Instead, the callback will be fired for the ongoing open.
+         *
+         * NOTE NOTE: This function is not thread-safe due to a lock-ordering issue.
+         * The caller must ensure it is not called from multiple threads at once
+         * for this object.
          */
         std::shared_future<std::shared_ptr<Source> > open();
 

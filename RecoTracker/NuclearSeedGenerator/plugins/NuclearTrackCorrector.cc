@@ -71,7 +71,6 @@ NuclearTrackCorrector::produce(edm::Event& iEvent, const edm::EventSetup& iSetup
   std::auto_ptr<reco::TrackCollection>          Output_track         ( new reco::TrackCollection );
   std::auto_ptr<TrackToTrajectoryMap>           Output_trackmap      ( new TrackToTrajectoryMap );
 
-  std::auto_ptr<TrackToTrackMap>  	        Output_tracktrackmap ( new TrackToTrackMap );
 
 
 
@@ -141,9 +140,9 @@ NuclearTrackCorrector::produce(edm::Event& iEvent, const edm::EventSetup& iSetup
 
                 reco::TrackExtraRef teref= reco::TrackExtraRef ( rTrackExtras, i );
                 reco::TrackExtra newTrackExtra = getNewTrackExtra(algoResults);
-                (algoResults[0].second.first)->setExtra( teref ); 
+                (algoResults[0].track)->setExtra( teref ); 
 
-                Output_track->push_back(*algoResults[0].second.first);        
+                Output_track->push_back(*algoResults[0].track);        
                 Output_trackextra->push_back( newTrackExtra );
 	        Output_traj->push_back(newTraj);
 
@@ -170,7 +169,7 @@ NuclearTrackCorrector::produce(edm::Event& iEvent, const edm::EventSetup& iSetup
      return;
   }
 
-
+  std::auto_ptr<TrackToTrackMap>  	        Output_tracktrackmap ( new TrackToTrackMap(Handle_tracks, m_TrajToTrackCollection->refProd().val) );
 
   for(unsigned int i = 0 ; i < Indice_Map.size() ; i++)
   {
@@ -275,8 +274,8 @@ bool NuclearTrackCorrector::getTrackFromTrajectory(const Trajectory& newTraj , c
 }
 //----------------------------------------------------------------------------------------
 reco::TrackExtra NuclearTrackCorrector::getNewTrackExtra(const AlgoProductCollection& algoResults) {
-                Trajectory* theTraj          = algoResults[0].first;
-                PropagationDirection seedDir = algoResults[0].second.second;
+                Trajectory* theTraj          = algoResults[0].trajectory;
+                PropagationDirection seedDir = algoResults[0].pDir;
 
                 TrajectoryStateOnSurface outertsos;
                 TrajectoryStateOnSurface innertsos;
