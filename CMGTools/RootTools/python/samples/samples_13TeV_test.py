@@ -40,20 +40,31 @@ kreator = ComponentCreator()
 ################################################################################
 #DYJetsToLL_M50_madgraphMLM_test = kreator.makeComponentHEPHY("DYJetsToLL_M50_madgraphMLM_test","/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/jbrandst-DYJets_MC2_2011-1ecb75fc045bbb6991586e4c053e23ab/USER","PRIVATE","*.root","phys03",1.0)
 
-DYJetsToLL_M50_madgraphMLM = kreator.makeComponentHEPHY("DYJetsToLL_M50_madgraphMLM","/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/jbrandst-DYJets_MC2_tauMu_151213-1ecb75fc045bbb6991586e4c053e23ab/USER","PRIVATE","*.root","phys03",1.0)
+DYJetsToLL_M50_madgraphMLM_151213 = kreator.makeComponentHEPHY("DYJetsToLL_M50_madgraphMLM_151213","/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/jbrandst-DYJets_MC2_tauMu_151213-1ecb75fc045bbb6991586e4c053e23ab/USER","PRIVATE","*.root","phys03",1.0)
+
+DYJetsToLL_M50_madgraphMLM_tauEle_160102 = kreator.makeComponentHEPHY("DYJetsToLL_M50_madgraphMLM_tauEle_160102","/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/jbrandst-DYJets_MC2_tauEle_160102-71a3c028dfed4d1fdaf7c36c202a6c4a/USER","PRIVATE","*.root","phys03",1.0)
 
 #WJetsToLNu_madgraphMLM_test = kreator.makeComponentHEPHY("WJetsToLNu_madgraphMLM_test","/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/jbrandst-WJets_MC2_2011-1ecb75fc045bbb6991586e4c053e23ab/USER","PRIVATE","*.root","phys03",1.0)
 
-WJetsToLNu_madgraphMLM = kreator.makeComponentHEPHY("WJetsToLNu_madgraphMLM","/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/jbrandst-WJets_MC2_2711-1ecb75fc045bbb6991586e4c053e23ab/USER","PRIVATE","*.root","phys03",1.0)
+WJetsToLNu_madgraphMLM_151225 = kreator.makeComponentHEPHY("WJetsToLNu_madgraphMLM_151225","/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/jbrandst-WJets_MC2_tauMu_151225-1ecb75fc045bbb6991586e4c053e23ab/USER","PRIVATE","*.root","phys03",1.0)
+
+WJetsToLNu_madgraphMLM_tauEle_151208 = kreator.makeComponentHEPHY("WJetsToLNu_madgraphMLM_tauEle_151208","/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/jbrandst-WJets_MC2_tauEle_151208-71a3c028dfed4d1fdaf7c36c202a6c4a/USER","PRIVATE","*.root","phys03",1.0)
 
 #TT_powheg_test = kreator.makeComponentHEPHY("TT_powheg_test","/TT_TuneCUETP8M1_13TeV-powheg-pythia8/mflechl-ttbar_MC2_2011-1ecb75fc045bbb6991586e4c053e23ab/USER","PRIVATE","*.root","phys03",1.0)
  
-TT_powheg = kreator.makeComponentHEPHY("TT_powheg","/TT_TuneCUETP8M1_13TeV-powheg-pythia8/mflechl-ttbar_MC4_2011-1ecb75fc045bbb6991586e4c053e23ab/USER","PRIVATE","*.root","phys03",1.0)
+TT_powheg_151223 = kreator.makeComponentHEPHY("TT_powheg_151223","/TT_TuneCUETP8M1_13TeV-powheg-pythia8/mflechl-ttbar_mu_MC1_151223-1ecb75fc045bbb6991586e4c053e23ab/USER","PRIVATE","*.root","phys03",1.0)
+
+TT_powheg_151209_tauEle = kreator.makeComponentHEPHY("TT_powheg_151209_tauEle","/TT_TuneCUETP8M1_13TeV-powheg-pythia8/mflechl-ttbar_ele_MC1_151209-71a3c028dfed4d1fdaf7c36c202a6c4a/USER","PRIVATE","*.root","phys03",1.0)
 
 ################################################################################
-Run2015D_05Oct2015_v1_151129 = kreator.makeDataComponentHEPHY("Run2015D_05Oct2015_151129","/SingleMuon/jbrandst-Run2015D-05Oct2015-151129-bcd6c9714832c3478864117da286b90d/USER", "PRIVATE", "*.root","phys03","/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON.txt")
+#Run2015D_05Oct2015_v1_151223 = kreator.makeDataComponentHEPHY("Run2015D_05Oct2015_151223","/SingleMuon/jbrandst-Run2015D-05Oct2015-151223-bcd6c9714832c3478864117da286b90d/USER", "PRIVATE", "*.root","phys03","/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt")
 
-Run2015D_PromptReco_v4_151205 = kreator.makeDataComponentHEPHY("Run2015D_PromptReco_v4_151205","/SingleMuon/jbrandst-Run2015D-Prompt-v4-151205-bcd6c9714832c3478864117da286b90d/USER", "PRIVATE", "*.root","phys03","/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON.txt")
+Run2015D_05Oct2015_v1_tauEle_151227 = kreator.makeDataComponentHEPHY("Run2015D_05Oct2015_v1_tauEle_151227","/SingleElectron/jbrandst-Run2015D-05Oct2015-tauEle-151227-f9431021787ca86df205944281578e0f/USER", "PRIVATE", "*.root","phys03","/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt")
+
+#Run2015D_PromptReco_v4_151223 = kreator.makeDataComponentHEPHY("Run2015D_PromptReco_v4_151223","/SingleMuon/jbrandst-Run2015D-Prompt-v4-151223-bcd6c9714832c3478864117da286b90d/USER", "PRIVATE", "*.root","phys03","/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt")
+
+Run2015D_PromptReco_v4_tauEle_151227 = kreator.makeDataComponentHEPHY("Run2015D_PromptReco_v4_tauEle_151227","/SingleElectron/jbrandst-Run2015D-Prompt-v4-tauEle-151227-f9431021787ca86df205944281578e0f/USER", "PRIVATE", "*.root","phys03","/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt")
+
 ################################################################################
 #Samples produced with cuts in SVFIT mass producer; bugs in cuts have been removed
 ################################################################################
@@ -63,12 +74,12 @@ Run2015D_PromptReco_v4_151205 = kreator.makeDataComponentHEPHY("Run2015D_PromptR
 
 #SUSYGluGlu_miniAOD2_tauEle_151206 = kreator.makeComponentHEPHY("SUSYGluGlu_miniAOD2_tauEle_151206","/SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/jbrandst-SUSYGluGlu_miniAOD2_tauEle_151206-91d3d7a0ea3064af1babdfb565a5574e/USER","PRIVATE","*.root","phys03",1.0)
 
-SUSYGluGlu_miniAOD2_tauEle_151218 = kreator.makeComponentHEPHY("SUSYGluGlu_miniAOD2_tauEle_151218","/SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/jbrandst-SUSYGluGlu_miniAOD2_tauEle_151218-f94f25e6710bbe7f4ddeb65fd72e6b15/USER","PRIVATE","*.root","phys03",1.0)
+SUSYGluGlu_miniAOD2_tauEle_151222 = kreator.makeComponentHEPHY("SUSYGluGlu_miniAOD2_tauEle_151222","/SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/jbrandst-SUSYGluGlu_miniAOD2_tauEle_151222-91d3d7a0ea3064af1babdfb565a5574e/USER","PRIVATE","*.root","phys03",1.0)
 
-SUSYGluGlu_miniAOD2_tauMu_151218 = kreator.makeComponentHEPHY("SUSYGluGlu_miniAOD2_tauMu_151218","/SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/jbrandst-SUSYGluGlu_miniAOD2_tauMu_151218-e01ec230728c190d430c0b6884ac2dd3/USER","PRIVATE","*.root","phys03",1.0)
+SUSYGluGlu_miniAOD2_tauMu_151222 = kreator.makeComponentHEPHY("SUSYGluGlu_miniAOD2_tauMu_151222","/SUSYGluGluToHToTauTau_M-160_TuneCUETP8M1_13TeV-pythia8/jbrandst-SUSYGluGlu_miniAOD2_tauMu_151222-1ecb75fc045bbb6991586e4c053e23ab/USER","PRIVATE","*.root","phys03",1.0)
 
 ################################################################################
-VBFHToTauTau_M125 = kreator.makeComponentHEPHY("VBFHToTauTau_M125","/VBFHToTauTau_M125_13TeV_powheg_pythia8/jbrandst-VBF_powheg_tauMu_151211-1ecb75fc045bbb6991586e4c053e23ab/USER","PRIVATE","*.root","phys03",1.0)
+VBFHToTauTau_M125_160105 = kreator.makeComponentHEPHY("VBFHToTauTau_M125_160105","/VBFHToTauTau_M125_13TeV_powheg_pythia8/jbrandst-VBF_powheg_tauMu_160105-1ecb75fc045bbb6991586e4c053e23ab/USER","PRIVATE","*.root","phys03",1.0)
  
 ################################################################################
 

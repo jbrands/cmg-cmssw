@@ -168,7 +168,7 @@ lepAna = cfg.Analyzer(
     inclusive_electron_lostHits = 1.0,
     # loose electron selection
     loose_electron_id     = "POG_Cuts_ID_2012_Veto_full5x5",
-    loose_electron_pt     = 15,
+    loose_electron_pt     = 10,
     loose_electron_eta    = 2.5,
     loose_electron_dxy    = 0.045,
     loose_electron_dz     = 0.2,
@@ -288,7 +288,7 @@ jetAna = cfg.Analyzer(
     applyL2L3Residual = True,
     recalibrationType = "AK4PFchs",
     mcGT     = "Summer15_25nsV2_MC",
-    data     = "Summer15_25nsV5_DATA",
+    data     = "Summer15_25nsV6_DATA",
     jecPath = "${CMSSW_BASE}/src/CMGTools/RootTools/data/jec/",
     shiftJEC = 0, # set to +1 or -1 to apply +/-1 sigma shift to the nominal jet energies                                                                                                                  
     addJECShifts = False, # if true, add  "corr", "corrJECUp", and "corrJECDown" for each jet (requires uncertainties to be available!)    smearJets = False,                                           

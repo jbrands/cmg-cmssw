@@ -110,7 +110,12 @@ leptonTypeH = NTupleObjectType("leptonH", baseObjectTypes = [ leptonType ], vari
     NTupleVariable("puChargedHadronIsoR04",           lambda lepton : lepton.puChargedHadronIsoR(0.4),  help= "self.physObj.pfIsolationR03().sumPUPt"),
         
     NTupleVariable("mvaIdSpring15NonTrig",   lambda lepton : lepton.mvaRun2("NonTrigSpring15") if abs(lepton.pdgId()) == 11 else 1, help="EGamma POG MVA ID for non-triggering electrons, Spring15 re-training; 1 for muons"),
-    NTupleVariable("POG_PHYS14_25ns_v1_Veto",   lambda lepton : lepton.cutBasedId('POG_PHYS14_25ns_v1_Veto') if abs(lepton.pdgId()) == 11 else 1, help="POG Phys14 25ns cut-based Veto ID"),
+    NTupleVariable("POG_PHYS14_25ns_v1_Veto",   lambda lepton : lepton.cutBasedId('POG_PHYS14_25ns_v1_Veto') if abs(lepton.pdgId()) == 11 else 1, help="POG Phys14 25ns cut-based v1 Veto ID"),
+    NTupleVariable("POG_PHYS14_25ns_v2_Veto",   lambda lepton : lepton.cutBasedId('POG_PHYS14_25ns_v2_Veto') if abs(lepton.pdgId()) == 11 else 1, help="POG Phys14 25ns cut-based v2 Veto ID"),
+    NTupleVariable("POG_PHYS14_25ns_v1_ConvVeto_Veto",   lambda lepton : lepton.cutBasedId('POG_PHYS14_25ns_v1_ConvVeto_Veto') if abs(lepton.pdgId()) == 11 else 1, help="POG Phys14 25ns cut-based v1 ConvVeto Veto ID"),
+    NTupleVariable("POG_PHYS14_25ns_v2_ConvVeto_Veto",   lambda lepton : lepton.cutBasedId('POG_PHYS14_25ns_v2_ConvVeto_Veto') if abs(lepton.pdgId()) == 11 else 1, help="POG Phys14 25ns cut-based v2 ConvVeto Veto ID"),
+    NTupleVariable("cutBasedElectronID_PHYS14_PU20bx25_V2_standalone_veto",   lambda lepton : lepton.cutBasedId('cutBasedElectronID_PHYS14_PU20bx25_V2_standalone_veto') if abs(lepton.pdgId()) == 11 else 1, help="cutBasedElectronID-PHYS14-PU20bx25-V2-standalone-veto"),
+    
     NTupleVariable("superClusterEta", lambda x : x.superCluster().eta() if abs(x.pdgId())==11 else -100, help="Electron supercluster pseudorapidity"),
 
 ] )
@@ -368,6 +373,14 @@ triggerObjectEle22 = NTupleObjectType("triggerTypeEle22",   baseObjectTypes = [ 
         NTupleVariable("pdgId", lambda x : x.pdgId(), float, mcOnly=False, help="pdgId of trigger object"),
         NTupleVariable("pt", lambda x : x.pt(), float, mcOnly=False, help="pt of trigger object"),
 ])
+
+triggerObjectEle23 = NTupleObjectType("triggerTypeEle23",   baseObjectTypes = [  ], variables = [
+        NTupleVariable("eta", lambda x : x.eta(), float, mcOnly=False, help="eta of trigger object"),
+        NTupleVariable("phi", lambda x : x.phi(), float, mcOnly=False, help="phi of trigger object"),
+        NTupleVariable("pdgId", lambda x : x.pdgId(), float, mcOnly=False, help="pdgId of trigger object"),
+        NTupleVariable("pt", lambda x : x.pt(), float, mcOnly=False, help="pt of trigger object"),
+])
+
 triggerObjectEle32 = NTupleObjectType("triggerTypeEle32",   baseObjectTypes = [  ], variables = [
         NTupleVariable("eta", lambda x : x.eta(), float, mcOnly=False, help="eta of trigger object"),
         NTupleVariable("phi", lambda x : x.phi(), float, mcOnly=False, help="phi of trigger object"),

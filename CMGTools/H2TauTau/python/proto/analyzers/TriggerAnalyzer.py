@@ -86,6 +86,7 @@ class TriggerAnalyzer(Analyzer):
         event.triggerObjectEvents_IsoMu24 = []
         event.triggerObjectEvents_IsoMu22 = []
         event.triggerObjectEvents_Ele22 = []
+        event.triggerObjectEvents_Ele23 = []
         event.triggerObjectEvents_Ele32 = []
         if self.cfg_ana.addTriggerObjects:
             triggerObjects = self.handles['triggerObjects'].product()
@@ -105,6 +106,8 @@ class TriggerAnalyzer(Analyzer):
                             event.triggerObjectEvents_IsoMu22.append(to)
                         if(info.name == 'HLT_Ele22_eta2p1_WP75_Gsf_v1'):
                             event.triggerObjectEvents_Ele22.append(to)
+                        if(info.name == 'HLT_Ele23_WPLoose_Gsf_v1' or info.name == 'HLT_Ele23_WPLoose_Gsf_v2' or info.name == 'HLT_Ele23_WPLoose_Gsf_v3' or info.name == 'HLT_Ele23_WPLoose_Gsf_v4'):
+                            event.triggerObjectEvents_Ele23.append(to)
                         if(info.name == 'HLT_Ele32_eta2p1_WP75_Gsf_v1'):
                             event.triggerObjectEvents_Ele32.append(to)
                         info.objects.append(to)
