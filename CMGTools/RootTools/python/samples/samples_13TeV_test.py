@@ -56,12 +56,15 @@ TT_powheg_151223 = kreator.makeComponentHEPHY("TT_powheg_151223","/TT_TuneCUETP8
 
 TT_powheg_151209_tauEle = kreator.makeComponentHEPHY("TT_powheg_151209_tauEle","/TT_TuneCUETP8M1_13TeV-powheg-pythia8/mflechl-ttbar_ele_MC1_151209-71a3c028dfed4d1fdaf7c36c202a6c4a/USER","PRIVATE","*.root","phys03",1.0)
 
+QCD_Pt20toInf = kreator.makeComponentHEPHY("QCD_Pt20toInf","/QCD_Pt-20toInf_MuEnrichedPt15_TuneCUETP8M1_13TeV_pythia8/jbrandst-QCD_MC2_tauMu_160113-1ecb75fc045bbb6991586e4c053e23ab/USER","PRIVATE","*.root","phys03",1.0)
+
+
 ################################################################################
-#Run2015D_05Oct2015_v1_151223 = kreator.makeDataComponentHEPHY("Run2015D_05Oct2015_151223","/SingleMuon/jbrandst-Run2015D-05Oct2015-151223-bcd6c9714832c3478864117da286b90d/USER", "PRIVATE", "*.root","phys03","/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt")
+Run2015D_05Oct2015_v1_151223 = kreator.makeDataComponentHEPHY("Run2015D_05Oct2015_151223","/SingleMuon/jbrandst-Run2015D-05Oct2015-151223-bcd6c9714832c3478864117da286b90d/USER", "PRIVATE", "*.root","phys03","/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt")
 
 Run2015D_05Oct2015_v1_tauEle_151227 = kreator.makeDataComponentHEPHY("Run2015D_05Oct2015_v1_tauEle_151227","/SingleElectron/jbrandst-Run2015D-05Oct2015-tauEle-151227-f9431021787ca86df205944281578e0f/USER", "PRIVATE", "*.root","phys03","/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt")
 
-#Run2015D_PromptReco_v4_151223 = kreator.makeDataComponentHEPHY("Run2015D_PromptReco_v4_151223","/SingleMuon/jbrandst-Run2015D-Prompt-v4-151223-bcd6c9714832c3478864117da286b90d/USER", "PRIVATE", "*.root","phys03","/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt")
+Run2015D_PromptReco_v4_151223 = kreator.makeDataComponentHEPHY("Run2015D_PromptReco_v4_151223","/SingleMuon/jbrandst-Run2015D-Prompt-v4-151223-bcd6c9714832c3478864117da286b90d/USER", "PRIVATE", "*.root","phys03","/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt")
 
 Run2015D_PromptReco_v4_tauEle_151227 = kreator.makeDataComponentHEPHY("Run2015D_PromptReco_v4_tauEle_151227","/SingleElectron/jbrandst-Run2015D-Prompt-v4-tauEle-151227-f9431021787ca86df205944281578e0f/USER", "PRIVATE", "*.root","phys03","/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/Cert_246908-260627_13TeV_PromptReco_Collisions15_25ns_JSON_v2.txt")
 

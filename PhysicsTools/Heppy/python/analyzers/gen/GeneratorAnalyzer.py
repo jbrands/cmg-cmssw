@@ -78,34 +78,36 @@ class GeneratorAnalyzer( Analyzer ):
             id     = abs(p.pdgId())
             status = p.status()
             # particles must be status > 2, except for prompt leptons, photons, neutralinos
-  #          if status <= 2:
-  #              if ((id not in self.stableBSMParticleIds) and
-  #                  (id not in [11,12,13,14,15,16,22] or not isNotFromHadronicShower(p))):
-  #                      continue
+  #JB          if status <= 2:
+  #JB              if ((id not in self.stableBSMParticleIds) and
+  #JB                  (id not in [11,12,13,14,15,16,22] or not isNotFromHadronicShower(p))):
+  #JB                      continue
             # a particle must not be decaying into itself
             #print "  test %6d  : %+8d  %3d :  %8.2f   %+5.2f   %+5.2f : %d %d : %+8d {%6d}: %s" % ( rawIndex,
             #        p.pdgId(), p.status(), p.pt(), p.eta(), p.phi(), p.numberOfMothers(), p.numberOfDaughters(), 
             #        p.motherRef(0).pdgId() if p.numberOfMothers() > 0 else -999, p.motherRef(0).key()   if p.numberOfMothers() > 0 else -999, 
             #        "  ".join("%d[%d]" % (p.daughter(i).pdgId(), p.daughter(i).status()) for i in xrange(p.numberOfDaughters())))
-  #          if id in self.savePreFSRParticleIds:
-  #              # for light objects, we want them pre-radiation
-  #              if any((p.mother(j).pdgId() == p.pdgId()) for j in xrange(p.numberOfMothers())):
-  #                  #print "    fail auto-decay"
-  #                  continue
-  #          else:
-  #              # everything else, we want it after radiation, i.e. just before decay
-  #              if any((p.daughter(j).pdgId() == p.pdgId() and p.daughter(j).status() > 2) for j in xrange(p.numberOfDaughters())):
-  #                  #print "    fail auto-decay"
-  #                  continue
+  #JB          if id in self.savePreFSRParticleIds:
+  #JB              # for light objects, we want them pre-radiation
+  #JB              if any((p.mother(j).pdgId() == p.pdgId()) for j in xrange(p.numberOfMothers())):
+  #JB                  #print "    fail auto-decay"
+  #JB                  continue
+  #JB          else:
+  #JB              # everything else, we want it after radiation, i.e. just before decay
+  #JB              if any((p.daughter(j).pdgId() == p.pdgId() and p.daughter(j).status() > 2) for j in xrange(p.numberOfDaughters())):
+  #JB                  #print "    fail auto-decay"
+  #JB                  continue
             # FIXME find a better criterion to discard there
             if status == 71: 
                 #drop QCD radiation with unclear parentage
-                continue 
+                continue
+
+            ok = True
             # is it an interesting particle?
-            ok = False
-            if interestingPdgId(id):
+#JB            ok = False
+#JB            if interestingPdgId(id):
                 #print "    pass pdgId"
-                ok = True
+#JB                ok = True
             ### no: we don't select by decay, so that we keep the particle summary free of incoming partons and such
             # if not ok and any(interestingPdgId(d.pdgId()) for d in realGenDaughters(p)):
             #    #print "    pass dau"
