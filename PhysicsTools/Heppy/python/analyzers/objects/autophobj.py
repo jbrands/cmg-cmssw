@@ -178,6 +178,7 @@ photonType = NTupleObjectType("gamma", baseObjectTypes = [ particleType ], varia
 jetType = NTupleObjectType("jet",  baseObjectTypes = [ fourVectorType ], variables = [
     NTupleVariable("id",    lambda x : x.jetID("POG_PFID") , int, mcOnly=False,help="POG Loose jet ID"),
     NTupleVariable("puId", lambda x : getattr(x, 'puJetIdPassed', -99), int,     mcOnly=False, help="puId (full MVA, loose WP, 5.3.X training on AK5PFchs: the only thing that is available now)"),
+    NTupleVariable("puIdMVAoutput", lambda x : x.puMva("pileupJetId:fullDiscriminant"),     mcOnly=False, help=""),
     NTupleVariable("btagCSV",   lambda x : x.btag('pfCombinedInclusiveSecondaryVertexV2BJetTags'), help="CSV-IVF v2 discriminator"),
     NTupleVariable("btagCMVA",  lambda x : x.btag('pfCombinedMVABJetTags'), help="CMVA discriminator"),
     NTupleVariable("rawPt",  lambda x : x.pt() * x.rawFactor(), help="p_{T} before JEC"),
@@ -245,8 +246,7 @@ metType = NTupleObjectType("met", baseObjectTypes = [ fourVectorType ], variable
 genParticleType = NTupleObjectType("genParticle", baseObjectTypes = [ particleType ], mcOnly=True, variables = [
     NTupleVariable("charge",   lambda x : x.threeCharge()/3.0, float),
     NTupleVariable("status",   lambda x : x.status(),int),
-    NTupleVariable("isPrompt",   lambda x : isPromptLepton(x, False), int),  
-    #NTupleVariable("isPrompt",   lambda x : x.isPrompt(), int),
+    NTupleVariable("isPrompt",   lambda x : x.statusFlags().isPrompt(), int),  
     NTupleVariable("isPromptFinalState",   lambda x : x.isPromptFinalState(), int),
     NTupleVariable("isDirectPromptTauDecayProduct",   lambda x : x.statusFlags().isDirectPromptTauDecayProduct(), int),
     #NTupleVariable("isDirectPromptTauDecayProductFinalState",   lambda x : x.isDirectPromptTauDecayProductFinalState(), int),
@@ -264,24 +264,3 @@ genParticleWithAncestryType = NTupleObjectType("genParticleWithAncestry", baseOb
 genParticleWithLinksType = NTupleObjectType("genParticleWithLinks", baseObjectTypes = [ genParticleWithAncestryType ], mcOnly=True, variables = [
     NTupleVariable("motherIndex", lambda x : x.motherIndex, int, help="index of the mother in the generatorSummary")
 ])
-
-def isPromptLepton(lepton, beforeFSR, includeMotherless=True, includeTauDecays=False):
-    if abs(lepton.pdgId()) not in [11,13,15]:
-        return False
-    if lepton.numberOfMothers() == 0:
-        return includeMotherless;
-    mom = lepton.mother()
-    if mom.pdgId() == lepton.pdgId():
-        if beforeFSR: return False
-        return isPromptLepton(mom, beforeFSR, includeMotherless, includeTauDecays)
-    elif abs(mom.pdgId()) == 15:
-        if not includeTauDecays: return False
-        return isPromptLepton(mom, beforeFSR, includeMotherless, includeTauDecays)
-    else:
-        return isNotHadronicId(mom.pdgId(), includeSMLeptons=False)
-
-def isNotHadronicId(pdgId,includeSMLeptons=True):
-    if abs(pdgId) in [11,12,13,14,15,16]:
-        return includeSMLeptons
-    i = (abs(pdgId) % 1000)
-    return i > 10 and i != 21 and i < 100

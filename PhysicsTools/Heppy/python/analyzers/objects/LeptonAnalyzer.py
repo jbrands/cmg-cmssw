@@ -209,9 +209,9 @@ class LeptonAnalyzer( Analyzer ):
                if (ele.electronID(self.cfg_ana.loose_electron_id) and
                          ele.pt()>self.cfg_ana.loose_electron_pt and abs(ele.eta())<self.cfg_ana.loose_electron_eta and 
                          abs(ele.dxy()) < self.cfg_ana.loose_electron_dxy and abs(ele.dz())<self.cfg_ana.loose_electron_dz and 
-                         self.eleIsoCut(ele) and 
-                         ele.lostInner() <= self.cfg_ana.loose_electron_lostHits and
-                         ( True if getattr(self.cfg_ana,'notCleaningElectrons',False) else (bestMatch(ele, looseMuons)[1] > (self.cfg_ana.min_dr_electron_muon**2)) )):
+                         #self.eleIsoCut(ele) and 
+                         ele.lostInner() <= self.cfg_ana.loose_electron_lostHits ): #and
+                         #( True if getattr(self.cfg_ana,'notCleaningElectrons',False) else (bestMatch(ele, looseMuons)[1] > (self.cfg_ana.min_dr_electron_muon**2)) )):
                     event.selectedLeptons.append(ele)
                     event.selectedElectrons.append(ele)
                     ele.looseIdSusy = True
