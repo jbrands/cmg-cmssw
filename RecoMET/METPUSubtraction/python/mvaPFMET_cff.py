@@ -11,9 +11,8 @@ from JetMETCorrections.Configuration.JetCorrectors_cff import *
 
 calibratedAK4PFJetsForPFMVAMEt = cms.EDProducer('CorrectedPFJetProducer',
     src = cms.InputTag('ak4PFJets'),
-    correctors = cms.VInputTag("ak4PFL1FastL2L3Corrector") # NOTE: use "ak5PFL1FastL2L3" for MC / "ak5PFL1FastL2L3Residual" for Data
+    correctors = cms.VInputTag("ak4PFL1FastL2L3Corrector") # NOTE: use "ak4PFL1FastL2L3Corrector" for MC / "ak4PFL1FastL2L3ResidualCorrector" for Data
 )
-
 from JetMETCorrections.Configuration.JetCorrectionServices_cff import ak4PFL1Fastjet
 from RecoJets.JetProducers.PileupJetID_cfi import pileupJetIdEvaluator
 from RecoJets.JetProducers.PileupJetIDParams_cfi import JetIdParams
@@ -68,15 +67,14 @@ pfMVAMEt = cms.EDProducer("PFMETProducerMVA",
     srcVertices = cms.InputTag('offlinePrimaryVertices'),
     srcLeptons = cms.VInputTag(),#"isomuons","isoelectrons","isotaus") # NOTE: you need to set this to collections of electrons, muons and tau-jets
                                  #                                             passing the lepton reconstruction & identification criteria applied in your analysis
-    minNumLeptons = cms.int32(0),
+    minNumLeptons = cms.int32(0),                     
     globalThreshold = cms.double(-1.),#pfMet.globalThreshold,
     minCorrJetPt = cms.double(-1.),
     inputFileNames = cms.PSet(
         U     = cms.FileInPath('RecoMET/METPUSubtraction/data/gbru_7_4_X_miniAOD_25NS_July2015.root'),
         DPhi  = cms.FileInPath('RecoMET/METPUSubtraction/data/gbrphi_7_4_X_miniAOD_25NS_July2015.root'),
         CovU1 = cms.FileInPath('RecoMET/METPUSubtraction/data/gbru1cov_7_4_X_miniAOD_25NS_July2015.root'),
-        CovU2 = cms.FileInPath('RecoMET/METPUSubtraction/data/gbru2cov_7_4_X_miniAOD_25NS_July2015.root'),
-    ),
+        CovU2 = cms.FileInPath('RecoMET/METPUSubtraction/data/gbru2cov_7_4_X_miniAOD_25NS_July2015.root') ),
     inputRecords = cms.PSet(
         U     = cms.string("RecoilCor"),
         DPhi  = cms.string("PhiCor"), 
@@ -85,7 +83,7 @@ pfMVAMEt = cms.EDProducer("PFMETProducerMVA",
     ),
     loadMVAfromDB = cms.bool(False),                             
 
-    corrector = cms.string("ak4PFL1Fastjet"),
+    corrector = cms.InputTag("ak4PFL1FastjetCorrector"),
     useType1  = cms.bool(True), 
     dZcut     = cms.double(0.1),
        

@@ -73,17 +73,16 @@ class JetAnalyzer( Analyzer ):
         self.addJECShifts = self.cfg_ana.addJECShifts if hasattr(self.cfg_ana, 'addJECShifts') else 0
         if   self.recalibrateJets == "MC"  : self.recalibrateJets =     self.cfg_comp.isMC
         elif self.recalibrateJets == "Data": self.recalibrateJets = not self.cfg_comp.isMC
-        elif self.recalibrateJets not in [True,False]: raise RuntimeError, "recalibrateJets must be any of { True, False, 'MC', 'Data' }, while it is %r " % self.recalibrateJets
-       
-        calculateSeparateCorrections = getattr(cfg_ana,"calculateSeparateCorrections", False);
-        calculateType1METCorrection  = getattr(cfg_ana,"calculateType1METCorrection",  False);
-        self.doJEC = self.recalibrateJets or (self.shiftJEC != 0) or self.addJECShifts or calculateSeparateCorrections or calculateType1METCorrection
+        elif self.recalibrateJets not in [True,False]: raise RuntimeError("recalibrateJets must be any of { True, False, 'MC', 'Data' }, while it is %r " % self.recalibrateJets)
+        self.doJEC = self.recalibrateJets or (self.shiftJEC != 0)
         if self.doJEC:
           doResidual = getattr(cfg_ana, 'applyL2L3Residual', 'Data')
           if   doResidual == "MC":   doResidual = self.cfg_comp.isMC
           elif doResidual == "Data": doResidual = not self.cfg_comp.isMC
-          elif doResidual not in [True,False]: raise RuntimeError, "If specified, applyL2L3Residual must be any of { True, False, 'MC', 'Data'(default)}"
-          GT = getattr(cfg_comp, 'jecGT', mcGT if self.cfg_comp.isMC else dataGT)
+
+          elif doResidual not in [True,False]: raise RuntimeError("If specified, applyL2L3Residual must be any of { True, False, 'MC', 'Data'(default)}")
+          GT = mcGT if self.cfg_comp.isMC else dataGT
+
           # Now take care of the optional arguments
           kwargs = { 'calculateSeparateCorrections':calculateSeparateCorrections,
                      'calculateType1METCorrection' :calculateType1METCorrection, }
@@ -320,7 +319,7 @@ class JetAnalyzer( Analyzer ):
             if self.cfg_ana.do_mc_match:
                 self.jetFlavour(event)
 
-        if hasattr(event,"jets"+self.cfg_ana.collectionPostFix): raise RuntimeError, "Event already contains a jet collection with the following postfix: "+self.cfg_ana.collectionPostFix
+        if hasattr(event,"jets"+self.cfg_ana.collectionPostFix): raise RuntimeError("Event already contains a jet collection with the following postfix: "+self.cfg_ana.collectionPostFix)
         setattr(event,"rho"                    +self.cfg_ana.collectionPostFix, self.rho                    ) 
         setattr(event,"deltaMetFromJEC"        +self.cfg_ana.collectionPostFix, self.deltaMetFromJEC        ) 
         setattr(event,"type1METCorr"           +self.cfg_ana.collectionPostFix, self.type1METCorr           ) 

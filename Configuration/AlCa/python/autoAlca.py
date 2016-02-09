@@ -2,7 +2,7 @@ AlCaRecoMatrix = {'AlCaLumiPixels' : 'LumiPixels',
                   'Charmonium'     : 'TkAlJpsiMuMu',
                   'Commissioning'  : 'HcalCalIsoTrk',
                   'Cosmics'        : 'TkAlCosmics0T+MuAlGlobalCosmics+HcalCalHOCosmics+DtCalibCosmics',
-                  'DoubleEG'       : 'EcalCalZElectron+EcalUncalZElectron',
+                  'DoubleEG'       : 'EcalCalZElectron+EcalUncalZElectron+HcalCalIterativePhiSym',
                   'DoubleElectron' : 'EcalCalZElectron+EcalUncalZElectron',
                   'DoubleMu'       : 'MuAlCalIsolatedMu+MuAlOverlaps+DtCalib+TkAlZMuMu',
                   'DoubleMuon'     : 'TkAlZMuMu+MuAlCalIsolatedMu+MuAlOverlaps+MuAlZMuMu+DtCalib',
@@ -13,18 +13,20 @@ AlCaRecoMatrix = {'AlCaLumiPixels' : 'LumiPixels',
                   'MinimumBias'    : 'SiStripCalMinBias+TkAlMinBias',
                   'MuOnia'         : 'TkAlJpsiMuMu+TkAlUpsilonMuMu',
                   'MuOniaParked'   : 'TkAlJpsiMuMu+TkAlUpsilonMuMu',
-                  'SingleElectron' : 'EcalCalWElectron+EcalUncalWElectron+EcalCalZElectron+EcalUncalZElectron',
-                  'SingleMu'       : 'MuAlCalIsolatedMu+MuAlOverlaps+TkAlMuonIsolated+DtCalib+MuAlZMuMu',
-                  'SingleMuon'     : 'TkAlMuonIsolated+DtCalib+MuAlCalIsolatedMu+MuAlOverlaps+MuAlZMuMu',
+                  'SingleElectron' : 'EcalCalWElectron+EcalUncalWElectron+EcalCalZElectron+EcalUncalZElectron+EcalESAlign+HcalCalIterativePhiSym',
+                  'SingleMu'       : 'MuAlCalIsolatedMu+MuAlOverlaps+TkAlMuonIsolated+DtCalib+MuAlZMuMu+HcalCalHO',
+                  'SingleMuon'     : 'TkAlMuonIsolated+DtCalib+MuAlCalIsolatedMu+MuAlOverlaps+MuAlZMuMu+HcalCalIterativePhiSym',
                   'SinglePhoton'   : 'HcalCalGammaJet',
-                  'StreamExpress'  : 'SiStripCalZeroBias+TkAlMinBias+SiStripPCLHistos+SiStripCalMinBias+DtCalib+Hotline',
+                  'ZeroBias'       : 'SiStripCalZeroBias+TkAlMinBias+LumiPixelsMinBias+SiStripCalMinBias', 
+                  'StreamExpress'  : 'SiStripCalZeroBias+TkAlMinBias+SiStripPCLHistos+SiStripCalMinBias+DtCalib+Hotline+LumiPixelsMinBias',
+                  'StreamExpressHI': 'SiStripCalZeroBias+TkAlMinBiasHI+SiStripPCLHistos+SiStripCalMinBias+DtCalibHI',
                   'ExpressCosmics' : 'SiStripCalZeroBias+TkAlCosmics0T',
                   # These two cannot run on RAW, they are just meant to run on the dedicated AlcaRAW so they do not enter the allForPrompt list
                   'AlCaP0'         : '',
                   # ---------------------------------------------------------------------------------------------------------------------------
                   'HcalNZS'        : 'HcalCalMinBias'
                   # This is in the AlCaRecoMatrix, but no RelVals are produced
-                  # 'TestEnablesTracker' : 'TkAlLAS'
+                  # 'TestEnablesTracker'  : 'TkAlLAS'
                   # 'TestEnablesEcalHcal' : 'HcalCalPedestal'
                   }
 
@@ -44,8 +46,9 @@ def buildList(pdList, matrix):
     return stringList
 
 # Update the lists anytime a new PD is added to the matrix
-autoAlca = { 'allForPrompt'         : buildList(['Charmonium', 'Commissioning', 'DoubleEG', 'DoubleElectron', 'DoubleMu', 'DoubleMuParked', 'DoubleMuon', 'HLTPhysics', 'HcalNZS', 'JetHT', 'MET', 'MinimumBias', 'MuOnia', 'MuOniaParked', 'SingleElectron', 'SingleMu', 'SingleMuon', 'SinglePhoton'], AlCaRecoMatrix),
+autoAlca = { 'allForPrompt'         : buildList(['Charmonium', 'Commissioning', 'DoubleEG', 'DoubleElectron', 'DoubleMu', 'DoubleMuParked', 'DoubleMuon', 'HLTPhysics', 'HcalNZS', 'JetHT', 'MET', 'MinimumBias', 'MuOnia', 'MuOniaParked', 'SingleElectron', 'SingleMu', 'SingleMuon', 'SinglePhoton', 'ZeroBias'], AlCaRecoMatrix),
              'allForExpress'        : buildList(['StreamExpress'], AlCaRecoMatrix),
+             'allForExpressHI'      : buildList(['StreamExpressHI'], AlCaRecoMatrix),
              'allForPromptCosmics'  : buildList(['Cosmics'], AlCaRecoMatrix),
              'allForExpressCosmics' : buildList(['ExpressCosmics'], AlCaRecoMatrix) }
 autoAlca.update(AlCaRecoMatrix)
