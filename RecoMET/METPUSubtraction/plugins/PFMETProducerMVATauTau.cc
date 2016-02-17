@@ -28,7 +28,7 @@ PFMETProducerMVATauTau::PFMETProducerMVATauTau(const edm::ParameterSet& cfg)
 
   minCorrJetPt_    = cfg.getParameter<double>     ("minCorrJetPt");
   useType1_        = cfg.getParameter<bool>       ("useType1");
-  correctorLabel_  = cfg.getParameter<std::string>("corrector");
+  mJetCorrector_  = consumes<reco::JetCorrector>(cfg.getParameter<edm::InputTag>("corrector"));
    
   verbosity_ = ( cfg.exists("verbosity") ) ?
     cfg.getParameter<int>("verbosity") : 0;
@@ -74,8 +74,11 @@ void PFMETProducerMVATauTau::produce(edm::Event& evt, const edm::EventSetup& es)
   edm::Handle<reco::PFJetCollection> uncorrJets;
   evt.getByToken(srcUncorrJets_, uncorrJets);
 
-  const JetCorrector* corrector = nullptr;
-  if( useType1_ ) corrector = JetCorrector::getJetCorrector(correctorLabel_, es);
+  edm::Handle<reco::JetCorrector> corrector;
+  if( useType1_ )
+    {
+      evt.getByToken(mJetCorrector_, corrector); 
+    }
   
   edm::Handle<reco::CandidateView> pfCandidates_view;
   evt.getByToken(srcPFCandidatesView_, pfCandidates_view);
@@ -330,10 +333,9 @@ PFMETProducerMVATauTau::computeJetInfo(const reco::PFJetCollection& uncorrJets,
 				 const edm::ValueMap<float>& jetIds,
 				 const reco::VertexCollection& vertices,
 				 const reco::Vertex* hardScatterVertex,
-				 const JetCorrector &iCorrector,edm::Event &iEvent,const edm::EventSetup &iSetup,
+				 const reco::JetCorrector &iCorrector,edm::Event &iEvent,const edm::EventSetup &iSetup,
 				 std::vector<reco::PUSubMETCandInfo> &iLeptons,std::vector<reco::PUSubMETCandInfo> &iCands)
 {
-  const L1FastjetCorrector* lCorrector = dynamic_cast<const L1FastjetCorrector*>(&iCorrector);
   std::vector<reco::PUSubMETCandInfo> retVal;
   for ( reco::PFJetCollection::const_iterator uncorrJet = uncorrJets.begin();
 	uncorrJet != uncorrJets.end(); ++uncorrJet ) {
@@ -359,7 +361,7 @@ PFMETProducerMVATauTau::computeJetInfo(const reco::PFJetCollection& uncorrJets,
       jetInfo.setP4( corrJet->p4() );
       double lType1Corr = 0;
       if(useType1_) { //Compute the type 1 correction ===> This code is crap 
-	double pCorr = lCorrector->correction(*uncorrJet,iEvent,iSetup);
+	double pCorr = iCorrector.correction(*uncorrJet);
 	lType1Corr = std::abs(corrJet->pt()-pCorr*uncorrJet->pt());
 	TLorentzVector pVec; pVec.SetPtEtaPhiM(lType1Corr,0,corrJet->phi(),0); 
 	reco::Candidate::LorentzVector pType1Corr; pType1Corr.SetCoordinates(pVec.Px(),pVec.Py(),pVec.Pz(),pVec.E());

@@ -6,7 +6,7 @@ class Events(object):
         pass
 
     def __len__(self):
-        return sys.maxsize
+        return sys.maxint
 
     def __getitem__(self, index):
         return self

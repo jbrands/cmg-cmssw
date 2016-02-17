@@ -31,7 +31,7 @@
 #include "DataFormats/PatCandidates/interface/MET.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 
-#include "JetMETCorrections/Algorithms/interface/L1FastjetCorrector.h"
+#include "JetMETCorrections/JetCorrector/interface/JetCorrector.h"
 
 #include "RecoMET/METAlgorithms/interface/METAlgo.h"
 #include "RecoMET/METAlgorithms/interface/PFSpecificAlgo.h"
@@ -39,6 +39,8 @@
 #include "RecoMET/METPUSubtraction/interface/MvaMEtUtilities.h"
 
 #include "RecoJets/JetProducers/interface/PileupJetIdAlgo.h"
+
+#include <TLorentzVector.h>
 
 namespace reco
 {
@@ -66,7 +68,7 @@ namespace reco
 
     std::vector<reco::PUSubMETCandInfo> computeJetInfo(const reco::PFJetCollection&, const edm::Handle<reco::PFJetCollection>&,
 							  const edm::ValueMap<float>&, const reco::VertexCollection&, 
-							  const reco::Vertex*, const JetCorrector &iCorr,
+						          const reco::Vertex*, const reco::JetCorrector &iCorr,
 							  edm::Event & iEvent,const edm::EventSetup &iSetup,
 							  std::vector<reco::PUSubMETCandInfo> &iLeptons,
 							  std::vector<reco::PUSubMETCandInfo> &iCands);
@@ -90,13 +92,13 @@ namespace reco
     //edm::EDGetTokenT<reco::PFCandidateCollection> srcPFCandidates_;
     edm::EDGetTokenT<edm::View<reco::Candidate> > srcPFCandidatesView_;
     edm::EDGetTokenT<reco::VertexCollection> srcVertices_;
+    edm::EDGetTokenT<reco::JetCorrector> mJetCorrector_;
     typedef std::vector<edm::InputTag> vInputTag;
     vInputTag srcLeptonsTags_;
     std::vector<edm::EDGetTokenT<reco::CandidateView > > srcLeptons_;
     int minNumLeptons_; // CV: option to skip MVA MET computation in case there are less than specified number of leptons in the event
     bool permuteLeptons_; // JS: option to calculate MVA MET for each combination of taking one lepton from each of the candidate views given by the input tags; if two input tags are identical, creates only combinations with the index of the former collection larger than the one of the later collection, e.g. (1, 0), (2, 0), but not (0, 0) or (1, 2)
 
-    std::string correctorLabel_;
     bool isOld42_ ;
     bool useType1_;
     

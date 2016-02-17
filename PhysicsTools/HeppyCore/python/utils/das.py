@@ -58,11 +58,11 @@ def get_value(data, filters):
             continue
         row = dict(data)
         for key in ftr.split('.'):
-            if  isinstance(row, dict) and key in row:
+            if  isinstance(row, dict) and row.has_key(key):
                 row = row[key]
             if  isinstance(row, list):
                 for item in row:
-                    if  isinstance(item, dict) and key in item:
+                    if  isinstance(item, dict) and item.has_key(key):
                         row = item[key]
                         break
         yield str(row)
@@ -105,7 +105,7 @@ def get_data(host, query, idx, limit, debug):
             fdesc = opener.open(req)
             data = fdesc.read()
             fdesc.close()
-        except urllib2.HTTPError as err:
+        except urllib2.HTTPError, err:
             print err
             return ""
         if  data and isinstance(data, str) and pat.match(data) and len(data) == 32:
@@ -134,7 +134,7 @@ def main():
     if  opts.format == 'plain':
         jsondict = json.loads(data)
         mongo_query = jsondict['mongo_query']
-        if  'filters' in mongo_query:
+        if  mongo_query.has_key('filters'):
             filters = mongo_query['filters']
             data = jsondict['data']
             if  isinstance(data, dict):

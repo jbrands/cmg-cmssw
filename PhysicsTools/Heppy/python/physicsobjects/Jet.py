@@ -50,7 +50,7 @@ class Jet(PhysicsObject):
 
     def jetID(self,name=""):
         if not self.isPFJet():
-            raise RuntimeError("jetID implemented only for PF Jets")
+            raise RuntimeError, "jetID implemented only for PF Jets"
         eta = abs(self.eta());
         energy = (self.p4()*self.rawFactor()).energy();
         chf = self.chargedHadronEnergy()/energy;
@@ -79,7 +79,10 @@ class Jet(PhysicsObject):
         if name == "VBFHBB_PFID_Loose":  return (npr>1 and phf<0.99 and nhf<0.99);
         if name == "VBFHBB_PFID_Medium": return (npr>1 and phf<0.99 and nhf<0.99) and ((eta<=2.4 and nhf<0.9 and phf<0.9 and elf<0.99 and muf<0.99 and chf>0 and chm>0) or eta>2.4);
         if name == "VBFHBB_PFID_Tight":  return (npr>1 and phf<0.99 and nhf<0.99) and ((eta<=2.4 and nhf<0.9 and phf<0.9 and elf<0.70 and muf<0.70 and chf>0 and chm>0) or eta>2.4);
-        raise RuntimeError("jetID '%s' not supported" % name)
+        if name == "PAG_monoID_Loose":    return (eta<3.0 and chf>0.05 and nhf<0.7 and phf<0.8);
+        if name == "PAG_monoID_Tight":    return (eta<3.0 and chf>0.2 and nhf<0.7 and phf<0.7);
+
+        raise RuntimeError, "jetID '%s' not supported" % name
 
     def looseJetId(self):
         '''PF Jet ID (loose operation point) [method provided for convenience only]'''
@@ -120,7 +123,7 @@ class Jet(PhysicsObject):
         if hasattr(self, 'CorrFactor_L1'):
             return self.CorrFactor_L1
         if self._recalibrated:
-            raise RuntimeError("The jet was recalibrated, but without calculateSeparateCorrections. L1 is not available")
+            raise RuntimeError, "The jet was recalibrated, but without calculateSeparateCorrections. L1 is not available"
         jecLevels = self.physObj.availableJECLevels()
         for level in jecLevels:
             if "L1" in level:

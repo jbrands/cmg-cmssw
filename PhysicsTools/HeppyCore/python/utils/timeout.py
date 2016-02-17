@@ -40,7 +40,7 @@ def timed_out(timeout):
                     raise TimedOutExc()
             return result
         
-        new_f.__name__ = f.__name__
+        new_f.func_name = f.func_name
         return new_f
 
     return decorate

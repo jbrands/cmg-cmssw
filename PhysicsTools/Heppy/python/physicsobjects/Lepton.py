@@ -8,7 +8,10 @@ class Lepton( PhysicsObject):
 
     def sip3D(self):
         '''3D impact parameter significance.'''
-        return abs(self.dB(self.PV3D) / self.edB(self.PV3D))
+        if abs(self.edB(self.PV3D)) < 1e-300:
+            return 0
+        else:
+            return abs(self.dB(self.PV3D) / self.edB(self.PV3D))
 
     def absIsoFromEA(self, area='04'):
         '''Calculate Isolation using the effective area approach.'''
