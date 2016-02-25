@@ -36,10 +36,11 @@ class METAnalyzer( Analyzer ):
             #self.handles['vertices'] =  AutoHandle( "offlineSlimmedPrimaryVertices", 'std::vector<reco::Vertex>', fallbackLabel="offlinePrimaryVertices" )
             self.mchandles['packedGen'] = AutoHandle( 'packedGenParticles', 'std::vector<pat::PackedGenParticle>' )
 
-        if self.cfg_ana.isTauMu:
-            self.handles['diLeptons'] = AutoHandle( 'cmgTauMuCorSVFitFullSel', 'std::vector<pat::CompositeCandidate>' ) #MF
-        if self.cfg_ana.isTauEle:
-            self.handles['diLeptons'] = AutoHandle( 'cmgTauEleCorSVFitFullSel', 'std::vector<pat::CompositeCandidate>' )
+        if self.cfg_ana.isDilepton:
+            if self.cfg_ana.isTauMu:
+                self.handles['diLeptons'] = AutoHandle( 'cmgTauMuCorSVFitFullSel', 'std::vector<pat::CompositeCandidate>' ) #MF
+            if self.cfg_ana.isTauEle:
+                self.handles['diLeptons'] = AutoHandle( 'cmgTauEleCorSVFitFullSel', 'std::vector<pat::CompositeCandidate>' )
 
 
     def beginLoop(self, setup):
@@ -107,12 +108,13 @@ class METAnalyzer( Analyzer ):
         getattr(event,"tkMetPVTight"+self.cfg_ana.collectionPostFix).sumEt = sum([hypot(x[0],x[1]) for x in chargedPVTight])
 
     
-        if self.cfg_ana.isTauMu:
-            event.diLeptons = map(TauMuon, self.handles['diLeptons'].product()) #MF                                                                                                     
-        if self.cfg_ana.isTauEle:
-            event.diLeptons = map(TauElectron, self.handles['diLeptons'].product())
-
-        event.diLepton = event.diLeptons[0]
+        if self.cfg_ana.isDilepton:
+            if self.cfg_ana.isTauMu:
+                event.diLeptons = map(TauMuon, self.handles['diLeptons'].product()) #MF                                                                                                     
+                if self.cfg_ana.isTauEle:
+                    event.diLeptons = map(TauElectron, self.handles['diLeptons'].product())
+                    
+            event.diLepton = event.diLeptons[0]
 
         
 
