@@ -111,7 +111,7 @@ class METAnalyzer( Analyzer ):
         if self.cfg_ana.isDilepton:
             if self.cfg_ana.isTauMu:
                 event.diLeptons = map(TauMuon, self.handles['diLeptons'].product()) #MF                                                                                                     
-                if self.cfg_ana.isTauEle:
+            if self.cfg_ana.isTauEle:
                     event.diLeptons = map(TauElectron, self.handles['diLeptons'].product())
                     
             event.diLepton = event.diLeptons[0]
