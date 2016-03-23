@@ -27,10 +27,10 @@ class PDFWeightsAnalyzer( Analyzer ):
         if self.doPDFVars or self.doPDFWeights:
             self.mchandles['pdfstuff'] = AutoHandle( 'generator', 'GenEventInfoProduct' )
             self.mchandles['EvtHandle'] = AutoHandle( 'externalLHEProducer', 'LHEEventProduct' ) #MF LHE
-            self.runHandle = Handle('LHERunInfoProduct') #MF LHE
+#            self.runHandle = Handle('LHERunInfoProduct') #MF LHE
 #            self.run = Runs('root://eoscms.cern.ch//eos/cms/store/mc/RunIIFall15MiniAODv2/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/70000/002ABFCA-A0B9-E511-B9BA-0CC47A57CD6A.root') #MF LHE
             self.run = Runs(self.cfg_comp.files[0]) #MF LHE
-            self.run.getByLabel( 'externalLHEProducer', self.runHandle ) #MF LHE
+#            self.run.getByLabel( 'externalLHEProducer', self.runHandle ) #MF LHE
 
     def beginLoop(self, setup):
         super(PDFWeightsAnalyzer,self).beginLoop(setup)
@@ -42,8 +42,8 @@ class PDFWeightsAnalyzer( Analyzer ):
         self.pdfWeightTool = PdfWeightProducerTool()
         for pdf in self.cfg_ana.PDFWeights:
             self.pdfWeightTool.addPdfSet(pdf+".LHgrid")
-#        self.pdfWeightTool.beginJob() #MF LHE
-        self.pdfWeightTool.beginJob(self.runHandle.product()) #MF LHE
+        self.pdfWeightTool.beginJob() #MF LHE
+#        self.pdfWeightTool.beginJob(self.runHandle.product()) #MF LHE
 
     def makePDFWeights(self, event):
         if not self.pdfWeightInit: self.initPDFWeights()
