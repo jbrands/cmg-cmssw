@@ -215,9 +215,9 @@ class LeptonAnalyzer( Analyzer ):
                if (ele.electronID(self.cfg_ana.loose_electron_id) and
                          ele.pt()>self.cfg_ana.loose_electron_pt and abs(ele.eta())<self.cfg_ana.loose_electron_eta and 
                          abs(ele.dxy()) < self.cfg_ana.loose_electron_dxy and abs(ele.dz())<self.cfg_ana.loose_electron_dz and 
-                         self.eleIsoCut(ele) and 
-                         ele.lostInner() <= self.cfg_ana.loose_electron_lostHits and
-                         ( True if getattr(self.cfg_ana,'notCleaningElectrons',False) else (bestMatch(ele, looseMuons)[1] > (self.cfg_ana.min_dr_electron_muon**2)) )):
+                         #self.eleIsoCut(ele) and 
+                         ele.lostInner() <= self.cfg_ana.loose_electron_lostHits ): # and
+                         #( True if getattr(self.cfg_ana,'notCleaningElectrons',False) else (bestMatch(ele, looseMuons)[1] > (self.cfg_ana.min_dr_electron_muon**2)) )):
                     event.selectedLeptons.append(ele)
                     event.selectedElectrons.append(ele)
                     ele.looseIdSusy = True
@@ -293,7 +293,7 @@ class LeptonAnalyzer( Analyzer ):
           else: raise RuntimeError,  "Unsupported value for mu_effectiveAreas: can only use Data2012 (rho: ?) and Phys14_25ns_v1 or Spring15_25ns_v1 (rho: fixedGridRhoFastjetAll)"
         # Attach the vertex to them, for dxy/dz calculation
         for mu in allmuons:
-            mu.associatedVertex = event.goodVertices[0] if len(event.goodVertices)>0 else event.vertices[0]
+            mu.associatedVertex = event.vertices[0] #f len(event.goodVertices)>0 else event.vertices[0]
             mu.setTrackForDxyDz(self.cfg_ana.muon_dxydz_track)
 
         # Set tight id if specified
@@ -395,7 +395,7 @@ class LeptonAnalyzer( Analyzer ):
 
         # Attach the vertex
         for ele in allelectrons:
-            ele.associatedVertex = event.goodVertices[0] if len(event.goodVertices)>0 else event.vertices[0]
+            ele.associatedVertex = event.vertices[0]# if len(event.goodVertices)>0 else event.vertices[0]
 
         # Compute relIso with R=0.3 and R=0.4 cones
         for ele in allelectrons:
@@ -649,7 +649,7 @@ setattr(LeptonAnalyzer,"defaultConfig",cfg.Analyzer(
     inclusive_electron_lostHits = 1.0,
     # loose electron selection
     loose_electron_id     = "", #POG_MVA_ID_NonTrig_full5x5",
-    loose_electron_pt     = 7,
+    loose_electron_pt     = 5,
     loose_electron_eta    = 2.4,
     loose_electron_dxy    = 0.05,
     loose_electron_dz     = 0.2,
