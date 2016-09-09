@@ -81,16 +81,16 @@ class GeneratorAnalyzer( Analyzer ):
             #        p.pdgId(), p.status(), p.pt(), p.eta(), p.phi(), p.numberOfMothers(), p.numberOfDaughters(), 
             #        p.motherRef(0).pdgId() if p.numberOfMothers() > 0 else -999, p.motherRef(0).key()   if p.numberOfMothers() > 0 else -999, 
             #        "  ".join("%d[%d]" % (p.daughter(i).pdgId(), p.daughter(i).status()) for i in xrange(p.numberOfDaughters())))
-            if id in self.savePreFSRParticleIds:
-                # for light objects, we want them pre-radiation
-                if any((p.mother(j).pdgId() == p.pdgId()) for j in xrange(p.numberOfMothers())):
-                    #print "    fail auto-decay"
-                    continue
-            else:
-                # everything else, we want it after radiation, i.e. just before decay
-                if any((p.daughter(j).pdgId() == p.pdgId() and p.daughter(j).status() > 2) for j in xrange(p.numberOfDaughters())):
-                    #print "    fail auto-decay"
-                    continue
+#            # if id in self.savePreFSRParticleIds:
+            #     # for light objects, we want them pre-radiation
+            #     if any((p.mother(j).pdgId() == p.pdgId()) for j in xrange(p.numberOfMothers())):
+            #         #print "    fail auto-decay"
+            #         continue
+            # else:
+            #     # everything else, we want it after radiation, i.e. just before decay
+            #     if any((p.daughter(j).pdgId() == p.pdgId() and p.daughter(j).status() > 2) for j in xrange(p.numberOfDaughters())):
+            #         #print "    fail auto-decay"
+#            #         continue
             # FIXME find a better criterion to discard there
             if status == 71: 
                 #drop QCD radiation with unclear parentage
